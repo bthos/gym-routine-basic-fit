@@ -1,0 +1,19 @@
+/* Basic-Fit DS — radius, shadow, motion tokens */
+:root {
+  --radius-btn: 6px;     /* buttons */
+  --radius-control: 4px; /* chips, inputs */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 0px;      /* cards — the site uses sharp rectangles */
+  --radius-xl: 0px;      /* photos, media blocks — square */
+  --radius-pill: 999px;  /* legacy — avoid; nothing on the site is pill-shaped */
+
+  /* Shadows: soft, low-key. */
+  --shadow-card: 0 2px 8px rgba(38, 38, 38, 0.07);
+  --shadow-raised: 0 4px 12px rgba(38, 38, 38, 0.12);
+  --shadow-overlay: 0 12px 32px rgba(38, 38, 38, 0.18);
+
+  /* Motion: quick and functional, no bounces */
+  --motion-fast: 120ms ease-out; /* @kind other */
+  --motion-base: 200ms ease-out; /* @kind other */
+}

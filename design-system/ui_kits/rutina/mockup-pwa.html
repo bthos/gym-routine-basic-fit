@@ -1,0 +1,122 @@
+<!-- @dsCard group="Rutina App" viewport="412x892" name="Rutina PWA — mockup" subtitle="rutina-pwa feature: Import / Home / Active Session / History / Export + Program & Catalog reuse" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Basic-Fit — Rutina PWA mockup</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="kit-data.js"></script>
+<style>
+  body { background: var(--bf-grey-1); }
+  ::-webkit-scrollbar { display: none; }
+  .devbar { position: fixed; top: 0; left: 0; right: 0; z-index: 999; background: #000; color: #fff; font: 11px/1.4 monospace; padding: 4px 8px; display: flex; gap: 8px; align-items: center; overflow-x: auto; white-space: nowrap; }
+  .devbar select, .devbar button { font: inherit; background: #222; color: #fff; border: 1px solid #444; padding: 2px 6px; }
+</style>
+</head>
+<body style="margin:0;">
+<div id="root"></div>
+
+<!-- Re-load the live screen sources so their top-level DS destructuring runs
+     AFTER _ds_bundle.js has fully populated window.BasicFitDesignSystem_1cb8a2
+     (the bundle's own baked-in copies capture DS before its export step runs —
+     same workaround index.html already uses). -->
+<script type="text/babel" src="RoutineScreen.jsx"></script>
+<script type="text/babel" src="CatalogScreen.jsx"></script>
+
+<!-- New mockup screens for this feature (not yet in _ds_bundle.js) -->
+<script type="text/babel" src="BottomTabBar.jsx"></script>
+<script type="text/babel" src="ImportScreen.jsx"></script>
+<script type="text/babel" src="HomeScreen.jsx"></script>
+<script type="text/babel" src="ActiveSessionScreen.jsx"></script>
+<script type="text/babel" src="HistoryScreen.jsx"></script>
+<script type="text/babel" src="ExportScreen.jsx"></script>
+
+<script type="text/babel">
+const TABS = [
+  { id: "home", label: "Inicio", icon: "home" },
+  { id: "program", label: "Programa", icon: "dumbbell" },
+  { id: "catalog", label: "Catálogo", icon: "search" },
+  { id: "history", label: "Historial", icon: "bar-chart-2" },
+];
+
+function App() {
+  // route: "import" | "session" | "export" | one of TABS' ids
+  const [route, setRoute] = React.useState(localStorage.getItem("bf_mock_route") || "import");
+  const [tab, setTab] = React.useState("home");
+  const [homeState, setHomeState] = React.useState("success");
+  const [historyState, setHistoryState] = React.useState("success");
+  const [importState, setImportState] = React.useState("empty");
+  const [exportState, setExportState] = React.useState("success");
+  const [hasActiveSession, setHasActiveSession] = React.useState(false);
+
+  const go = (r) => { setRoute(r); localStorage.setItem("bf_mock_route", r); window.scrollTo(0, 0); };
+
+  let content;
+  if (route === "import") {
+    content = <ImportScreen demoState={importState} onImported={() => go("app")} />;
+  } else if (route === "session") {
+    content = <ActiveSessionScreen onEnd={() => { setHasActiveSession(false); go("app"); }} />;
+  } else if (route === "export") {
+    content = <ExportScreen demoState={exportState} />;
+  } else {
+    // route === "app" — bottom-tab-bar screens
+    let screen;
+    if (tab === "home") screen = <HomeScreen demoState={homeState} hasActiveSession={hasActiveSession} onStart={() => { setHasActiveSession(true); go("session"); }} onGoImport={() => go("import")} />;
+    else if (tab === "program") screen = window.RoutineScreen ? <window.RoutineScreen /> : <div style={{padding:20}}>RoutineScreen no disponible</div>;
+    else if (tab === "catalog") screen = window.CatalogScreen ? <window.CatalogScreen /> : <div style={{padding:20}}>CatalogScreen no disponible</div>;
+    else if (tab === "history") screen = <HistoryScreen demoState={historyState} onExport={() => go("export")} />;
+    content = (
+      <React.Fragment>
+        {screen}
+        <BottomTabBar active={tab} onChange={setTab} tabs={TABS} />
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <div>
+      <div className="devbar">
+        <strong>mockup:</strong>
+        <button onClick={() => go("import")}>Import</button>
+        <button onClick={() => go("app")}>App (tabs)</button>
+        <button onClick={() => go("session")}>Active Session</button>
+        <button onClick={() => go("export")}>Export</button>
+        {route === "import" && (
+          <select value={importState} onChange={(e) => setImportState(e.target.value)}>
+            <option value="empty">empty</option>
+            <option value="loading">loading</option>
+            <option value="error">error</option>
+          </select>
+        )}
+        {route === "app" && tab === "home" && (
+          <select value={homeState} onChange={(e) => setHomeState(e.target.value)}>
+            <option value="success">success</option>
+            <option value="error">error (corrupt storage)</option>
+          </select>
+        )}
+        {route === "app" && tab === "history" && (
+          <select value={historyState} onChange={(e) => setHistoryState(e.target.value)}>
+            <option value="success">success</option>
+            <option value="empty">empty</option>
+          </select>
+        )}
+        {route === "export" && (
+          <select value={exportState} onChange={(e) => setExportState(e.target.value)}>
+            <option value="success">success</option>
+            <option value="error">error (clipboard)</option>
+          </select>
+        )}
+      </div>
+      <div style={{ paddingTop: 26 }}>{content}</div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "lastUpdated": "2026-02-01",
+    "source": "BasicFit Malaga Website",
+    "city": "Málaga",
+    "totalGyms": 7,
+    "note": "6 confirmed locations in Málaga city, 1 location in nearby Rincón de la Victoria"
+  },
+  "gyms": [
+    {
+      "id": 1,
+      "name": "Armengual de la Mota",
+      "address": "Calle Armengual de la Mota 26, 29007 Málaga",
+      "neighborhood": "Centro",
+      "hours": {
+        "weekday": "7:00-22:30",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["personal-training", "yanga-sports-water", "video-workouts"]
+    },
+    {
+      "id": 2,
+      "name": "Calle Héroe de Sostoa 51",
+      "address": "Calle Héroe de Sostoa 51, Málaga",
+      "neighborhood": "Jardín de la Abadía",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["personal-training", "wheelchair-accessible", "yanga-sports-water"]
+    },
+    {
+      "id": 3,
+      "name": "Centro Comercial Alameda",
+      "address": "Avda. Andalucía s/n, Centro Comercial Alameda, Málaga",
+      "neighborhood": "La Luz",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["group-classes", "personal-training"]
+    },
+    {
+      "id": 4,
+      "name": "Calle Félix García Palacios 1",
+      "address": "Calle Félix García Palacios 1, Málaga",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["personal-training", "wheelchair-accessible", "yanga-sports-water"]
+    },
+    {
+      "id": 5,
+      "name": "Bulevar Louis Pasteur 20",
+      "address": "Bulevar Louis Pasteur 20, Málaga",
+      "neighborhood": "Teatinos",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["personal-training", "wheelchair-accessible", "yanga-sports-water"]
+    },
+    {
+      "id": 6,
+      "name": "Calle Olmos 43",
+      "address": "Calle Olmos 43, Málaga",
+      "neighborhood": "El Palo",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      },
+      "features": ["personal-training"]
+    },
+    {
+      "id": 7,
+      "name": "Rincón de la Victoria",
+      "address": "Rincón de la Victoria, Málaga",
+      "note": "Location in nearby Rincón de la Victoria - address to be confirmed",
+      "hours": {
+        "weekday": "6:00-24:00",
+        "weekend": "8:00-21:00"
+      }
+    }
+  ]
+}

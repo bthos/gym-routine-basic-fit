@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Rutina de entrenamiento" description="Página de rutina Basic-Fit: hero, fase, calentamiento, día con ejercicios, resumen y reglas" -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="background:#F5F5F5; min-height:100vh; font-family:'Archivo','Helvetica Neue',Arial,sans-serif;">
+
+  <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.PageHeader"
+    title="Rutina Málaga" subtitle="Programa de readaptación para principiantes"
+    badge="FASE 1 — ADAPTACIÓN (Meses 1-3)"
+    meta="Basic-Fit Málaga — Bulevar Louis Pasteur 20 · Actualizado: Febrero 2026"
+    hint-size="100%,300px"></x-import>
+
+  <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.NavMenu"
+    dc-props="{{ navProps }}" hint-size="100%,56px"></x-import>
+
+  <div style="max-width:760px; margin:0 auto; padding:24px 20px 48px; display:grid; gap:32px;">
+
+    <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.SectionBanner"
+      tone="success" title="Objetivos de la fase"
+      subtitle="Técnica, preparación de articulaciones, adaptación del sistema nervioso"
+      dc-props="{{ phaseItems }}" hint-size="100%,200px"></x-import>
+
+    <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.SectionBanner"
+      tone="brand" title="Calentamiento" subtitle="Obligatorio · 5-7 minutos"
+      dc-props="{{ warmupItems }}" hint-size="100%,200px"></x-import>
+
+    <section id="dia-1" style="display:grid; gap:16px;">
+      <div>
+        <h2 style="font:800 26px/1.15 'Archivo Expanded','Archivo',sans-serif; text-transform:uppercase; color:#262626; margin:0 0 4px;">Lunes — Full Body A</h2>
+        <p style="font:400 14px/1.5 'Archivo',sans-serif; color:#757575; margin:0;">Enfoque: Piernas, Pecho, Espalda</p>
+      </div>
+      <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.ExerciseCard"
+        dc-props="{{ ex1 }}" hint-size="100%,420px"></x-import>
+      <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.ExerciseCard"
+        dc-props="{{ ex2 }}" hint-size="100%,320px"></x-import>
+    </section>
+
+    <section id="resumen" style="display:grid; gap:16px;">
+      <h2 style="font:800 26px/1.15 'Archivo Expanded','Archivo',sans-serif; text-transform:uppercase; color:#262626; margin:0;">Resumen semanal</h2>
+      <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.SummaryTable"
+        dc-props="{{ tableProps }}" hint-size="100%,220px"></x-import>
+    </section>
+  </div>
+
+  <x-import component-from-global-scope="BasicFitDesignSystem_1cb8a2.PageFooter"
+    dc-props="{{ footerProps }}" hint-size="100%,140px"></x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      navProps: {
+        activeId: "dia-1",
+        items: [
+          { id: "dia-1", label: "Lunes" },
+          { id: "resumen", label: "Resumen" },
+        ],
+      },
+      phaseItems: { items: ["Intensidad: 60-65% del máximo", "Descanso: 60-90 segundos", "Frecuencia: 3 días por semana"] },
+      warmupItems: { items: ["Elíptica o cinta de correr (5-7 min a ritmo suave)", "Rotaciones de hombros, cadera y rodillas"] },
+      ex1: {
+        number: 1,
+        name: "Prensa de Piernas (Leg Press)",
+        muscles: ["Cuádriceps", "Glúteos"],
+        details: [
+          { label: "Series × Repeticiones", value: "3 × 12" },
+          { label: "Descanso", value: "90 segundos" },
+          { label: "Intensidad", value: "3 reps en reserva" },
+        ],
+        equipment: "Matrix Aura G3-S70 — Prensa de Piernas",
+        steps: [
+          "Siéntese con la espalda firme contra el respaldo",
+          "Pies al ancho de los hombros en la plataforma",
+          "Empuje extendiendo las piernas casi por completo",
+          "Regrese lentamente a la posición inicial",
+        ],
+        videoHref: "https://www.youtube.com/results?search_query=tutorial+prensa+de+piernas",
+      },
+      ex2: {
+        number: 2,
+        name: "Prensa de Pecho (Chest Press)",
+        muscles: ["Pecho", "Tríceps"],
+        details: [
+          { label: "Series × Repeticiones", value: "3 × 10" },
+          { label: "Descanso", value: "90 segundos" },
+        ],
+        equipment: "Matrix Aura G3-S10 — Prensa de Pecho",
+        videoHref: "https://www.youtube.com/results?search_query=tutorial+prensa+pecho+maquina",
+      },
+      tableProps: {
+        columns: ["Día", "Enfoque", "Duración"],
+        rows: [
+          ["Lunes", "Full Body A", "60 min"],
+          ["Miércoles", "Full Body B", "60 min"],
+          ["Sábado", "Full Body C", "60 min"],
+        ],
+      },
+      footerProps: { lines: ["Programa personal — no sustituye asesoramiento médico", "Basic-Fit · Matrix Aura"] },
+    };
+  }
+}
+</script>
+</body>
+</html>

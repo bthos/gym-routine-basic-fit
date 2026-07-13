@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BasicFit Equipment Catalog Schema",
+  "type": "object",
+  "required": ["metadata", "equipment"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["lastUpdated", "source", "languages", "totalEquipment"],
+      "properties": {
+        "lastUpdated": {
+          "type": "string",
+          "format": "date"
+        },
+        "source": {
+          "type": "string"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "totalEquipment": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "equipment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "modelCode",
+          "series",
+          "category",
+          "muscleGroup",
+          "names",
+          "descriptions",
+          "images",
+          "videos",
+          "manuals",
+          "instructions",
+          "specifications",
+          "gyms"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "modelCode": {
+            "type": "string"
+          },
+          "series": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["chest", "shoulders", "back", "arms", "core", "legs"]
+          },
+          "gymZone": {
+            "type": "string",
+            "enum": ["pesos-libres", "strength"],
+            "description": "Sección del gimnasio: pesos-libres (zona libre) o strength (sala de máquinas)"
+          },
+          "muscleGroup": {
+            "type": "object",
+            "required": ["primary", "secondary"],
+            "properties": {
+              "primary": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "secondary": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "names": {
+            "type": "object",
+            "required": ["en", "es", "be"],
+            "properties": {
+              "en": {
+                "type": "string"
+              },
+              "es": {
+                "type": "string"
+              },
+              "be": {
+                "type": "string"
+              }
+            }
+          },
+          "descriptions": {
+            "type": "object",
+            "required": ["en", "es", "be"],
+            "properties": {
+              "en": {
+                "type": "string"
+              },
+              "es": {
+                "type": "string"
+              },
+              "be": {
+                "type": "string"
+              }
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["url", "source", "isMain"],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "isMain": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "videos": {
+            "type": "object",
+            "required": ["en", "es", "be"],
+            "properties": {
+              "en": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["url", "type", "title"],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "string"
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "es": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["url", "type", "title"],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "string"
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "be": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["url", "type", "title"],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "string"
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "manuals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["url", "language", "type"],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "searchTerm": {
+                  "type": "string",
+                  "description": "Term to search on JHT manuals page when direct product URL is not available"
+                }
+              }
+            }
+          },
+          "instructions": {
+            "type": "object",
+            "required": ["en", "es", "be"],
+            "properties": {
+              "en": {
+                "type": "string"
+              },
+              "es": {
+                "type": "string"
+              },
+              "be": {
+                "type": "string"
+              }
+            }
+          },
+          "specifications": {
+            "type": "object",
+            "properties": {
+              "stackHeight": {
+                "type": "string"
+              },
+              "weightStack": {
+                "type": "string"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "gyms": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

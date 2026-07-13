@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "lastUpdated": "2026-02-01",
+    "note": "Pesos actuales del usuario (kg) — aplicables en cualquier gimnasio"
+  },
+  "weights": {
+    "smith-machine": 15,
+    "perfect-squat": 20,
+    "g3-s40": 20,
+    "g3-s10": 32,
+    "g3-s30": 39,
+    "g3-s52": 52,
+    "g3-s42": 32,
+    "g3-s23": 27,
+    "g3-s71": 32,
+    "g3-s70": 45,
+    "g3-s31": 39,
+    "g3-s73": 23
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "basicfit-rutina",
+  "version": "1.0.1",
+  "description": "BasicFit Málaga Equipment Catalog and Routine Generator",
+  "scripts": {
+    "serve": "npx --yes serve . -p 3000",
+    "extract-images": "node scripts/extract-matrix-images-puppeteer.js",
+    "extract-images-all": "node scripts/extract-matrix-images-puppeteer.js --all",
+    "extract-images-list": "node scripts/extract-matrix-images-puppeteer.js --list",
+    "validate-data": "node scripts/validate-data.js",
+    "validate-rutina": "node scripts/validate-rutina.js",
+    "build-rutina": "node scripts/build-rutina.js",
+    "generate-catalog": "node scripts/generate-catalog.js"
+  },
+  "keywords": [
+    "fitness",
+    "gym",
+    "equipment",
+    "basicfit",
+    "matrix"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0",
+    "puppeteer": "^23.11.0"
+  }
+}

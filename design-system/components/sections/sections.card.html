@@ -1,0 +1,82 @@
+<!-- @dsCard group="Sections" viewport="760x1700" name="Sections — Header, Hero, Club Finder, Footer, Mobile Menu" subtitle="Full page-level blocks: site chrome, hero, feature splits — the largest reusable units" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body style="margin:0;background:var(--bf-white);">
+<div id="root"></div>
+<script type="text/babel">
+const { SiteHeader, Hero, ClubFinder, MobileMenu, PageHeader, PageFooter, FeatureSplit } = window.BasicFitDesignSystem_1cb8a2;
+const label = { font: "600 12px/1 var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted, #777)", margin: "0", padding: "10px 24px 0" };
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <div style={{ display: "grid", gap: 20 }}>
+    <p style={label}>Site header</p>
+    <SiteHeader
+      usps={["1600+ Clubs", "Mejor Equipamiento", "App Basic-Fit gratuita"]}
+      utilities={[{ label: "My Basic-Fit" }, { label: "Atención al cliente" }, { label: "ES" }]}
+      navItems={[{ label: "Busca un club" }, { label: "Precios" }, { label: "Club e instalaciones", hasMenu: true }]}
+    />
+    <p style={label}>Hero</p>
+    <Hero
+      title="Empieza por solo" highlight="9,99 €*"
+      subtitle="y llévate una mochila"
+      note="*9,99 € el primer período de 4 semanas. Después, precio según suscripción."
+      primaryCta={{ label: "empezar" }} secondaryCta={{ label: "ver precios" }}
+    />
+    <div style={{ padding: "0 24px" }}>
+      <p style={label}>Club finder</p>
+      <ClubFinder
+        subtitle={<span>Más de <b>240</b> gimnasios en España</span>}
+        cities={["Madrid", "Barcelona", "Valencia", "Sevilla", "Málaga", "Zaragoza"]}
+      />
+    </div>
+    <p style={label}>Feature split</p>
+    <FeatureSplit
+      title="Entrena a cualquier hora"
+      body="Todos nuestros clubes están abiertos 24 horas al día, 7 días a la semana."
+      checks={["Acceso 24/7", "App Basic-Fit incluida", "Sin permanencia"]}
+      cta={{ label: "saber más" }}
+    />
+    <div style={{ padding: "0 24px" }}>
+      <p style={label}>Page header</p>
+      <PageHeader
+        breadcrumb={[{ label: "Home", href: "#" }, { label: "Rutina" }]}
+        title="Rutina Málaga"
+        subtitle="Programa de readaptación para principiantes"
+        badge="FASE 1 — ADAPTACIÓN (Meses 1-3)"
+        meta="Basic-Fit Málaga — Bulevar Louis Pasteur 20 · Actualizado: Febrero 2026"
+      />
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 20, padding: "0 24px" }}>
+      <div>
+        <p style={label}>Mobile menu</p>
+        <MobileMenu
+          items={[
+            { label: "Busca un club" }, { label: "Precios" },
+            { id: "clubs", label: "Club e instalaciones", hasMenu: true },
+            { label: "Clases colectivas" },
+          ]}
+          activeId="clubs"
+          utilities={[{ icon: "user", label: "My Basic-Fit" }, { icon: "info", label: "Atención al cliente" }]}
+        />
+      </div>
+    </div>
+    <p style={label}>Page footer</p>
+    <PageFooter
+      columns={[
+        { title: "Rutina", links: [{ label: "Fase 1 — Adaptación" }, { label: "Equipamiento" }, { label: "Progresión" }] },
+        { title: "Club", links: [{ label: "Basic-Fit Málaga" }, { label: "Horarios 24/7" }] },
+      ]}
+      lines={["Programa personal — no sustituye asesoramiento médico", "Actualizado: Febrero 2026"]}
+    />
+  </div>
+);
+</script>
+</body>
+</html>

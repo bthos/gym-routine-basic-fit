@@ -1,0 +1,55 @@
+/* Basic-Fit DS — color tokens */
+:root {
+  /* Brand */
+  --bf-orange: #F36F21;          /* primary brand orange (logo orange) */
+  --bf-orange-dark: #D85A0F;     /* hover / pressed */
+  --bf-orange-deep: #B84A08;     /* active / text-on-light accessible */
+  --bf-orange-tint: #FEF0E6;     /* tinted surfaces, tag backgrounds */
+  --bf-orange-tint-2: #FCDCC5;   /* stronger tint, borders on tinted surfaces */
+
+  /* Action purple — ALL interactive controls (buttons, links, icons) */
+  --bf-purple: #5B21AC;          /* primary CTA (sampled from basic-fit.com) */
+  --bf-purple-dark: #47188C;     /* hover / pressed */
+  --bf-purple-tint: #F0EAFA;     /* tinted hover surfaces */
+  --bf-purple-deep: #2E055F;     /* nav underlines, active markers */
+
+  /* Ink / neutrals */
+  --bf-ink: #2D2D2D;             /* near-black, headlines + dark surfaces */
+  --bf-ink-2: #4A4A4A;           /* body text on light */
+  --bf-ink-3: #757575;           /* secondary / meta text */
+  --bf-grey-4: #B5B5B5;          /* disabled text, placeholders */
+  --bf-grey-3: #D9D9D9;          /* strong borders */
+  --bf-grey-2: #EBEBEB;          /* hairline borders, dividers */
+  --bf-grey-1: #F5F5F5;          /* section background */
+  --bf-cream: #FBF7F0;           /* warm off-white — USP/utility bar, mobile menu */
+  --bf-sand: #E8D7C1;            /* beige section background (content bands) */
+  --bf-white: #FFFFFF;
+
+  /* Controls */
+  --border-control: #2D2D2D;     /* chip/input borders — ink, 1px */
+
+  /* Semantic */
+  --bf-success: #1E8A4C;         /* achieved weight, confirmations */
+  --bf-success-tint: #E7F5EC;
+  --bf-info: #2A6FDB;            /* cooldown / informational */
+  --bf-info-tint: #EAF1FC;
+  --bf-danger: #D23B2E;          /* warnings, deload alerts */
+  --bf-danger-tint: #FBEBE9;
+
+  /* Semantic aliases */
+  --surface-page: var(--bf-white);
+  --surface-section: var(--bf-grey-1);
+  --surface-card: var(--bf-white);
+  --surface-inverse: var(--bf-ink);
+  --surface-brand: var(--bf-orange);
+  --surface-action: var(--bf-purple);
+  --text-heading: var(--bf-ink);
+  --text-body: var(--bf-ink-2);
+  --text-muted: var(--bf-ink-3);
+  --text-on-brand: var(--bf-white);
+  --text-on-inverse: var(--bf-white);
+  --text-link: var(--bf-purple);
+  --border-default: var(--bf-grey-2);
+  --border-strong: var(--bf-grey-3);
+  --focus-ring: 0 0 0 3px rgba(91, 33, 172, 0.30);
+}

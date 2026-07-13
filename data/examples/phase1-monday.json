@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "name": "Nombre — Fase 1",
+    "phaseName": "Adaptación",
+    "phaseNumber": 1,
+    "gymId": 5,
+    "durationWeeks": 12,
+    "lastUpdated": "2026-07-13"
+  },
+  "phaseInfo": {
+    "objective": "Técnica, preparación de articulaciones, adaptación del sistema nervioso central",
+    "intensityPercent": "60-65%",
+    "restSeconds": "60-90",
+    "frequencyPerWeek": 3
+  },
+  "warmup": {
+    "durationMinutes": "5-7",
+    "steps": [
+      "Elíptica o cinta de correr (5-7 minutos a ritmo suave)",
+      "Rotaciones de hombros, cadera y rodillas",
+      "1 serie de calentamiento antes de cada ejercicio (peso muy ligero)"
+    ]
+  },
+  "cooldown": {
+    "durationMinutes": "5",
+    "steps": [
+      "Estiramientos suaves de los grupos musculares trabajados"
+    ]
+  },
+  "days": [
+    {
+      "label": "Lunes",
+      "intro": "Full Body A",
+      "exercises": [
+        {
+          "name": "Prensa de Pecho",
+          "muscleGroups": ["pectoralis-major", "triceps"],
+          "equipmentId": "g3-s10",
+          "sets": 3,
+          "reps": "10-12",
+          "restSeconds": 75,
+          "intensity": "RIR 2-3",
+          "technique": [
+            "Espalda pegada al respaldo",
+            "Bajar controlado, empujar sin bloquear el codo"
+          ],
+          "videoQuery": "tutorial prensa pecho maquina"
+        },
+        {
+          "name": "Prensa de Piernas",
+          "muscleGroups": ["quadriceps", "glutes"],
+          "equipmentId": "g3-s70",
+          "sets": 3,
+          "reps": "10-12",
+          "restSeconds": 90,
+          "intensity": "RIR 2-3",
+          "technique": [
+            "Pies a la anchura de los hombros",
+            "No bloquear rodillas en la extensión"
+          ]
+        },
+        {
+          "name": "Jalón al Pecho",
+          "muscleGroups": ["latissimus-dorsi"],
+          "equipmentId": "g3-s30",
+          "sets": 3,
+          "reps": "10-12",
+          "restSeconds": 75,
+          "technique": [
+            "Tirar con la espalda, no con los brazos"
+          ],
+          "videoQuery": "tutorial jalón al pecho"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    "Hidratación - 2-3 litros de agua al día",
+    "Calentar siempre antes de cada ejercicio"
+  ],
+  "notes": [
+    {
+      "title": "Progresión",
+      "body": "Si completas todas las series con buena técnica y RIR > 3, sube el peso la próxima sesión."
+    }
+  ]
+}

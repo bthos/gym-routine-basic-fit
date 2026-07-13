@@ -1,0 +1,6 @@
+/* Basic-Fit DS — webfonts.
+   NOTE: Basic-Fit's proprietary brand typeface was not provided.
+   Substitute: Archivo (Google Fonts) — bold grotesque, condensed-capable,
+   closest available match to the brand's heavy sans headlines.
+   Replace with official font files + @font-face when available. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Archivo+Expanded:wght@700;800;900&display=swap');

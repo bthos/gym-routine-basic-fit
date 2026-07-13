@@ -1,0 +1,100 @@
+<!-- @dsCard group="Composite" viewport="760x820" name="Composite — Cards, Tables, Menus" subtitle="Assembled from primitives: equipment/exercise cards, price cards, accordion, table, nav" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body style="margin:0;padding:16px;background:var(--bf-grey-1);">
+<div id="root"></div>
+<script type="text/babel">
+const { EquipmentCard, ExerciseCard, SectionBanner, SummaryTable, Accordion, ArticleCard, PriceCard, NavMenu } = window.BasicFitDesignSystem_1cb8a2;
+const label = { font: "600 12px/1 var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted, #777)", margin: "0 0 6px" };
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <div style={{ display: "grid", gap: 18 }}>
+    <div>
+      <p style={label}>Nav menu</p>
+      <NavMenu activeId="lunes" items={[
+        { id: "fase-info", label: "Información" },
+        { id: "equipamiento", label: "Equipamiento" },
+        { id: "lunes", label: "Lunes" },
+        { id: "miercoles", label: "Miércoles" },
+      ]} />
+    </div>
+    <div>
+      <p style={label}>Section banner + exercise card</p>
+      <div style={{ display: "grid", gap: 10 }}>
+        <SectionBanner tone="brand" title="Calentamiento" subtitle="Duración: 5–7 minutos"
+          items={["Elíptica o cinta de correr a ritmo suave", "Rotaciones de hombros, cadera y rodillas"]} />
+        <ExerciseCard
+          number={1}
+          name="Prensa de Piernas (Leg Press)"
+          muscles={["Cuádriceps", "Glúteos"]}
+          details={[
+            { label: "Series × Repeticiones", value: "3 × 12" },
+            { label: "Descanso", value: "90 s" },
+            { label: "Intensidad", value: "3 reps en reserva" },
+          ]}
+          equipment="Matrix Aura G3-S70 — Prensa de Piernas"
+          steps={["Siéntese con la espalda firme contra el respaldo", "Pies al ancho de los hombros en la plataforma", "Empuje extendiendo las piernas casi por completo"]}
+          videoHref="#"
+        />
+      </div>
+    </div>
+    <div>
+      <p style={label}>Equipment card</p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, alignItems: "start" }}>
+        <EquipmentCard
+          name="Prensa de Pecho" modelCode="G3-S10" series="Aura"
+          imageUrl="https://images.jhtassets.com/aade812e103cdbcfeebf40679e3a74723a65ef68/transformed/w_300"
+          primaryMuscles={["Pectoral mayor"]} secondaryMuscles={["Tríceps", "Deltoides anterior"]}
+          description="Máquina de prensa de pecho sentado para desarrollo pectoral."
+          weight={32} videoHref="#" manualHref="#"
+        />
+        <EquipmentCard
+          name="Jalón al Pecho" modelCode="G3-S30" series="Aura"
+          primaryMuscles={["Dorsal ancho"]} secondaryMuscles={["Bíceps"]}
+          description="Jalón vertical para el desarrollo de la espalda."
+          weight={39} videoHref="#"
+        />
+      </div>
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div>
+        <p style={label}>Price card</p>
+        <PriceCard
+          name="ultimate" flag="Todo incluido"
+          oldPrice="34,99 €" price="9,99 €"
+          feeNote="1,00 € cuota de inscripción"
+          features={["Entrena en toda Europa", "Invita a un amigo siempre"]}
+        />
+      </div>
+      <div>
+        <p style={label}>Article card</p>
+        <ArticleCard
+          tag="Nutrición"
+          title="10 snacks saludables para llevar"
+          body="Ideas sencillas para mantener tu energía y seguir con tus hábitos."
+        />
+      </div>
+    </div>
+    <div>
+      <p style={label}>Summary table + accordion</p>
+      <SummaryTable
+        columns={["Día", "Enfoque", "Duración"]}
+        rows={[["Lunes", "Full Body A", "60 min"], ["Miércoles", "Full Body B", "60 min"], ["Sábado", "Full Body C", "60 min"]]}
+      />
+      <Accordion defaultOpen={0} items={[
+        { question: "¿Qué es el pase de día?", answer: "Acceso completo a cualquier club Basic-Fit durante un día." },
+        { question: "¿Cómo funciona?", answer: "Compra online y recibe tu código QR de acceso al instante." },
+      ]} />
+    </div>
+  </div>
+);
+</script>
+</body>
+</html>

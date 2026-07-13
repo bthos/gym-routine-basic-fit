@@ -1,0 +1,7 @@
+{
+    "airun.settings": {
+        "workspaceId": "44f2d48d-6ad7-4ceb-9d76-fceaf08f2faa"
+    },
+    "specstory.cloudSync.enabled": "always",
+    "python-envs.defaultEnvManager": "ms-python.python:system"
+}
