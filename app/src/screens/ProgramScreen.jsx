@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { PageHeader } from '../../../design-system/components/sections/PageHeader.jsx';
 import { SectionBanner } from '../../../design-system/components/composite/SectionBanner.jsx';
@@ -7,8 +7,11 @@ import { SummaryTable } from '../../../design-system/components/composite/Summar
 import { RuleItem } from '../../../design-system/components/primitives/RuleItem.jsx';
 import { NoteItem } from '../../../design-system/components/primitives/NoteItem.jsx';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
+import { Button } from '../../../design-system/components/primitives/Button.jsx';
+import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
 import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/equipment.js';
 import { dayFocusLabels, muscleGroupLabels } from '../lib/muscleGroups.js';
+import { getActiveSession, listSessions, clearActiveRutina } from '../lib/db.js';
 
 const wrap = { maxWidth: 760, margin: '0 auto', padding: '0 var(--page-gutter)', display: 'grid', gap: 'var(--space-8)' };
 
@@ -26,15 +29,52 @@ function SectionTitle({ children }) {
  * exercise render. Mirrors ux-design.md's "Program → Day list → Day detail"
  * flow, replacing the original single-page anchor-nav document.
  */
-export function ProgramScreen({ rutina }) {
+export function ProgramScreen({ rutina, onGoImport, onRutinaCleared }) {
   const { dayIndex } = useParams();
   if (dayIndex === undefined) {
-    return <ProgramOverview rutina={rutina} />;
+    return <ProgramOverview rutina={rutina} onGoImport={onGoImport} onRutinaCleared={onRutinaCleared} />;
   }
   return <ProgramDayDetail rutina={rutina} dayIndex={Number(dayIndex)} />;
 }
 
-function ProgramOverview({ rutina }) {
+function ProgramOverview({ rutina, onGoImport, onRutinaCleared }) {
+  const [sheet, setSheet] = useState(null); // null | 'replace-warn' | 'remove-b' | 'remove-c' | 'remove-d'
+  const [removing, setRemoving] = useState(false);
+  const [removeError, setRemoveError] = useState(false);
+
+  const handleReplaceClick = async () => {
+    const activeSession = await getActiveSession();
+    if (activeSession) {
+      setSheet('replace-warn');
+    } else {
+      onGoImport();
+    }
+  };
+
+  const handleRemoveClick = async () => {
+    const [activeSession, sessions] = await Promise.all([getActiveSession(), listSessions()]);
+    if (activeSession) {
+      setSheet('remove-d');
+    } else if (sessions.length > 0) {
+      setSheet('remove-c');
+    } else {
+      setSheet('remove-b');
+    }
+  };
+
+  const handleRemoveConfirm = async () => {
+    setSheet(null);
+    setRemoving(true);
+    setRemoveError(false);
+    try {
+      await clearActiveRutina();
+      onRutinaCleared();
+    } catch {
+      setRemoving(false);
+      setRemoveError(true);
+    }
+  };
+
   const { program, phaseInfo, warmup, cooldown, days, rules, notes } = rutina;
 
   const phaseStats = [
@@ -53,6 +93,7 @@ function ProgramOverview({ rutina }) {
   ]);
 
   return (
+    <>
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
       <PageHeader title={program.name} subtitle={`${program.phaseName} · ${program.durationWeeks} semanas`} badge={`Fase ${program.phaseNumber}`} />
       <div style={{ ...wrap, paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-10)' }}>
@@ -141,8 +182,83 @@ function ProgramOverview({ rutina }) {
             </div>
           </section>
         )}
+
+        <div style={{ marginTop: 'var(--space-8)' }}>
+          <hr aria-hidden="true" style={{ border: 'none', borderTop: '1px solid var(--border-default)', margin: '0 0 var(--space-6)' }} />
+          <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
+            <Button
+              variant="outline"
+              style={{ width: '100%' }}
+              disabled={removing}
+              onClick={handleReplaceClick}
+            >
+              Reemplazar programa
+            </Button>
+            {(!sheet || sheet === 'replace-warn') && (
+              <Button
+                variant="ghost"
+                style={{ width: '100%', color: 'var(--bf-danger)' }}
+                disabled={removing}
+                onClick={handleRemoveClick}
+              >
+                {removing ? 'Eliminando...' : 'Eliminar programa'}
+              </Button>
+            )}
+            {removeError && (
+              <p role="alert" style={{ font: 'var(--text-body-sm)', color: 'var(--bf-danger)', margin: 'var(--space-3) 0 0' }}>
+                Error al eliminar el programa. Inténtalo de nuevo.
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
+
+    {sheet === 'replace-warn' && (
+      <ConfirmSheet
+        title="Sesión en curso"
+        description="Tienes una sesión en curso. Si reemplazas el programa ahora, la sesión podría quedar desactualizada. ¿Continuar de todas formas?"
+        primaryLabel="Ir a importar"
+        onPrimary={() => onGoImport()}
+        cancelLabel="Cancelar"
+        onCancel={() => setSheet(null)}
+        danger={false}
+      />
+    )}
+    {sheet === 'remove-b' && (
+      <ConfirmSheet
+        title="Eliminar programa"
+        description="Se eliminará el programa activo. Podrás importar uno nuevo en cualquier momento."
+        primaryLabel="Eliminar"
+        onPrimary={handleRemoveConfirm}
+        cancelLabel="Cancelar"
+        onCancel={() => setSheet(null)}
+        danger={true}
+      />
+    )}
+    {sheet === 'remove-c' && (
+      <ConfirmSheet
+        title="Eliminar programa"
+        description="Se eliminará el programa activo. Tu historial de sesiones se conserva, pero ya no estará vinculado a un programa."
+        primaryLabel="Eliminar de todas formas"
+        onPrimary={handleRemoveConfirm}
+        cancelLabel="Cancelar"
+        onCancel={() => setSheet(null)}
+        danger={true}
+      />
+    )}
+    {sheet === 'remove-d' && (
+      <ConfirmSheet
+        title="Sesión en curso"
+        description="Tienes una sesión en curso. Si eliminas el programa ahora, la sesión podría quedar desactualizada. ¿Continuar de todas formas?"
+        primaryLabel="Eliminar de todas formas"
+        onPrimary={handleRemoveConfirm}
+        cancelLabel="Cancelar"
+        onCancel={() => setSheet(null)}
+        danger={true}
+      />
+    )}
+    </>
   );
 }
 

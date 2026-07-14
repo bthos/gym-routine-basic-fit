@@ -345,3 +345,15 @@ vuelva a generar el JSON completo. Vuelve a ejecutar el validador. Repite hasta 
   `data/equipment.json`.
 - **¿No sabes el ID de tu gimnasio?** Consulta `data/gyms.json` — cada gimnasio tiene
   un `id` numérico y un nombre/dirección legibles (`name`/`address`).
+
+---
+
+## Actualizar tu programa
+
+Una vez que hay un programa cargado, puedes reemplazarlo o eliminarlo desde la pestaña **Programa**:
+
+1. Ve a la pestaña **Programa** y desplázate hasta el final de la vista general.
+2. Pulsa **Reemplazar programa** para ir a la pantalla de importación y pegar un nuevo rutina.json.
+3. O pulsa **Eliminar programa** para borrar el programa activo y volver al estado inicial.
+
+El historial de sesiones se conserva al eliminar — los registros se mantienen pero ya no estarán vinculados a un programa.

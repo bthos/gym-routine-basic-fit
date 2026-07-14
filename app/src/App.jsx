@@ -50,11 +50,11 @@ function Shell() {
           />
           <Route
             path="/program"
-            element={rutina ? <ProgramScreen rutina={rutina} /> : <Navigate to="/import" replace />}
+            element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
           />
           <Route
             path="/program/:dayIndex"
-            element={rutina ? <ProgramScreen rutina={rutina} /> : <Navigate to="/import" replace />}
+            element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
           />
           <Route path="/session" element={<ActiveSessionScreen />} />
           <Route path="/history" element={<HistoryScreen />} />

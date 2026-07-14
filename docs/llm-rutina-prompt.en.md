@@ -338,3 +338,15 @@ re-output the full JSON. Re-run the validator. Repeat until it passes.
   free text — they must match `data/equipment.json` exactly.
 - **Not sure your gym's id?** Check `data/gyms.json` — each gym has a numeric `id` and
   a human-readable `name`/`address`.
+
+---
+
+## Updating your program
+
+Once a program is loaded, you can replace or remove it from the **Program** tab in the app:
+
+1. Open the **Program** tab and scroll to the bottom of the overview.
+2. Tap **Reemplazar programa** (Replace program) to go to the import screen and paste a new rutina.json.
+3. Or tap **Eliminar programa** (Remove program) to clear the active program and return to first-run state.
+
+Session history is preserved on remove — records are kept but are no longer linked to a program.

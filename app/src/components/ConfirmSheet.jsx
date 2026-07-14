@@ -7,7 +7,7 @@ import { Button } from '../../../design-system/components/primitives/Button.jsx'
  * back the Import screen's re-import discard warning (spec.md Render AC)
  * without duplicating the fixed-overlay/sheet markup twice.
  */
-export function ConfirmSheet({ title, description, primaryLabel, onPrimary, secondaryLabel, onSecondary, cancelLabel = 'Cancelar', onCancel }) {
+export function ConfirmSheet({ title, description, primaryLabel, onPrimary, secondaryLabel, onSecondary, cancelLabel = 'Cancelar', onCancel, danger = false }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(45,45,45,.5)', zIndex: 300, display: 'flex', alignItems: 'flex-end' }}>
       <div
@@ -27,7 +27,11 @@ export function ConfirmSheet({ title, description, primaryLabel, onPrimary, seco
         {description && <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 var(--space-5)' }}>{description}</p>}
         <div style={{ display: 'grid', gap: 10 }}>
           {onPrimary && (
-            <Button variant="primary" style={{ width: '100%' }} onClick={onPrimary}>
+            <Button
+              variant="primary"
+              style={{ width: '100%', ...(danger ? { background: 'var(--bf-danger)', borderColor: 'var(--bf-danger)' } : {}) }}
+              onClick={onPrimary}
+            >
               {primaryLabel}
             </Button>
           )}
