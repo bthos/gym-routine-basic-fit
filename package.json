@@ -1,6 +1,6 @@
 {
   "name": "basicfit-rutina",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "BasicFit Málaga Equipment Catalog and Routine Generator",
   "scripts": {
     "serve": "npx --yes serve . -p 3000",
@@ -10,7 +10,13 @@
     "validate-data": "node scripts/validate-data.js",
     "validate-rutina": "node scripts/validate-rutina.js",
     "build-rutina": "node scripts/build-rutina.js",
-    "generate-catalog": "node scripts/generate-catalog.js"
+    "generate-catalog": "node scripts/generate-catalog.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:viewport": "node tests/viewport-check.js"
   },
   "keywords": [
     "fitness",
@@ -25,6 +31,22 @@
     "ajv": "^8.20.0",
     "axios": "^1.7.0",
     "cheerio": "^1.0.0",
-    "puppeteer": "^23.11.0"
+    "idb": "^8.0.0",
+    "puppeteer": "^23.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "fake-indexeddb": "^6.0.0",
+    "jsdom": "^25.0.1",
+    "vite": "^6.0.3",
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^2.1.8"
   }
 }

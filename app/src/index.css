@@ -1,0 +1,47 @@
+/* App-level resets layered on top of design-system/styles.css (tokens). */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bf-grey-1);
+  font: var(--text-body-md);
+  color: var(--bf-ink);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Screen-reader-only content (aria-live announcements, etc.) — visually
+   hidden but still reachable by assistive tech, standard "sr-only" pattern. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Every screen behind the fixed BottomTabBar needs bottom padding so its
+   last content isn't hidden underneath the bar; screens set this via inline
+   style already (paddingBottom), this is just the safe-area floor. */
+:root {
+  --tab-bar-height: 58px;
+}
