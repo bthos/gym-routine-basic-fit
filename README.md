@@ -84,7 +84,10 @@ basicfit-rutina/
 ├── tests/
 │   └── viewport-check.js           # Puppeteer: no horizontal scroll + tab-bar row-wrap at 360/390/412/768px
 ├── docs/
-│   └── llm-rutina-prompt.md        # Prompt template for authoring routines with an LLM
+│   ├── llm-rutina-prompt.md        # Prompt template — English, original (backward-compat)
+│   ├── llm-rutina-prompt.en.md     # English
+│   ├── llm-rutina-prompt.es.md     # Spanish / Español
+│   └── llm-rutina-prompt.be.md     # Belarusian / Беларуская
 ├── equipment-catalog.html          # Static catalog (data embedded, works offline)
 ├── rutina_*.html                   # Legacy static routine pages
 ├── vite.config.js                  # Vite + React + vite-plugin-pwa config
@@ -174,7 +177,15 @@ Training programs are authored by pasting a filled-in checklist into any LLM cha
 4. If validation fails, paste the error text back to the LLM and re-validate
 5. Import the validated file into the PWA
 
-Full walkthrough, prompt template, and a worked example: **[`docs/llm-rutina-prompt.md`](docs/llm-rutina-prompt.md)**
+Full walkthrough, prompt template, and a worked example — pick your language:
+
+| Language | Guide |
+|----------|-------|
+| English | [`docs/llm-rutina-prompt.en.md`](docs/llm-rutina-prompt.en.md) |
+| Español | [`docs/llm-rutina-prompt.es.md`](docs/llm-rutina-prompt.es.md) |
+| Беларуская | [`docs/llm-rutina-prompt.be.md`](docs/llm-rutina-prompt.be.md) |
+
+The original [`docs/llm-rutina-prompt.md`](docs/llm-rutina-prompt.md) is kept for backward compatibility.
 
 ## Data Format
 

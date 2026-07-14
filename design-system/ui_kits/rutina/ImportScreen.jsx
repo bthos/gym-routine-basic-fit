@@ -1,9 +1,27 @@
 const DSImp = window.BasicFitDesignSystem_1cb8a2;
 const { Icon: ImpIcon, Button: ImpButton } = DSImp;
 
-/** Mockup — states: empty | loading | error | success (see ux-design.md States Matrix). */
-function ImportScreen({ demoState = "empty", onImported }) {
+/* Helper: detect guide locale from navigator.language (mirrors production helper). */
+function detectGuideLocale(navLang) {
+  const code = ((navLang !== undefined ? navLang : navigator.language) || "").toLowerCase().slice(0, 2);
+  if (code === "es") return "es";
+  if (code === "be") return "be";
+  return "en";
+}
+
+const GUIDE_LINK_TEXT = {
+  es: "Ver la guía de creación con LLM →",
+  en: "View the LLM creation guide →",
+  be: "Паглядзіце кіраўніцтва па стварэнні з LLM →",
+};
+
+/** Mockup — states: empty | loading | error | success (see ux-design.md States Matrix).
+    demoLocale: 'es'|'en'|'be' — overrides navigator.language for design-system preview. */
+function ImportScreen({ demoState = "empty", demoLocale, onImported }) {
   const [text, setText] = React.useState(demoState === "error" ? '{ "schemaVersion": 1, "days": [ { "label": "Lunes", "exercises": [ { "equipmentId": "g3-xx" } ] } ] }' : "");
+  const [showGuide, setShowGuide] = React.useState(false);
+  const locale = demoLocale || detectGuideLocale(navigator.language);
+  const GuideOverlayComp = window.GuideOverlay;
   const errors = demoState === "error" ? [
     'program.phaseName: required',
     'phaseInfo: required',
@@ -55,9 +73,19 @@ function ImportScreen({ demoState = "empty", onImported }) {
 
         <p style={{ textAlign: "center", font: "var(--text-body-sm)", color: "var(--text-muted)", marginTop: "var(--space-6)" }}>
           ¿No tienes un rutina.json?<br />
-          <a href="#" style={{ color: "var(--text-link)" }}>Ver la guía de creación con LLM →</a>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); setShowGuide(true); }}
+            style={{ color: "var(--text-link)", fontWeight: 600 }}
+          >
+            {GUIDE_LINK_TEXT[locale]}
+          </a>
         </p>
       </div>
+
+      {showGuide && GuideOverlayComp && (
+        <GuideOverlayComp locale={locale} onClose={() => setShowGuide(false)} />
+      )}
     </div>
   );
 }

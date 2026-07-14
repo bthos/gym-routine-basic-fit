@@ -1,14 +1,81 @@
 {
   "metadata": {
-    "lastUpdated": "2026-02-01",
-    "source": "BasicFit Malaga Website",
-    "city": "Málaga",
-    "totalGyms": 7,
-    "note": "6 confirmed locations in Málaga city, 1 location in nearby Rincón de la Victoria"
+    "lastUpdated": "2026-07-14",
+    "source": "basic-fit.com (per-country homepages, verified July 2026)",
+    "note": "Network-wide club counts from official Basic-Fit country websites. Individual gym data: Málaga (Spain) fully enumerated; other countries have representative city data only. Full gym enumeration requires API access or per-city scraping of 1,600+ locations."
+  },
+  "network": {
+    "totalClubsApprox": 1666,
+    "totalClubsLabel": "1,600+",
+    "countries": {
+      "NL": {
+        "name": "Netherlands",
+        "nameFr": "Pays-Bas",
+        "nameEs": "Países Bajos",
+        "clubs": 254,
+        "majorCities": [
+          "Amsterdam", "Rotterdam", "Utrecht", "Almere", "Den Haag",
+          "Eindhoven", "Tilburg", "Alkmaar", "Almelo", "Alphen aan den Rijn"
+        ]
+      },
+      "BE": {
+        "name": "Belgium",
+        "nameFr": "Belgique",
+        "nameEs": "Bélgica",
+        "clubs": 220,
+        "majorCities": [
+          "Antwerpen", "Gent", "Brussels", "Luik", "Hasselt", "Halle"
+        ]
+      },
+      "FR": {
+        "name": "France",
+        "nameFr": "France",
+        "nameEs": "Francia",
+        "clubs": 890,
+        "majorCities": [
+          "Paris", "Marseille", "Lyon", "Lille", "Nantes",
+          "Nice", "Montpellier", "Bordeaux", "Toulouse", "Angers", "Nîmes"
+        ]
+      },
+      "LU": {
+        "name": "Luxembourg",
+        "nameFr": "Luxembourg",
+        "nameEs": "Luxemburgo",
+        "clubs": 10,
+        "cities": [
+          "Belvaux", "Bereldange", "Bettembourg", "Ettelbruck", "Foetz",
+          "Gasperich", "Luxembourg", "Sandweiler", "Strassen", "Windhof"
+        ]
+      },
+      "ES": {
+        "name": "Spain",
+        "nameFr": "Espagne",
+        "nameEs": "España",
+        "clubs": 240,
+        "majorCities": [
+          "Madrid", "Barcelona", "Valencia", "Sevilla", "Málaga",
+          "Zaragoza", "Bilbao", "Alcalá de Henares", "Alicante",
+          "Albacete", "Córdoba", "Gijón"
+        ]
+      },
+      "DE": {
+        "name": "Germany",
+        "nameFr": "Allemagne",
+        "nameEs": "Alemania",
+        "clubs": 52,
+        "majorCities": [
+          "Berlin", "Hamburg", "Köln", "Frankfurt", "Bremen",
+          "Bielefeld", "Dortmund", "Bochum", "Essen",
+          "Freiburg", "Gelsenkirchen", "Kaiserslautern"
+        ]
+      }
+    }
   },
   "gyms": [
     {
       "id": 1,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Armengual de la Mota",
       "address": "Calle Armengual de la Mota 26, 29007 Málaga",
       "neighborhood": "Centro",
@@ -20,6 +87,8 @@
     },
     {
       "id": 2,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Calle Héroe de Sostoa 51",
       "address": "Calle Héroe de Sostoa 51, Málaga",
       "neighborhood": "Jardín de la Abadía",
@@ -31,6 +100,8 @@
     },
     {
       "id": 3,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Centro Comercial Alameda",
       "address": "Avda. Andalucía s/n, Centro Comercial Alameda, Málaga",
       "neighborhood": "La Luz",
@@ -42,6 +113,8 @@
     },
     {
       "id": 4,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Calle Félix García Palacios 1",
       "address": "Calle Félix García Palacios 1, Málaga",
       "hours": {
@@ -52,6 +125,8 @@
     },
     {
       "id": 5,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Bulevar Louis Pasteur 20",
       "address": "Bulevar Louis Pasteur 20, Málaga",
       "neighborhood": "Teatinos",
@@ -63,6 +138,8 @@
     },
     {
       "id": 6,
+      "country": "ES",
+      "city": "Málaga",
       "name": "Calle Olmos 43",
       "address": "Calle Olmos 43, Málaga",
       "neighborhood": "El Palo",
@@ -74,9 +151,11 @@
     },
     {
       "id": 7,
+      "country": "ES",
+      "city": "Rincón de la Victoria",
       "name": "Rincón de la Victoria",
       "address": "Rincón de la Victoria, Málaga",
-      "note": "Location in nearby Rincón de la Victoria - address to be confirmed",
+      "note": "Location in nearby Rincón de la Victoria — address to be confirmed",
       "hours": {
         "weekday": "6:00-24:00",
         "weekend": "8:00-21:00"
