@@ -10,7 +10,7 @@
     "validate-data": "node scripts/validate-data.js",
     "validate-rutina": "node scripts/validate-rutina.js",
     "build-rutina": "node scripts/build-rutina.js",
-    "generate-catalog": "node scripts/generate-catalog.js",
+    "build-catalog": "node scripts/generate-catalog.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
