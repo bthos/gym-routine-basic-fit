@@ -47,7 +47,10 @@ basicfit-rutina/
 │       ├── App.jsx                 # HashRouter + route shell
 │       ├── components/
 │       │   ├── BottomTabBar.jsx    # Persistent bottom navigation (Home/Program/Catalog/History)
-│       │   └── ConfirmSheet.jsx    # Reusable confirmation sheet
+│       │   ├── ConfirmSheet.jsx    # Reusable confirmation sheet
+│       │   └── InstallBanner.jsx   # "Add to Home Screen" banner (beforeinstallprompt)
+│       ├── hooks/
+│       │   └── useInstallPrompt.js # Captures beforeinstallprompt; drives InstallBanner
 │       ├── screens/
 │       │   ├── ImportScreen.jsx    # Import a rutina.json
 │       │   ├── HomeScreen.jsx      # Today's workout summary
@@ -61,7 +64,11 @@ basicfit-rutina/
 │       │   ├── sessionMachine.js   # Pure session-state reducer
 │       │   ├── exportFormat.js     # sessions[] → { json, markdown }
 │       │   ├── today.js            # Heuristic: which day is "today" in the rutina
-│       │   └── validateImport.js   # Browser wrapper around scripts/lib/rutina-validator.js
+│       │   ├── validateImport.js   # Browser wrapper around scripts/lib/rutina-validator.js
+│       │   ├── difficulty.js       # Difficulty enum (easy/normal/hard) ↔ display labels
+│       │   ├── muscleGroups.js     # Muscle group display labels
+│       │   ├── relativeTime.js     # Relative time formatting ("hace 2 días")
+│       │   └── trends.js           # Per-exercise trend list for History screen
 │       └── data/
 │           └── equipment.js        # Imports data/equipment.json at build time
 ├── data/
@@ -84,6 +91,7 @@ basicfit-rutina/
 ├── tests/
 │   └── viewport-check.js           # Puppeteer: no horizontal scroll + tab-bar row-wrap at 360/390/412/768px
 ├── docs/
+│   ├── export-format.md            # Export Markdown + JSON format reference (LLM paste contract)
 │   ├── llm-rutina-prompt.md        # Prompt template — English, original (backward-compat)
 │   ├── llm-rutina-prompt.en.md     # English
 │   ├── llm-rutina-prompt.es.md     # Spanish / Español
@@ -101,7 +109,7 @@ basicfit-rutina/
 | `npm run dev` | Start Vite dev server for the PWA (`http://localhost:5173`) |
 | `npm run build` | Build PWA for production → `dist/` |
 | `npm run preview` | Serve the production build locally |
-| `npm test` | Run Vitest unit tests (lib modules) |
+| `npm test` | Run Vitest test suites (lib modules + component tests) |
 | `npm run test:watch` | Vitest in watch mode |
 | `npm run test:viewport` | Puppeteer viewport regression: 360/390/412/768px × 5 routes (requires `npm run preview` running) |
 | `npm run validate-data` | Validate `data/equipment.json` against its schema |
@@ -147,13 +155,15 @@ npm run test:viewport    # verify no horizontal overflow and tab-bar stays singl
 ### Running tests
 
 ```bash
-npm test                 # 5 Vitest suites: sessionMachine, exportFormat, today, db, validateImport
+npm test                 # Vitest suites: sessionMachine, exportFormat, today, db, validateImport, ProgramScreen, ConfirmSheet, useInstallPrompt
 npm run validate-data    # data integrity gate (27 equipment items)
 ```
 
 ### Installing the PWA
 
 After `npm run preview` (or deploying `dist/`), open the app in Chrome/Edge on Android or Safari on iOS and use the browser's "Add to Home Screen" / "Install" prompt. The manifest at `app/public/manifest.json` uses a relative `start_url` and `scope` so it works on any static host.
+
+On Chromium-based browsers (Chrome, Edge, Samsung Internet), the app also shows an **InstallBanner** at the top of the screen when the browser fires the `beforeinstallprompt` event. Tap **Instalar** to trigger the native install dialog without needing the browser menu. Tap **Ahora no** to dismiss it for the session; the banner won't reappear once the app is installed.
 
 ## Using the PWA
 
@@ -162,7 +172,7 @@ After `npm run preview` (or deploying `dist/`), open the app in Chrome/Edge on A
 3. **Program** — full routine view across all days.
 4. **Active session** — tap a day on Home to start. Log weight + difficulty per exercise. Finish or abandon at any time.
 5. **History** — past sessions with per-exercise last-3-sessions weight trend.
-6. **Export** — download a JSON archive or copy Markdown to clipboard. Optional Web Share on mobile.
+6. **Export** — download a JSON archive or copy Markdown to clipboard. Optional Web Share on mobile. See [`docs/export-format.md`](docs/export-format.md) for the exact format.
 7. **Catalog** — all 27 equipment items with images and instructions (EN/ES/BE).
 
 All data is stored locally in IndexedDB — no account, no server.
@@ -176,6 +186,8 @@ Training programs are authored by pasting a filled-in checklist into any LLM cha
 3. Save the reply and validate: `npm run validate-rutina -- path/to/rutina.json`
 4. If validation fails, paste the error text back to the LLM and re-validate
 5. Import the validated file into the PWA
+
+When repeating this for a second phase, paste the Markdown from the PWA's **Export** screen as field 8 — the LLM uses it to understand what actually happened (weight progression, difficulty, abandoned sessions). See [`docs/export-format.md`](docs/export-format.md) for the exact format.
 
 Full walkthrough, prompt template, and a worked example — pick your language:
 

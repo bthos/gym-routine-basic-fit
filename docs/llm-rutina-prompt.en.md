@@ -55,7 +55,7 @@ paste it into Step 3's `REQUEST` section.
 5. Injuries / movements to avoid (write "none"/"ninguna" if none):
 6. Target gym (name or id — see data/gyms.json):
 7. Language for the output text:
-8. Prior progress export (optional — paste Markdown from the PWA's export screen, or leave blank):
+8. Prior progress export (optional — paste Markdown from the PWA's Export screen, or leave blank; see docs/export-format.md for the format):
 ```
 
 | # | Field | Example | Required |
@@ -67,7 +67,7 @@ paste it into Step 3's `REQUEST` section.
 | 5 | Injuries / movements to avoid | "Evitar press militar por hombro derecho" | no — write "none" if none |
 | 6 | Target gym | "Avda. Andalucía, Centro Comercial Alameda, Málaga" | yes — determines which equipment subset applies |
 | 7 | Language for the output text | "Español" | yes |
-| 8 | Prior progress export | pasted Markdown from the PWA's export screen | no — leave blank until the PWA exists |
+| 8 | Prior progress export | pasted Markdown from the PWA's export screen | no — omit if starting a first phase or if no sessions logged yet |
 
 ## Step 2 — Attach your equipment list
 
@@ -338,6 +338,35 @@ re-output the full JSON. Re-run the validator. Repeat until it passes.
   free text — they must match `data/equipment.json` exactly.
 - **Not sure your gym's id?** Check `data/gyms.json` — each gym has a numeric `id` and
   a human-readable `name`/`address`.
+
+---
+
+## Using your progress export (field 8)
+
+After running a phase, the PWA's **History → Exportar progreso** screen produces a
+Markdown text you can paste as-is into field 8 of the checklist above. It looks like:
+
+```
+Prensa de Pecho (g3-s10)
+  · 32kg / difícil
+  · 32kg / normal
+  · 35kg / fácil
+
+Jalón al Pecho (g3-s30)
+  · 45kg / normal
+  · 48kg / fácil
+
+Sesiones sin completar:
+  · Lunes — 2026-07-01 (abandonada)
+```
+
+The LLM reads this as evidence of which weights were manageable, which felt too easy or
+too hard, and which sessions were abandoned — and adjusts the next phase accordingly
+(progression, regression, or weight plateau).
+
+**Full format reference:** [`docs/export-format.md`](export-format.md) — covers the
+Markdown format rules, the JSON archive format, the cross-device copy-paste workflow,
+and a worked example.
 
 ---
 

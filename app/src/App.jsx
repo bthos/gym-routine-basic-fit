@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { BottomTabBar } from './components/BottomTabBar.jsx';
+import { InstallBanner } from './components/InstallBanner.jsx';
 import { ImportScreen } from './screens/ImportScreen.jsx';
 import { HomeScreen } from './screens/HomeScreen.jsx';
 import { ProgramScreen } from './screens/ProgramScreen.jsx';
@@ -34,6 +35,7 @@ function Shell() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
+      <InstallBanner />
       <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
         <Routes>
           <Route
