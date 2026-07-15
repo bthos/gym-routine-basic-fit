@@ -1,10 +1,10 @@
 # BasicFit Rutina
 
-A multilingual (EN/ES/BE) equipment catalog and training-routine PWA for BasicFit Málaga gyms featuring Matrix Aura series strength machines. Includes an offline-capable React PWA for tracking workouts, a static HTML catalog viewer, and an LLM-based routine authoring workflow.
+A multilingual (EN/ES/BE) equipment catalog and training-routine PWA for BasicFit gyms featuring Matrix Aura series strength machines. Includes an offline-capable React PWA for tracking workouts, a static HTML catalog viewer, and an LLM-based routine authoring workflow.
 
 ## Overview
 
-27 Matrix equipment items (25 Aura series + Smith Machine + Perfect Squat) across 7 BasicFit locations in Málaga, Spain. Each entry includes multilingual names and instructions (English, Spanish, Belarusian), product images, video links, PDF manuals, and muscle-group targeting.
+27 Matrix equipment items (25 Aura series + Smith Machine + Perfect Squat) across BasicFit locations. Each entry includes multilingual names and instructions (English, Spanish, Belarusian), product images, video links, PDF manuals, and muscle-group targeting.
 
 The **Rutina PWA** (`app/`) lets you import a `rutina.json` training program, log workout sessions with per-exercise weight and difficulty, review history, and export progress — all offline, no backend.
 
@@ -73,7 +73,7 @@ basicfit-rutina/
 │           └── equipment.js        # Imports data/equipment.json at build time
 ├── data/
 │   ├── equipment.json              # Complete equipment catalog (27 items)
-│   ├── gyms.json                   # 7 BasicFit Málaga locations
+│   ├── gyms.json                   # BasicFit locations
 │   ├── user-weights.json           # Default weights per equipment
 │   ├── examples/
 │   │   └── phase1-monday.json      # Example rutina.json for first-run import
@@ -84,7 +84,7 @@ basicfit-rutina/
 ├── scripts/                        # Node.js build and scraping scripts
 │   ├── lib/
 │   │   └── rutina-validator.js     # Shared rutina.json validator (isomorphic, used by PWA)
-│   ├── generate-catalog.js         # Embeds equipment data into equipment-catalog.html
+│   ├── build-catalog.js            # Embeds equipment data into equipment-catalog.html
 │   ├── build-rutina.js             # Embeds data into legacy rutina_*.html files
 │   ├── validate-data.js            # Schema validation for equipment.json
 │   └── validate-rutina.js          # CLI validator for rutina.json files
@@ -115,7 +115,7 @@ basicfit-rutina/
 | `npm run validate-data` | Validate `data/equipment.json` against its schema |
 | `npm run validate-rutina -- <path>` | Validate a `rutina.json` file against its schema + cross-check `equipmentId` values |
 | `npm run serve` | Serve the repo root on port 3000 (for static HTML pages) |
-| `npm run generate-catalog` | Embed equipment data into `equipment-catalog.html` |
+| `npm run build-catalog` | Embed equipment data into `equipment-catalog.html` |
 | `npm run build-rutina` | Embed equipment + weights into legacy `rutina_*.html` files |
 | `npm run extract-images` | Scrape equipment images from Matrix product pages (Puppeteer) |
 
@@ -264,7 +264,7 @@ G3-S70 Leg Press · G3-S71 Leg Extension · G3-S72 Seated Leg Curl · G3-S73 Pro
 
 ## Gym Locations
 
-7 BasicFit locations in Málaga, Spain:
+BasicFit locations:
 
 1. Armengual de la Mota — Calle Armengual de la Mota 26, 29007 (Centro)
 2. Héroe de Sostoa — Calle Héroe de Sostoa 51
@@ -281,7 +281,7 @@ To add or update equipment:
 1. Edit `data/equipment.json`
 2. Follow the existing structure (EN/ES/BE content required)
 3. Run `npm run validate-data` — must pass
-4. Run `npm run generate-catalog` to update the static HTML catalog
+4. Run `npm run build-catalog` to update the static HTML catalog
 
 ## License
 
@@ -290,5 +290,5 @@ For personal use. Equipment specifications and names are based on publicly avail
 ## Resources
 
 - [Matrix Fitness](https://www.matrixfitness.com/)
-- [BasicFit Málaga](https://www.basic-fit.com/en-es/gyms/malaga)
+- [BasicFit](https://www.basic-fit.com/en-es/gyms)
 - [Matrix Manuals](https://jhtsupport.com/eng/matrix/manuals/)

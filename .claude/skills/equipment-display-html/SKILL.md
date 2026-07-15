@@ -90,4 +90,4 @@ Consistent scheme across the catalog:
 
 ## Talaka fit
 
-This is a domain-convention skill, not a pipeline stage. It carries knowledge; it doesn't own a handoff. When `@cmok` builds or edits equipment HTML, these rules apply. After changes, the data gate is `npm run validate-data` (per `.tlk/PROJECT.md`); the build is `npm run generate-catalog && npm run build-rutina`. Pair with the `matrix-image-handling` skill whenever image URLs are involved.
+This is a domain-convention skill, not a pipeline stage. It carries knowledge; it doesn't own a handoff. When `@cmok` builds or edits equipment HTML, these rules apply. After changes, the data gate is `npm run validate-data` (per `.tlk/PROJECT.md`); the build is `npm run build-catalog && npm run build-rutina`. Pair with the `matrix-image-handling` skill whenever image URLs are involved.

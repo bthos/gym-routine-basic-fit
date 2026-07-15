@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
 import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
+import { GuideOverlay } from '../components/GuideOverlay.jsx';
+import { detectGuideLocale, GUIDE_LINK_TEXT } from '../lib/guideLocale.js';
 import { validateImportedRutina } from '../lib/validateImport.js';
 import { saveActiveRutina, getActiveRutina, getActiveSession, listSessions } from '../lib/db.js';
 import exampleRutina from '../../../data/examples/phase1-monday.json';
@@ -15,8 +17,11 @@ export function ImportScreen({ onImported }) {
   const [text, setText] = useState('');
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [pendingRutina, setPendingRutina] = useState(null); // parsed+valid, awaiting discard-warning confirmation
   const fileInputRef = useRef(null);
+  const guideLinkRef = useRef(null);
+  const locale = detectGuideLocale(navigator.language);
 
   function handleFilePick(e) {
     const file = e.target.files && e.target.files[0];
@@ -153,9 +158,29 @@ export function ImportScreen({ onImported }) {
         <p style={{ textAlign: 'center', font: 'var(--text-body-sm)', color: 'var(--text-muted)', marginTop: 'var(--space-6)' }}>
           ¿No tienes un rutina.json?
           <br />
-          <span style={{ color: 'var(--text-link)', fontWeight: 600 }}>Ver la guía de creación con LLM en docs/llm-rutina-prompt.md</span>
+          <a
+            ref={guideLinkRef}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowGuide(true);
+            }}
+            style={{ color: 'var(--text-link)', fontWeight: 600 }}
+          >
+            {GUIDE_LINK_TEXT[locale]}
+          </a>
         </p>
       </div>
+
+      {showGuide && (
+        <GuideOverlay
+          locale={locale}
+          onClose={() => {
+            setShowGuide(false);
+            guideLinkRef.current?.focus();
+          }}
+        />
+      )}
 
       {pendingRutina && (
         <ConfirmSheet

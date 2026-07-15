@@ -12,7 +12,7 @@ function CatalogScreen() {
       <CatHeader
         breadcrumb={[{ label: "Home", href: "#" }, { label: "Equipamiento" }]}
         title="Catálogo de equipamiento"
-        subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit de Málaga"
+        subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit"
       />
       <div style={{ ...wrap, marginTop: "var(--space-6)" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
@@ -55,7 +55,7 @@ function CatalogScreen() {
           </div>
         )}
       </div>
-      <CatFooter lines={["Datos: Matrix Fitness + Basic-Fit Málaga", "27 máquinas · 7 gimnasios · EN/ES/BE"]} />
+      <CatFooter lines={["Datos: Matrix Fitness + Basic-Fit", "27 máquinas · 7 gimnasios · EN/ES/BE"]} />
     </div>
   );
 }

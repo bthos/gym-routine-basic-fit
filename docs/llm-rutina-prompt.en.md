@@ -213,13 +213,13 @@ about it depends on the PWA existing.
 3. Days per week: 4
 4. Session length budget: 45-60 min
 5. Injuries / movements to avoid: ninguna
-6. Target gym: Bulevar Louis Pasteur 20 (id 5)
+6. Target gym: Avda. Andalucía, Centro Comercial Alameda (id 3)
 7. Language for the output text: Español
 8. Prior progress export (optional): (ninguna todavía, primera vez usando esto)
 ```
 
 **2 — Equipment list (Path B, abbreviated — a real prompt would include the full
-gym-5 subset, not just these three):**
+gym-3 subset, not just these three):**
 
 ```json
 [
@@ -241,8 +241,8 @@ You are a strength & conditioning coach. Output ONLY JSON...
 [{ "id": "g3-s10", ... }, { "id": "g3-s30", ... }, { "id": "g3-s70", ... }]
 ### REQUEST
 Program: Nombre — Fase 2. Goal: Hipertrofia, más volumen muscular. Días/semana: 4.
-Duración de sesión: 45-60 min. Lesiones: ninguna. Gimnasio: Bulevar Louis Pasteur 20
-(id 5). Idioma: Español. Progreso previo: ninguno todavía.
+Duración de sesión: 45-60 min. Lesiones: ninguna. Gimnasio: Avda. Andalucía, Centro Comercial Alameda
+(id 3). Idioma: Español. Progreso previo: ninguno todavía.
 ### OUTPUT
 Return the JSON object now. Nothing else.
 ```
@@ -256,7 +256,7 @@ Return the JSON object now. Nothing else.
     "name": "Nombre — Fase 2",
     "phaseName": "Hipertrofia",
     "phaseNumber": 2,
-    "gymId": 5,
+    "gymId": 3,
     "durationWeeks": 12,
     "lastUpdated": "2026-07-13"
   },
@@ -313,7 +313,7 @@ npm run validate-rutina -- data/rutina-nombre-fase2-draft.json
 ```
 
 If everything resolves, that's a `✓ Valid rutina: 4 days, N exercises` — done. If the
-LLM had, say, used an equipment id that doesn't exist at gym 5, you'd see something like:
+LLM had, say, used an equipment id that doesn't exist at gym 3, you'd see something like:
 
 ```
 days[2].exercises[0].equipmentId "g3-xx" not found in data/equipment.json

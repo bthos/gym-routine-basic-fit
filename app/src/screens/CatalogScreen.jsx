@@ -36,7 +36,7 @@ export function CatalogScreen() {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <PageHeader title="Catálogo de equipamiento" subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit de Málaga" />
+      <PageHeader title="Catálogo de equipamiento" subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit" />
 
       <div style={{ ...wrap, marginTop: 'var(--space-6)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>

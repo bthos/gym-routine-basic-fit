@@ -1,7 +1,7 @@
 {
   "name": "basicfit-rutina",
   "version": "1.2.0",
-  "description": "BasicFit Málaga Equipment Catalog and Routine Generator",
+  "description": "BasicFit Equipment Catalog and Routine Generator",
   "scripts": {
     "serve": "npx --yes serve . -p 3000",
     "extract-images": "node scripts/extract-matrix-images-puppeteer.js",
@@ -10,8 +10,11 @@
     "validate-data": "node scripts/validate-data.js",
     "validate-rutina": "node scripts/validate-rutina.js",
     "build-rutina": "node scripts/build-rutina.js",
-    "build-catalog": "node scripts/generate-catalog.js",
+    "build-catalog": "node scripts/build-catalog.js",
+    "build-guide": "node scripts/build-guide-content.js",
+    "predev": "npm run build-guide",
     "dev": "vite",
+    "prebuild": "npm run build-guide",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -46,6 +49,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "fake-indexeddb": "^6.0.0",
     "jsdom": "^25.0.1",
+    "marked": "^15.0.12",
     "vite": "^6.0.3",
     "vite-plugin-pwa": "^0.21.1",
     "vitest": "^2.1.8"

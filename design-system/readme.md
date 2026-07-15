@@ -5,7 +5,7 @@ A design system for building **training-routine SPAs** (rutina pages, equipment 
 ## Context & sources
 
 - **Brand reference:** https://www.basic-fit.com/es-es/home (public marketing site, es-ES locale). Palette, tone and layout conventions were derived from it.
-- **Attached codebase:** `basicfit-rutina/` (local mount) — a personal multilingual (EN/ES/BE) toolset for BasicFit Málaga gyms:
+- **Attached codebase:** `basicfit-rutina/` (local mount) — a personal multilingual (EN/ES/BE) toolset for BasicFit gyms:
   - `equipment-catalog.html` — filterable catalog of 27 Matrix Aura machines (language switch EN/ES/BE, category filters, equipment cards with images, muscle tags, instructions, video/manual links, gym badges).
   - `data/equipment.json`, `data/gyms.json`, `data/user-weights.json` — the data model these apps embed.
 - Equipment imagery comes from the Matrix CDN (`images.jhtassets.com`); it is hot-linked, not stored locally.

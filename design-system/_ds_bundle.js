@@ -2526,7 +2526,7 @@ function CatalogScreen() {
       color: "var(--text-muted)"
     }
   }, "Sin resultados")), /*#__PURE__*/React.createElement(CatFooter, {
-    lines: ["Datos: Matrix Fitness + Basic-Fit Málaga", "27 máquinas · 7 gimnasios · EN/ES/BE"]
+    lines: ["Datos: Matrix Fitness + Basic-Fit", "27 máquinas · 7 gimnasios · EN/ES/BE"]
   }));
 }
 window.CatalogScreen = CatalogScreen;
@@ -2593,7 +2593,7 @@ function RoutineScreen() {
     }, /*#__PURE__*/React.createElement(DS.Icon, {
       name: "map-pin",
       size: 16
-    }), " Basic-Fit M\xE1laga \u2014 Bulevar Louis Pasteur 20 \xB7 Actualizado: Febrero 2026")
+    }), " Basic-Fit M\xE1laga \u2014 Avda. Andalucía, Centro Comercial Alameda \xB7 Actualizado: Febrero 2026")
   }), /*#__PURE__*/React.createElement(NavMenu, {
     activeId: "lunes",
     items: [{
@@ -2777,12 +2777,12 @@ function RoutineScreen() {
     }, {
       title: "Club",
       links: [{
-        label: "Basic-Fit Málaga"
+        label: "Basic-Fit"
       }, {
         label: "Horarios 24/7"
       }]
     }],
-    lines: ["Programa personal — no sustituye asesoramiento médico", "Equipamiento: Matrix Aura · Basic-Fit Málaga"]
+    lines: ["Programa personal — no sustituye asesoramiento médico", "Equipamiento: Matrix Aura · Basic-Fit"]
   }), /*#__PURE__*/React.createElement(BackToTop, null));
 }
 window.RoutineScreen = RoutineScreen;

@@ -39,7 +39,7 @@ let html = fs.readFileSync(rutinaPath, 'utf8');
 
 // Replace fetch-based loading with embedded data + fallback
 const oldFetch = `        // Load equipment and user weights, display for selected gym
-        const GYM_ID = 5; // Bulevar Louis Pasteur 20
+        const GYM_ID = 3; // Avda. Andalucía, Centro Comercial Alameda
         Promise.all([
             fetch('data/equipment.json').then(r => r.json()),
             fetch('data/user-weights.json').then(r => r.json())
@@ -71,7 +71,7 @@ const oldFetch = `        // Load equipment and user weights, display for select
         });`;
 
 const newFetch = `        // Load equipment and user weights (embedded for offline, or fetch when served)
-        const GYM_ID = 5; // Bulevar Louis Pasteur 20
+        const GYM_ID = 3; // Avda. Andalucía, Centro Comercial Alameda
         function renderEquipmentList(equipmentData, weightsData) {
             const container = document.getElementById('equipment-list');
             const weights = (weightsData && weightsData.weights) || weightsData || {};

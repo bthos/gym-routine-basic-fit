@@ -18,10 +18,10 @@ function RoutineScreen() {
     <div data-screen-label="Rutina — Fase 1" style={{ background: "var(--bf-grey-1)", minHeight: "100%" }}>
       <PageHeader
         breadcrumb={[{ label: "Home", href: "#" }, { label: "Rutina" }]}
-        title="Rutina Málaga"
+        title="Rutina"
         subtitle="Programa de readaptación para principiantes"
         badge="FASE 1 — ADAPTACIÓN (Meses 1-3)"
-        meta={<span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><DS.Icon name="map-pin" size={16} /> Basic-Fit Málaga — Bulevar Louis Pasteur 20 · Actualizado: Febrero 2026</span>}
+        meta={<span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><DS.Icon name="map-pin" size={16} /> Basic-Fit [Gym Name] · Actualizado: Febrero 2026</span>}
       />
       <NavMenu activeId="lunes" items={[
         { id: "fase-info", label: "Información" },
@@ -135,11 +135,11 @@ function RoutineScreen() {
       <PageFooter
         columns={[
           { title: "Rutina", links: [{ label: "Fase 1 — Adaptación" }, { label: "Equipamiento" }, { label: "Progresión" }] },
-          { title: "Club", links: [{ label: "Basic-Fit Málaga" }, { label: "Horarios 24/7" }] },
+          { title: "Club", links: [{ label: "Basic-Fit" }, { label: "Horarios 24/7" }] },
         ]}
         lines={[
         "Programa personal — no sustituye asesoramiento médico",
-        "Equipamiento: Matrix Aura · Basic-Fit Málaga",
+        "Equipamiento: Matrix Aura · Basic-Fit",
       ]} />
       <BackToTop />
     </div>
