@@ -46,6 +46,50 @@ export function CatalogScreen() {
         </div>
       </div>
 
+      <div style={{ ...wrap, marginTop: 'var(--space-6)' }}>
+        <h2 style={{ font: 'var(--text-h4)', color: 'var(--bf-ink)', margin: '0 0 10px' }}>
+          Gimnasios
+        </h2>
+        <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 12px' }}>
+          Usa el <strong>id</strong> al crear tu rutina con un LLM (campo 6 del prompt).
+        </p>
+        <div style={{ display: 'grid', gap: 8 }}>
+          {GYMS.map((gym) => (
+            <div
+              key={gym.id}
+              style={{
+                background: 'var(--bf-white)',
+                border: '1px solid var(--border-control)',
+                borderRadius: 'var(--radius-md)',
+                padding: '12px 14px',
+                boxShadow: 'var(--shadow-card)',
+              }}
+            >
+              <div style={{
+                display: 'inline-block',
+                font: '700 11px/1 var(--font-sans)',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'var(--bf-white)',
+                background: 'var(--bf-purple)',
+                borderRadius: 3,
+                padding: '3px 7px',
+                marginBottom: 6,
+              }}>
+                id {gym.id}
+              </div>
+              <div style={{ font: '700 15px/1.3 var(--font-sans)', color: 'var(--bf-ink)' }}>{gym.name}</div>
+              <div style={{ font: 'var(--text-body-sm)', color: 'var(--bf-ink-2)', marginTop: 4 }}>{gym.address}</div>
+              {(gym.city || gym.neighborhood) && (
+                <div style={{ font: 'var(--text-caption)', color: 'var(--text-muted)', marginTop: 2 }}>
+                  {[gym.city, gym.neighborhood].filter(Boolean).join(' · ')}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ ...wrap, marginTop: 'var(--space-6)', display: 'grid', gap: 12 }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Idioma</span>

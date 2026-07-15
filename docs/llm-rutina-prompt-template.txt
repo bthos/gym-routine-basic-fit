@@ -1,3 +1,14 @@
+### REQUEST
+
+1. Who is this for / program name:
+2. Primary goal this phase:
+3. Days per week:
+4. Session length budget:
+5. Injuries / movements to avoid (write "none"/"ninguna" if none):
+6. Target gym (name or id):
+7. Language for the output text:
+8. Prior progress export (optional — paste Markdown from Rutina app Export, or leave blank):
+
 ### ROLE
 You are a strength & conditioning coach. You will output ONLY a single JSON
 object — no prose, no markdown fences, no explanation — conforming exactly
@@ -28,9 +39,6 @@ If you cannot fetch URLs, ask the user to attach these four files manually.
 - Do NOT include a "summaryTable" field — it does not exist in the schema and
   will fail validation. Any summary view is derived from "days" elsewhere.
 - Omit a field only when the schema marks it optional; every other field is required.
-
-### REQUEST
-<<< paste your filled checklist here, verbatim >>>
 
 ### OUTPUT
 Return the JSON object now. Nothing else.

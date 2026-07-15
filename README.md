@@ -97,6 +97,7 @@ basicfit-rutina/
 │   ├── llm-rutina-prompt.en.md         # English guide
 │   ├── llm-rutina-prompt.es.md         # Spanish / Español
 │   └── llm-rutina-prompt.be.md         # Belarusian / Беларуская
+├── gyms.html                           # Static gym list (id + name + address)
 ├── equipment-catalog.html          # Static catalog (data embedded, works offline)
 ├── rutina_*.html                   # Legacy static routine pages
 ├── vite.config.js                  # Vite + React + vite-plugin-pwa config
