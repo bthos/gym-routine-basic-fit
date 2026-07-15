@@ -92,10 +92,11 @@ basicfit-rutina/
 │   └── viewport-check.js           # Puppeteer: no horizontal scroll + tab-bar row-wrap at 360/390/412/768px
 ├── docs/
 │   ├── export-format.md            # Export Markdown + JSON format reference (LLM paste contract)
-│   ├── llm-rutina-prompt.md        # Prompt template — English, original (backward-compat)
-│   ├── llm-rutina-prompt.en.md     # English
-│   ├── llm-rutina-prompt.es.md     # Spanish / Español
-│   └── llm-rutina-prompt.be.md     # Belarusian / Беларуская
+│   ├── llm-rutina-prompt.md            # Redirect — backward compat
+│   ├── llm-rutina-prompt-template.txt  # Copy-paste LLM prompt (shared)
+│   ├── llm-rutina-prompt.en.md         # English guide
+│   ├── llm-rutina-prompt.es.md         # Spanish / Español
+│   └── llm-rutina-prompt.be.md         # Belarusian / Беларуская
 ├── equipment-catalog.html          # Static catalog (data embedded, works offline)
 ├── rutina_*.html                   # Legacy static routine pages
 ├── vite.config.js                  # Vite + React + vite-plugin-pwa config
@@ -179,25 +180,25 @@ All data is stored locally in IndexedDB — no account, no server.
 
 ## Authoring a Rutina with an LLM
 
-Training programs are authored by pasting a filled-in checklist into any LLM chat — no coding required.
+Training programs are authored by pasting a ready-made prompt into any LLM chat — no coding required.
 
 1. Fill in an 8-field checklist (goal, days/week, session length, injuries, gym, output language, etc.)
-2. Paste the assembled prompt (checklist + schema + your gym's equipment list) into any LLM
-3. Save the reply and validate: `npm run validate-rutina -- path/to/rutina.json`
-4. If validation fails, paste the error text back to the LLM and re-validate
-5. Import the validated file into the PWA
+2. Copy the prompt template, paste your checklist into `REQUEST`, and send to any LLM
+3. The prompt points the LLM at public data files in this repo (schema, equipment, gyms, example) — nothing to assemble by hand
+4. Import the JSON reply into the PWA (or validate locally: `npm run validate-rutina -- path/to/rutina.json`)
+5. If validation fails, paste the error text back to the LLM and re-import
 
 When repeating this for a second phase, paste the Markdown from the PWA's **Export** screen as field 8 — the LLM uses it to understand what actually happened (weight progression, difficulty, abandoned sessions). See [`docs/export-format.md`](docs/export-format.md) for the exact format.
 
-Full walkthrough, prompt template, and a worked example — pick your language:
+Full walkthrough (shown in-app via **Import → guide link**) — pick your language:
 
-| Language | Guide |
-|----------|-------|
-| English | [`docs/llm-rutina-prompt.en.md`](docs/llm-rutina-prompt.en.md) |
-| Español | [`docs/llm-rutina-prompt.es.md`](docs/llm-rutina-prompt.es.md) |
-| Беларуская | [`docs/llm-rutina-prompt.be.md`](docs/llm-rutina-prompt.be.md) |
+| Language | Guide | Prompt template |
+|----------|-------|-----------------|
+| English | [`docs/llm-rutina-prompt.en.md`](docs/llm-rutina-prompt.en.md) | [`docs/llm-rutina-prompt-template.txt`](docs/llm-rutina-prompt-template.txt) |
+| Español | [`docs/llm-rutina-prompt.es.md`](docs/llm-rutina-prompt.es.md) | (same template) |
+| Беларуская | [`docs/llm-rutina-prompt.be.md`](docs/llm-rutina-prompt.be.md) | (same template) |
 
-The original [`docs/llm-rutina-prompt.md`](docs/llm-rutina-prompt.md) is kept for backward compatibility.
+The original [`docs/llm-rutina-prompt.md`](docs/llm-rutina-prompt.md) redirects to the English guide.
 
 ## Data Format
 
