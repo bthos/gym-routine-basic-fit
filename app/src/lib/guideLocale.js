@@ -31,7 +31,7 @@ export const GUIDE_COPIED = { es: 'Copiado', en: 'Copied', be: 'Скапірав
 
 /** Public gym list (names + ids) — not part of the LLM prompt. */
 export const GYMS_CATALOG_URL =
-  'https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html';
+  'https://bthos.github.io/gym-routine-basic-fit/gyms.html';
 
 export const GUIDE_FILL_HINT = {
   es: 'Rellena cada línea numerada del REQUEST (texto simple, sin JSON) antes de enviar.',

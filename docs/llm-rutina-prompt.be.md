@@ -26,7 +26,7 @@ Prompt паказвае LLM, дзе іх чытаць — вам **не** трэ
 ## Як гэта працуе
 
 ```
-1. Запоўніце секцыю REQUEST на пачатку prompt (блок са спісам залаў — над ім)
+1. Запоўніце секцыю REQUEST на пачатку prompt (блок са спісам залаў — пад ім)
 2. Скапіруйце ўвесь prompt і ўстаўце ў любы LLM-чат
 3. Скапіруйце адказ JSON ад LLM
 4. Імпартуйце ў прыклад Rutina (устаўка ці загрузка .json)
@@ -48,7 +48,7 @@ Prompt паказвае LLM, дзе іх чытаць — вам **не** трэ
 **REQUEST** — запоўніце кожны нумараваны радок (звычайны тэкст, без JSON) перад адпраўкай.
 
 > **Поле 6 — мэтавы зал**
-> Знайдзіце назву і лічбавы **id** вашага зала ў **[спісе залаў →](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html)**
+> Знайдзіце назву і лічбавы **id** вашага зала ў **[спісе залаў →](https://bthos.github.io/gym-routine-basic-fit/gyms.html)**
 > (адкрываецца ў новай укладцы). Таксама на ўкладцы **Catálogo** у прыкладзе Rutina.
 
 | # | Поле | Прыклад | Абавязковае |
@@ -114,7 +114,7 @@ npm run validate-rutina -- шлях/да/вашай-rutina.json
 - **LLM дадаў уступ ці абгорнуў JSON у markdown.** "Output ONLY the JSON object, no markdown fence, no explanation."
 - **Адказ абрываецца сярод JSON.** "continue from where you stopped, still outputting only JSON".
 - **ID абсталявання не знайдзены.** LLM павінен выбіраць id з `equipment.json` для вашага зала.
-- **Не ведаеце id зала?** [Спіс залаў](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html) ці ўкладка **Catálogo** у Rutina.
+- **Не ведаеце id зала?** [Спіс залаў](https://bthos.github.io/gym-routine-basic-fit/gyms.html) ці ўкладка **Catálogo** у Rutina.
 
 ---
 

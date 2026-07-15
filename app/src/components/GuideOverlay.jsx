@@ -70,6 +70,7 @@ const FALLBACK_HTML = {
  */
 export function GuideOverlay({ locale = 'es', onClose }) {
   const closeRef = useRef(null);
+  const [promptText, setPromptText] = useState(GUIDE_PROMPT);
   const [copied, setCopied] = useState(false);
   const title = GUIDE_TITLE[locale] || GUIDE_TITLE.en;
   const closeLabel = GUIDE_CLOSE[locale] || GUIDE_CLOSE.en;
@@ -98,7 +99,7 @@ export function GuideOverlay({ locale = 'es', onClose }) {
 
   async function handleCopyPrompt() {
     try {
-      await navigator.clipboard.writeText(GUIDE_PROMPT);
+      await navigator.clipboard.writeText(promptText);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -176,12 +177,15 @@ export function GuideOverlay({ locale = 'es', onClose }) {
               gap: 12,
               marginBottom: 8,
             }}>
-              <span style={{
-                font: 'var(--text-label)',
-                letterSpacing: 'var(--tracking-label)',
-                textTransform: 'uppercase',
-                color: 'var(--text-muted)',
-              }}>
+              <span
+                id="guide-prompt-label"
+                style={{
+                  font: 'var(--text-label)',
+                  letterSpacing: 'var(--tracking-label)',
+                  textTransform: 'uppercase',
+                  color: 'var(--text-muted)',
+                }}
+              >
                 {promptLabel}
               </span>
               <button
@@ -213,6 +217,28 @@ export function GuideOverlay({ locale = 'es', onClose }) {
             }}>
               {fillHint}
             </p>
+            <textarea
+              id="guide-prompt-editor"
+              aria-labelledby="guide-prompt-label"
+              value={promptText}
+              onChange={(e) => setPromptText(e.target.value)}
+              spellCheck={false}
+              style={{
+                display: 'block',
+                width: '100%',
+                boxSizing: 'border-box',
+                background: 'var(--bf-white)',
+                border: '1px solid var(--border-control)',
+                borderRadius: 'var(--radius-control)',
+                padding: '12px 14px',
+                font: '12px/1.5 monospace',
+                color: 'var(--bf-ink)',
+                margin: '0 0 10px',
+                minHeight: 'min(42vh, 320px)',
+                maxHeight: 'min(60vh, 480px)',
+                resize: 'vertical',
+              }}
+            />
             <div style={{
               display: 'flex',
               gap: 12,
@@ -221,7 +247,6 @@ export function GuideOverlay({ locale = 'es', onClose }) {
               border: '1px solid var(--bf-purple)',
               borderRadius: 'var(--radius-md)',
               padding: '12px 14px',
-              marginBottom: 10,
             }}>
               <Icon name="map-pin" size={18} style={{ color: 'var(--bf-purple)', marginTop: 2 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -262,23 +287,6 @@ export function GuideOverlay({ locale = 'es', onClose }) {
                 </p>
               </div>
             </div>
-            <pre
-              style={{
-                background: 'var(--bf-grey-1)',
-                border: '1px solid var(--border-control)',
-                borderRadius: 'var(--radius-control)',
-                padding: '12px 14px',
-                font: '12px/1.5 monospace',
-                color: 'var(--bf-ink)',
-                overflowX: 'auto',
-                whiteSpace: 'pre-wrap',
-                margin: 0,
-                maxHeight: 'min(42vh, 320px)',
-                overflowY: 'auto',
-              }}
-            >
-              {GUIDE_PROMPT}
-            </pre>
           </div>
 
           <article

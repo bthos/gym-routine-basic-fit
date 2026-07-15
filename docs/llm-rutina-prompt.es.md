@@ -26,7 +26,7 @@ los archivos de equipamiento.
 ## Cómo funciona
 
 ```
-1. Rellena la sección REQUEST al inicio del prompt (el recuadro del listado de gimnasios está encima)
+1. Rellena la sección REQUEST al inicio del prompt (el recuadro del listado de gimnasios está debajo)
 2. Copia todo el prompt y pégalo en cualquier chat LLM
 3. Copia la respuesta JSON del LLM
 4. Importa en la app Rutina (pegar o subir .json)
@@ -48,7 +48,7 @@ Usa el botón **Copiar** encima de esta guía. El prompt empieza por **REQUEST**
 cada línea numerada (texto simple, sin JSON) antes de enviar.
 
 > **Campo 6 — gimnasio objetivo**
-> Busca el nombre y el **id** numérico de tu gimnasio en el **[listado de gimnasios →](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html)**
+> Busca el nombre y el **id** numérico de tu gimnasio en el **[listado de gimnasios →](https://bthos.github.io/gym-routine-basic-fit/gyms.html)**
 > (se abre en una pestaña nueva). También está en la pestaña **Catálogo** de la app Rutina.
 
 | # | Campo | Ejemplo | Requerido |
@@ -95,7 +95,7 @@ npm run validate-rutina -- ruta/a/tu-rutina.json
 **REQUEST rellenado (inicio del prompt copiado):**
 
 ```text
-1. Para quién es / nombre del programa: Nombre — Fase 2
+1. Para quién es / nombre del programa: Elena Rois — Fase 2
 2. Objetivo principal en esta fase: Hipertrofia, más volumen muscular
 3. Días por semana: 4
 4. Presupuesto de duración de sesión: 45-60 min
@@ -121,7 +121,7 @@ npm run validate-rutina -- ruta/a/tu-rutina.json
   que "continúe desde donde paró, siguiendo generando solo JSON".
 - **ID de equipamiento no encontrado.** El LLM debe elegir ids de `equipment.json` cuyo
   array `gyms` incluya tu id de gimnasio. Pega el error del validador y pídele que relea el catálogo.
-- **¿No sabes el id de tu gimnasio?** Abre la [lista de gimnasios](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html) o la pestaña **Catálogo** en la app Rutina.
+- **¿No sabes el id de tu gimnasio?** Abre la [lista de gimnasios](https://bthos.github.io/gym-routine-basic-fit/gyms.html) o la pestaña **Catálogo** en la app Rutina.
 
 ---
 

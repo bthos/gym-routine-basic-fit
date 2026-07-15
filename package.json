@@ -17,6 +17,7 @@
     "dev": "vite",
     "prebuild": "npm run build-guide && npm run build-gyms",
     "build": "vite build",
+    "postbuild": "node scripts/copy-static-pages.js",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

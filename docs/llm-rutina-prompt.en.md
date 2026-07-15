@@ -26,7 +26,7 @@ equipment files yourself.
 ## How it works
 
 ```
-1. Fill in the REQUEST section at the top of the prompt (see the gym list callout above it for field 6)
+1. Fill in the REQUEST section at the top of the prompt (see the gym list callout below it for field 6)
 2. Copy the whole prompt and paste it into any LLM chat
 3. Copy the LLM's JSON reply
 4. Import into the Rutina app (paste or upload .json)
@@ -48,7 +48,7 @@ Use the **Copy** button above this guide. The prompt starts with **REQUEST** —
 every numbered line (plain text, no JSON) before sending.
 
 > **Field 6 — target gym**
-> Look up your gym’s name and numeric **id** in the **[gym list →](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html)**
+> Look up your gym’s name and numeric **id** in the **[gym list →](https://bthos.github.io/gym-routine-basic-fit/gyms.html)**
 > (opens in a new tab). You can also find the same list in the Rutina app’s **Catalog** tab.
 
 | # | Field | Example | Required |
@@ -95,7 +95,7 @@ npm run validate-rutina -- path/to/your-rutina.json
 **REQUEST filled in (top of the copied prompt):**
 
 ```text
-1. Who is this for / program name: Nombre — Fase 2
+1. Who is this for / program name: Elena Rois — Fase 2
 2. Primary goal this phase: Hipertrofia, más volumen muscular
 3. Days per week: 4
 4. Session length budget: 45-60 min
@@ -122,7 +122,7 @@ npm run validate-rutina -- path/to/your-rutina.json
 - **Equipment id not found.** The LLM must pick ids from `equipment.json` where the `gyms`
   array includes your gym id — not invented ids. Paste the validator error back and ask
   it to re-read the equipment catalog.
-- **Not sure your gym's id?** Open the [gym list](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/gyms.html) or the **Catalog** tab in the Rutina app.
+- **Not sure your gym's id?** Open the [gym list](https://bthos.github.io/gym-routine-basic-fit/gyms.html) or the **Catalog** tab in the Rutina app.
 
 ---
 

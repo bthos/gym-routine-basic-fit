@@ -19,7 +19,7 @@ function HomeScreen({ demoState = "success", hasActiveSession = false, onStart, 
       <div style={{ background: "var(--bf-white)", borderBottom: "1px solid var(--border-default)", padding: "var(--space-6) var(--page-gutter) var(--space-5)" }}>
         <div style={{ font: "800 13px/1 var(--font-display)", color: "var(--bf-orange)", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 10 }}>Basic-Fit</div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1 style={{ font: "var(--text-h2)", textTransform: "uppercase", color: "var(--bf-ink)", margin: 0 }}>Nombre — Fase 2</h1>
+          <h1 style={{ font: "var(--text-h2)", textTransform: "uppercase", color: "var(--bf-ink)", margin: 0 }}>Elena Rois — Fase 2</h1>
           <HomeBadge tone="brand">Fase 2</HomeBadge>
         </div>
       </div>
