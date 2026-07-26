@@ -20,8 +20,10 @@ equipment files yourself.
 | Gyms list (for the LLM) | [gyms.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/gyms.json) |
 | Reference example | [phase1-monday.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/examples/phase1-monday.json) |
 
-> **LLM without web access?** Download the four data files from the repository and attach
-> them to the chat manually. The prompt already names each file.
+> **LLM without web access?** Use the **Download** buttons in this guide screen to save
+> the four data files directly to your device — real files, ready to attach to the chat,
+> not just an inline browser view. Prefer to fetch them yourself? The table above links
+> directly to the raw files in the repository.
 
 ## How it works
 
@@ -113,8 +115,10 @@ npm run validate-rutina -- path/to/your-rutina.json
 
 ## Troubleshooting
 
-- **The LLM cannot fetch URLs.** Attach the four DATA SOURCES files manually, or paste
-  their contents into the chat. The filenames match those in the prompt.
+- **The LLM cannot fetch URLs.** Use the **Download** buttons in this guide screen to
+  save the four DATA SOURCES files, then attach them to the chat manually — filenames
+  match those in the prompt. The raw-URL table above works too, for LLMs/browsers that
+  can fetch directly, or you can paste file contents into the chat instead.
 - **The LLM added a friendly intro or wrapped the JSON in a markdown fence.** Re-send
   with: "Output ONLY the JSON object, no markdown fence, no explanation."
 - **The reply got cut off mid-JSON (very long programs).** Ask the LLM to "continue

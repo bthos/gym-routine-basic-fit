@@ -20,8 +20,10 @@ los archivos de equipamiento.
 | Lista de gimnasios (para el LLM) | [gyms.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/gyms.json) |
 | Ejemplo de referencia | [phase1-monday.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/examples/phase1-monday.json) |
 
-> **¿LLM sin acceso web?** Descarga los cuatro archivos de datos del repositorio y
-> adjúntalos manualmente al chat. El prompt ya nombra cada archivo.
+> **¿LLM sin acceso web?** Usa los botones **Descargar** de esta pantalla de guía para
+> guardar los cuatro archivos de datos directamente en tu dispositivo — archivos reales,
+> listos para adjuntar al chat, no solo una vista en el navegador. ¿Prefieres obtenerlos
+> tú mismo? La tabla de arriba enlaza directamente a los archivos en bruto del repositorio.
 
 ## Cómo funciona
 
@@ -113,8 +115,11 @@ npm run validate-rutina -- ruta/a/tu-rutina.json
 
 ## Solución de problemas
 
-- **El LLM no puede obtener URLs.** Adjunta manualmente los cuatro archivos de DATA
-  SOURCES, o pega su contenido en el chat.
+- **El LLM no puede obtener URLs.** Usa los botones **Descargar** de esta pantalla de
+  guía para guardar los cuatro archivos de DATA SOURCES y adjúntalos manualmente al
+  chat — los nombres coinciden con los del prompt. La tabla de URLs de arriba también
+  funciona para LLMs/navegadores que sí pueden obtenerlos directamente, o puedes pegar
+  el contenido en el chat.
 - **El LLM añadió una introducción o envolvió el JSON en una valla de markdown.**
   Reenvía con: "Output ONLY the JSON object, no markdown fence, no explanation."
 - **La respuesta se cortó a la mitad del JSON (programas muy largos).** Pide al LLM

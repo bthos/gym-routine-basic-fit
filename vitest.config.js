@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
-    include: ['app/src/**/*.test.{js,jsx}'],
+    include: ['app/src/**/*.test.{js,jsx}', 'scripts/**/*.test.js'],
     globals: false,
     setupFiles: ['./app/src/test-setup.js'],
   },

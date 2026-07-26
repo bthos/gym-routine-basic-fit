@@ -62,3 +62,43 @@ export const GUIDE_GYM_ALT = {
   en: 'Also in the app’s Catalog tab.',
   be: 'Таксама на ўкладцы Catálogo ў прыкладзе.',
 };
+
+/**
+ * In-app "Download data files" card (llm-guide-file-downloads).
+ * Served same-origin from the deployed PWA (GitHub Pages) so the HTML
+ * `download` attribute reliably forces a save dialog instead of an inline
+ * browser view — see spec AC2. Always the absolute production URL, mirroring
+ * GYMS_CATALOG_URL's existing convention (the guide never points these at
+ * localhost, even in local dev).
+ */
+export const GUIDE_DATA_FILES_BASE_URL =
+  'https://bthos.github.io/gym-routine-basic-fit/';
+
+/** Canonical AC3 order — must mirror DATA_FILES in scripts/copy-static-pages.js. */
+export const GUIDE_DATA_FILES = [
+  { key: 'schema', filename: 'rutina.schema.json', path: 'data/schema/rutina.schema.json', bytes: 10772 },
+  { key: 'equipment', filename: 'equipment.json', path: 'data/equipment.json', bytes: 111480 },
+  { key: 'gyms', filename: 'gyms.json', path: 'data/gyms.json', bytes: 4955 },
+  { key: 'example', filename: 'phase1-monday.json', path: 'data/examples/phase1-monday.json', bytes: 2428 },
+];
+
+export const GUIDE_DOWNLOADS_HEADING = {
+  es: '¿LLM sin acceso web?',
+  en: 'LLM without web access?',
+  be: 'LLM без доступу да інтэрнэту?',
+};
+
+export const GUIDE_DOWNLOADS_BODY = {
+  es: 'Descarga los cuatro archivos de datos y adjúntalos al chat manualmente.',
+  en: 'Download the four data files and attach them to the chat manually.',
+  be: 'Спампуйце чатыры файлы даных і далучыце іх да чата ўручную.',
+};
+
+export const GUIDE_DOWNLOAD_ACTION = { es: 'Descargar', en: 'Download', be: 'Спампаваць' };
+
+export const GUIDE_DOWNLOAD_FILE_LABELS = {
+  schema: { es: 'Esquema', en: 'Schema', be: 'Схема' },
+  equipment: { es: 'Equipamiento', en: 'Equipment', be: 'Абсталяванне' },
+  gyms: { es: 'Gimnasios', en: 'Gyms', be: 'Залы' },
+  example: { es: 'Ejemplo', en: 'Example', be: 'Прыклад' },
+};
