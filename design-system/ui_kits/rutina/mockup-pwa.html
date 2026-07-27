@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rutina App" viewport="412x892" name="Rutina PWA — mockup" subtitle="rutina-pwa feature: Import / Home / Active Session / History / Export + Program & Catalog reuse" -->
+<!-- @dsCard group="Rutina App" viewport="412x892" name="Rutina PWA — mockup" subtitle="Import BF / History BF / ConfirmSheet / BfObtainGuide + existing tabs" -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,15 +21,12 @@
 <body style="margin:0;">
 <div id="root"></div>
 
-<!-- Re-load the live screen sources so their top-level DS destructuring runs
-     AFTER _ds_bundle.js has fully populated window.BasicFitDesignSystem_1cb8a2
-     (the bundle's own baked-in copies capture DS before its export step runs —
-     same workaround index.html already uses). -->
 <script type="text/babel" src="RoutineScreen.jsx"></script>
 <script type="text/babel" src="CatalogScreen.jsx"></script>
-
-<!-- New mockup screens for this feature (not yet in _ds_bundle.js) -->
 <script type="text/babel" src="BottomTabBar.jsx"></script>
+<script type="text/babel" src="ConfirmSheet.jsx"></script>
+<script type="text/babel" src="BfObtainGuide.jsx"></script>
+<script type="text/babel" src="GuideOverlay.jsx"></script>
 <script type="text/babel" src="ImportScreen.jsx"></script>
 <script type="text/babel" src="HomeScreen.jsx"></script>
 <script type="text/babel" src="ActiveSessionScreen.jsx"></script>
@@ -45,31 +42,64 @@ const TABS = [
 ];
 
 function App() {
-  // route: "import" | "session" | "export" | one of TABS' ids
   const [route, setRoute] = React.useState(localStorage.getItem("bf_mock_route") || "import");
-  const [tab, setTab] = React.useState("home");
+  const [tab, setTab] = React.useState("history");
   const [homeState, setHomeState] = React.useState("success");
   const [historyState, setHistoryState] = React.useState("success");
+  const [historyBfState, setHistoryBfState] = React.useState("success");
+  const [historySessions, setHistorySessions] = React.useState("success");
+  const [importMode, setImportMode] = React.useState("bf");
   const [importState, setImportState] = React.useState("empty");
   const [exportState, setExportState] = React.useState("success");
   const [hasActiveSession, setHasActiveSession] = React.useState(false);
 
   const go = (r) => { setRoute(r); localStorage.setItem("bf_mock_route", r); window.scrollTo(0, 0); };
 
+  const goImportBf = () => {
+    setImportMode("bf");
+    setImportState("empty");
+    go("import");
+  };
+
   let content;
   if (route === "import") {
-    content = <ImportScreen demoState={importState} onImported={() => go("app")} />;
+    content = (
+      <ImportScreen
+        demoMode={importMode}
+        demoState={importState}
+        onImported={() => { setTab("history"); setHistoryBfState("success"); go("app"); }}
+      />
+    );
   } else if (route === "session") {
     content = <ActiveSessionScreen onEnd={() => { setHasActiveSession(false); go("app"); }} />;
   } else if (route === "export") {
     content = <ExportScreen demoState={exportState} />;
   } else {
-    // route === "app" — bottom-tab-bar screens
     let screen;
-    if (tab === "home") screen = <HomeScreen demoState={homeState} hasActiveSession={hasActiveSession} onStart={() => { setHasActiveSession(true); go("session"); }} onGoImport={() => go("import")} />;
-    else if (tab === "program") screen = window.RoutineScreen ? <window.RoutineScreen /> : <div style={{padding:20}}>RoutineScreen no disponible</div>;
-    else if (tab === "catalog") screen = window.CatalogScreen ? <window.CatalogScreen /> : <div style={{padding:20}}>CatalogScreen no disponible</div>;
-    else if (tab === "history") screen = <HistoryScreen demoState={historyState} onExport={() => go("export")} />;
+    if (tab === "home") {
+      screen = (
+        <HomeScreen
+          demoState={homeState}
+          hasActiveSession={hasActiveSession}
+          onStart={() => { setHasActiveSession(true); go("session"); }}
+          onGoImport={() => go("import")}
+        />
+      );
+    } else if (tab === "program") {
+      screen = window.RoutineScreen ? <window.RoutineScreen /> : <div style={{ padding: 20 }}>RoutineScreen no disponible</div>;
+    } else if (tab === "catalog") {
+      screen = window.CatalogScreen ? <window.CatalogScreen /> : <div style={{ padding: 20 }}>CatalogScreen no disponible</div>;
+    } else if (tab === "history") {
+      screen = (
+        <HistoryScreen
+          demoState={historyState}
+          demoBfState={historyBfState}
+          demoSessions={historySessions}
+          onExport={() => go("export")}
+          onImportBf={goImportBf}
+        />
+      );
+    }
     content = (
       <React.Fragment>
         {screen}
@@ -82,16 +112,29 @@ function App() {
     <div>
       <div className="devbar">
         <strong>mockup:</strong>
-        <button onClick={() => go("import")}>Import</button>
-        <button onClick={() => go("app")}>App (tabs)</button>
-        <button onClick={() => go("session")}>Active Session</button>
-        <button onClick={() => go("export")}>Export</button>
+        <button type="button" onClick={() => go("import")}>Import</button>
+        <button type="button" onClick={() => { setTab("history"); go("app"); }}>App (tabs)</button>
+        <button type="button" onClick={() => go("session")}>Active Session</button>
+        <button type="button" onClick={() => go("export")}>Export</button>
         {route === "import" && (
-          <select value={importState} onChange={(e) => setImportState(e.target.value)}>
-            <option value="empty">empty</option>
-            <option value="loading">loading</option>
-            <option value="error">error</option>
-          </select>
+          <>
+            <select value={importMode} onChange={(e) => setImportMode(e.target.value)} aria-label="Import mode">
+              <option value="rutina">mode: rutina</option>
+              <option value="bf">mode: bf</option>
+            </select>
+            <select value={importState} onChange={(e) => setImportState(e.target.value)} aria-label="Import state">
+              <option value="empty">empty</option>
+              <option value="loading">loading</option>
+              <option value="error">error</option>
+              {importMode === "bf" && (
+                <>
+                  <option value="confirm-first">confirm-first</option>
+                  <option value="confirm-replace">confirm-replace</option>
+                  <option value="guide">guide open</option>
+                </>
+              )}
+            </select>
+          </>
         )}
         {route === "app" && tab === "home" && (
           <select value={homeState} onChange={(e) => setHomeState(e.target.value)}>
@@ -100,10 +143,25 @@ function App() {
           </select>
         )}
         {route === "app" && tab === "history" && (
-          <select value={historyState} onChange={(e) => setHistoryState(e.target.value)}>
-            <option value="success">success</option>
-            <option value="empty">empty</option>
-          </select>
+          <>
+            <select value={historyBfState} onChange={(e) => setHistoryBfState(e.target.value)} aria-label="BF history state">
+              <option value="none">bf: none</option>
+              <option value="empty">bf: empty+CTA</option>
+              <option value="partial-visits">bf: partial visits</option>
+              <option value="partial-fitness">bf: partial fitness</option>
+              <option value="success">bf: success</option>
+            </select>
+            <select value={historySessions} onChange={(e) => setHistorySessions(e.target.value)} aria-label="Sessions state">
+              <option value="success">sesiones: success</option>
+              <option value="empty">sesiones: empty</option>
+            </select>
+            {historyBfState === "none" && (
+              <select value={historyState} onChange={(e) => setHistoryState(e.target.value)}>
+                <option value="success">legacy success</option>
+                <option value="empty">legacy empty</option>
+              </select>
+            )}
+          </>
         )}
         {route === "export" && (
           <select value={exportState} onChange={(e) => setExportState(e.target.value)}>
