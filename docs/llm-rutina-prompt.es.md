@@ -15,10 +15,10 @@ los archivos de equipamiento.
 
 | Dato | URL |
 |------|-----|
-| Esquema (fuente de verdad) | [rutina.schema.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/schema/rutina.schema.json) |
-| Catálogo de equipamiento | [equipment.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/equipment.json) |
-| Lista de gimnasios (para el LLM) | [gyms.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/gyms.json) |
-| Ejemplo de referencia | [phase1-monday.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/examples/phase1-monday.json) |
+| Esquema (fuente de verdad) | [rutina.schema.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/schema/rutina.schema.json) |
+| Catálogo de equipamiento | [equipment.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/equipment.json) |
+| Lista de gimnasios (para el LLM) | [gyms.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/gyms.json) |
+| Ejemplo de referencia | [phase1-monday.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/examples/phase1-monday.json) |
 
 > **¿LLM sin acceso web?** Usa los botones **Descargar** de esta pantalla de guía para
 > guardar los cuatro archivos de datos directamente en tu dispositivo — archivos reales,

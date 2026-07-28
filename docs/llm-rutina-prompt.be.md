@@ -15,10 +15,10 @@ Prompt паказвае LLM, дзе іх чытаць — вам **не** трэ
 
 | Даныя | URL |
 |-------|-----|
-| Схема (крыніца ісціны) | [rutina.schema.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/schema/rutina.schema.json) |
-| Каталог абсталявання | [equipment.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/equipment.json) |
-| Спіс залаў (для LLM) | [gyms.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/gyms.json) |
-| Даведачны прыклад | [phase1-monday.json](https://raw.githubusercontent.com/bthos/gym-routine-basic-fit/main/data/examples/phase1-monday.json) |
+| Схема (крыніца ісціны) | [rutina.schema.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/schema/rutina.schema.json) |
+| Каталог абсталявання | [equipment.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/equipment.json) |
+| Спіс залаў (для LLM) | [gyms.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/gyms.json) |
+| Даведачны прыклад | [phase1-monday.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/examples/phase1-monday.json) |
 
 > **LLM без доступу да інтэрнэту?** Націсніце кнопкі **Спампаваць** на гэтым экране
 > кіраўніцтва, каб захаваць чатыры файлы даных непасрэдна на прыладу — сапраўдныя
