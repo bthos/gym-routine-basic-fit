@@ -20,10 +20,11 @@ los archivos de equipamiento.
 | Lista de gimnasios (para el LLM) | [gyms.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/gyms.json) |
 | Ejemplo de referencia | [phase1-monday.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/examples/phase1-monday.json) |
 
-> **¿LLM sin acceso web?** Usa los botones **Descargar** de esta pantalla de guía para
-> guardar los cuatro archivos de datos directamente en tu dispositivo — archivos reales,
-> listos para adjuntar al chat, no solo una vista en el navegador. ¿Prefieres obtenerlos
-> tú mismo? La tabla de arriba enlaza directamente a los archivos en bruto del repositorio.
+> **¿LLM sin acceso web?** Usa el botón **Descargar** de esta pantalla de guía para
+> guardar un archivo zip con los cuatro archivos de datos directamente en tu dispositivo
+> — un solo archivo, listo para adjuntar al chat, no solo una vista en el navegador.
+> ¿Prefieres obtenerlos tú mismo? La tabla de arriba enlaza directamente a los archivos
+> en bruto del repositorio.
 
 ## Cómo funciona
 
@@ -115,11 +116,14 @@ npm run validate-rutina -- ruta/a/tu-rutina.json
 
 ## Solución de problemas
 
-- **El LLM no puede obtener URLs.** Usa los botones **Descargar** de esta pantalla de
-  guía para guardar los cuatro archivos de DATA SOURCES y adjúntalos manualmente al
-  chat — los nombres coinciden con los del prompt. La tabla de URLs de arriba también
-  funciona para LLMs/navegadores que sí pueden obtenerlos directamente, o puedes pegar
-  el contenido en el chat.
+- **El LLM no puede obtener URLs.** Usa el botón **Descargar** de esta pantalla de guía
+  para guardar un archivo zip con los archivos de DATA SOURCES y adjúntalo manualmente
+  al chat — los nombres dentro del zip coinciden con los del prompt. La tabla de URLs
+  de arriba también funciona para LLMs/navegadores que sí pueden obtenerlos
+  directamente, o puedes pegar el contenido en el chat.
+- **El chat del LLM no puede abrir un adjunto `.zip`.** Extrae el archivo localmente y
+  adjunta o pega los archivos individuales — `rutina.schema.json`, `equipment.json`,
+  `gyms.json`, `phase1-monday.json`.
 - **El LLM añadió una introducción o envolvió el JSON en una valla de markdown.**
   Reenvía con: "Output ONLY the JSON object, no markdown fence, no explanation."
 - **La respuesta se cortó a la mitad del JSON (programas muy largos).** Pide al LLM

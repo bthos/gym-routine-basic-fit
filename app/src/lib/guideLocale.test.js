@@ -27,33 +27,27 @@ describe('detectGuideLocale', () => {
   });
 });
 
-// llm-guide-file-downloads (AC3, AC4 wiring): pending Cmok implementation —
-// see tech-plan.md for the exact GUIDE_DATA_FILES / GUIDE_DATA_FILES_BASE_URL shape.
-describe('GUIDE_DATA_FILES (LLM guide file-download card)', () => {
-  it('lists the four DATA SOURCES files in canonical AC3 order', () => {
-    const files = guideLocale.GUIDE_DATA_FILES;
-    expect(Array.isArray(files)).toBe(true);
-    expect(files.map((f) => f.filename)).toEqual([
-      'rutina.schema.json',
-      'equipment.json',
-      'gyms.json',
-      'phase1-monday.json',
-    ]);
+// llm-guide-zip-download (AC7): pending Cmok implementation — see
+// tech-plan.md for the exact GUIDE_DATA_ARCHIVE / GUIDE_DOWNLOAD_ARCHIVE_LABEL
+// shape. Replaces the prior feature's GUIDE_DATA_FILES describe block, which
+// tested the per-file constants this feature removes.
+describe('GUIDE_DATA_ARCHIVE (LLM guide zip-download card)', () => {
+  it('has the confirmed zip filename (AC7)', () => {
+    expect(guideLocale.GUIDE_DATA_ARCHIVE.filename).toBe('rutina-data-files.zip');
   });
 
-  it('mirrors the dist/data/... subpaths the build step copies files to (AC4)', () => {
-    const files = guideLocale.GUIDE_DATA_FILES;
-    expect(files.map((f) => f.path)).toEqual([
-      'data/schema/rutina.schema.json',
-      'data/equipment.json',
-      'data/gyms.json',
-      'data/examples/phase1-monday.json',
-    ]);
+  it('path mirrors where buildDataArchive writes the zip in dist/ (AC2/AC7)', () => {
+    expect(guideLocale.GUIDE_DATA_ARCHIVE.path).toBe('data/rutina-data-files.zip');
   });
 
   it('points at the production GitHub Pages origin, not raw.githubusercontent.com (AC2)', () => {
     expect(guideLocale.GUIDE_DATA_FILES_BASE_URL).toBe(
       'https://bthos.github.io/gym-routine-basic-fit/'
     );
+  });
+
+  it('removes the per-file constants entirely — replacement, not addition (AC7)', () => {
+    expect(guideLocale.GUIDE_DATA_FILES).toBeUndefined();
+    expect(guideLocale.GUIDE_DOWNLOAD_FILE_LABELS).toBeUndefined();
   });
 });

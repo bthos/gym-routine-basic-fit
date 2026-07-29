@@ -185,7 +185,7 @@ Training programs are authored by pasting a ready-made prompt into any LLM chat 
 
 1. Fill in an 8-field checklist (goal, days/week, session length, injuries, gym, output language, etc.)
 2. Copy the prompt template, paste your checklist into `REQUEST`, and send to any LLM
-3. The prompt points the LLM at public data files in this repo (schema, equipment, gyms, example) — nothing to assemble by hand. If your LLM chat can't fetch URLs (e.g. Perplexity, offline models), the in-app guide also offers **Download** buttons to save the four files directly and attach them instead.
+3. The prompt points the LLM at public data files in this repo (schema, equipment, gyms, example) — nothing to assemble by hand. If your LLM chat can't fetch URLs (e.g. Perplexity, offline models), the in-app guide also offers a single **Download** button to save a zip archive of the data files and attach it instead.
 4. Import the JSON reply into the PWA (or validate locally: `npm run validate-rutina -- path/to/rutina.json`)
 5. If validation fails, paste the error text back to the LLM and re-import
 

@@ -20,10 +20,10 @@ equipment files yourself.
 | Gyms list (for the LLM) | [gyms.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/gyms.json) |
 | Reference example | [phase1-monday.json](https://cdn.jsdelivr.net/gh/bthos/gym-routine-basic-fit@main/data/examples/phase1-monday.json) |
 
-> **LLM without web access?** Use the **Download** buttons in this guide screen to save
-> the four data files directly to your device — real files, ready to attach to the chat,
-> not just an inline browser view. Prefer to fetch them yourself? The table above links
-> directly to the raw files in the repository.
+> **LLM without web access?** Use the **Download** button in this guide screen to save
+> a zip archive of all four data files directly to your device — one file, ready to
+> attach to the chat, not just an inline browser view. Prefer to fetch them yourself?
+> The table above links directly to the raw files in the repository.
 
 ## How it works
 
@@ -115,10 +115,14 @@ npm run validate-rutina -- path/to/your-rutina.json
 
 ## Troubleshooting
 
-- **The LLM cannot fetch URLs.** Use the **Download** buttons in this guide screen to
-  save the four DATA SOURCES files, then attach them to the chat manually — filenames
-  match those in the prompt. The raw-URL table above works too, for LLMs/browsers that
-  can fetch directly, or you can paste file contents into the chat instead.
+- **The LLM cannot fetch URLs.** Use the **Download** button in this guide screen to
+  save a zip archive of the DATA SOURCES files, then attach it to the chat manually —
+  filenames inside match those in the prompt. The raw-URL table above works too, for
+  LLMs/browsers that can fetch directly, or you can paste file contents into the chat
+  instead.
+- **The LLM's chat can't open a `.zip` attachment.** Extract the archive locally, then
+  attach or paste the individual files instead — `rutina.schema.json`, `equipment.json`,
+  `gyms.json`, `phase1-monday.json`.
 - **The LLM added a friendly intro or wrapped the JSON in a markdown fence.** Re-send
   with: "Output ONLY the JSON object, no markdown fence, no explanation."
 - **The reply got cut off mid-JSON (very long programs).** Ask the LLM to "continue

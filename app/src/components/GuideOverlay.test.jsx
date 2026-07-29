@@ -52,11 +52,12 @@ describe('GuideOverlay — prompt copy', () => {
   });
 });
 
-// llm-guide-file-downloads: User UAT (2026-07-25) approved an always-expanded
-// "Download data files" card, sibling to the gym-hint card, no collapse/expand.
-// Pending Cmok implementation — see ux-design.md + tech-plan.md for the exact
-// component structure. Failures here are expected until that card is built.
-describe('GuideOverlay — data file downloads', () => {
+// llm-guide-zip-download: User UAT (2026-07-29) approved replacing the shipped
+// 4-row "Download data files" card (llm-guide-file-downloads, 2026-07-25) with
+// a single zip-archive row. Pending Cmok implementation — see ux-design.md +
+// tech-plan.md for the exact component structure. Failures here are expected
+// until that row is built.
+describe('GuideOverlay — data archive download', () => {
   beforeEach(() => {
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true,
@@ -68,55 +69,48 @@ describe('GuideOverlay — data file downloads', () => {
     vi.restoreAllMocks();
   });
 
-  const EXPECTED_FILES = [
-    { filename: 'rutina.schema.json', path: 'data/schema/rutina.schema.json' },
-    { filename: 'equipment.json', path: 'data/equipment.json' },
-    { filename: 'gyms.json', path: 'data/gyms.json' },
-    { filename: 'phase1-monday.json', path: 'data/examples/phase1-monday.json' },
-  ];
+  const ARCHIVE_FILENAME = 'rutina-data-files.zip';
+  const ARCHIVE_PATH = 'data/rutina-data-files.zip';
   const BASE_URL = 'https://bthos.github.io/gym-routine-basic-fit/';
+  const OLD_PER_FILE_NAMES = [
+    'rutina.schema.json',
+    'equipment.json',
+    'gyms.json',
+    'phase1-monday.json',
+  ];
 
   it('renders a heading introducing the download card (AC1)', () => {
     render(<GuideOverlay locale="en" onClose={() => {}} />);
     expect(screen.getByText(/llm without web access/i)).toBeInTheDocument();
   });
 
-  it('renders all four download rows immediately, with no expand step (AC1 — always-expanded per UAT)', () => {
+  it('renders exactly one download row — the zip, not the four old per-file rows (AC1)', () => {
     render(<GuideOverlay locale="en" onClose={() => {}} />);
-    for (const { filename } of EXPECTED_FILES) {
-      expect(screen.getByText(filename)).toBeInTheDocument();
+    expect(screen.getByText(ARCHIVE_FILENAME)).toBeInTheDocument();
+    for (const oldName of OLD_PER_FILE_NAMES) {
+      expect(screen.queryByText(oldName)).not.toBeInTheDocument();
     }
   });
 
-  it('each row has a same-origin GitHub Pages href with the download attribute, not raw.githubusercontent.com (AC2)', () => {
+  it('the row has a same-origin GitHub Pages href with the download attribute, not raw.githubusercontent.com (AC2)', () => {
     render(<GuideOverlay locale="en" onClose={() => {}} />);
-    for (const { filename, path } of EXPECTED_FILES) {
-      const link = screen.getByText(filename).closest('a');
-      expect(link).not.toBeNull();
-      expect(link).toHaveAttribute('download');
-      expect(link.getAttribute('href')).toBe(`${BASE_URL}${path}`);
-    }
+    const link = screen.getByText(ARCHIVE_FILENAME).closest('a');
+    expect(link).not.toBeNull();
+    expect(link).toHaveAttribute('download');
+    expect(link.getAttribute('href')).toBe(`${BASE_URL}${ARCHIVE_PATH}`);
   });
 
-  it('shows the canonical filename verbatim per row, matching what the prompt tells users to attach (AC3)', () => {
+  it('the row is a single link reachable by an accessible name including the zip filename (a11y — one <a>, no nested controls)', () => {
     render(<GuideOverlay locale="en" onClose={() => {}} />);
-    expect(screen.getByText('rutina.schema.json')).toBeInTheDocument();
-    expect(screen.getByText('equipment.json')).toBeInTheDocument();
-    expect(screen.getByText('gyms.json')).toBeInTheDocument();
-    expect(screen.getByText('phase1-monday.json')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /rutina-data-files\.zip/i })).toBeInTheDocument();
   });
 
-  it('each row is a single link reachable by an accessible name including its filename (a11y — one <a>, no nested controls)', () => {
-    render(<GuideOverlay locale="en" onClose={() => {}} />);
-    expect(screen.getByRole('link', { name: /rutina\.schema\.json/i })).toBeInTheDocument();
-  });
-
-  it('renders the download card for es and be locales too', () => {
+  it('renders the download row for es and be locales too', () => {
     const { unmount } = render(<GuideOverlay locale="es" onClose={() => {}} />);
-    expect(screen.getByText('rutina.schema.json')).toBeInTheDocument();
+    expect(screen.getByText(ARCHIVE_FILENAME)).toBeInTheDocument();
     unmount();
 
     render(<GuideOverlay locale="be" onClose={() => {}} />);
-    expect(screen.getByText('rutina.schema.json')).toBeInTheDocument();
+    expect(screen.getByText(ARCHIVE_FILENAME)).toBeInTheDocument();
   });
 });
