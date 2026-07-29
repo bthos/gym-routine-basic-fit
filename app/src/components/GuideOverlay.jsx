@@ -5,10 +5,10 @@ import {
   GUIDE_CLOSE,
   GUIDE_COPY,
   GUIDE_COPIED,
-  GUIDE_DATA_FILES,
+  GUIDE_DATA_ARCHIVE,
   GUIDE_DATA_FILES_BASE_URL,
   GUIDE_DOWNLOAD_ACTION,
-  GUIDE_DOWNLOAD_FILE_LABELS,
+  GUIDE_DOWNLOAD_ARCHIVE_LABEL,
   GUIDE_DOWNLOADS_BODY,
   GUIDE_DOWNLOADS_HEADING,
   GUIDE_FILL_HINT,
@@ -109,6 +109,7 @@ export function GuideOverlay({ locale = 'es', onClose }) {
   const downloadsHeading = GUIDE_DOWNLOADS_HEADING[locale] || GUIDE_DOWNLOADS_HEADING.en;
   const downloadsBody = GUIDE_DOWNLOADS_BODY[locale] || GUIDE_DOWNLOADS_BODY.en;
   const downloadAction = GUIDE_DOWNLOAD_ACTION[locale] || GUIDE_DOWNLOAD_ACTION.en;
+  const downloadArchiveLabel = GUIDE_DOWNLOAD_ARCHIVE_LABEL[locale] || GUIDE_DOWNLOAD_ARCHIVE_LABEL.en;
   const html = GUIDE_HTML[locale] || GUIDE_HTML.en || FALLBACK_HTML[locale] || FALLBACK_HTML.en;
 
   useEffect(() => {
@@ -343,64 +344,59 @@ export function GuideOverlay({ locale = 'es', onClose }) {
                 className="guide-downloads-grid"
                 style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
               >
-                {GUIDE_DATA_FILES.map((file) => (
-                  <a
-                    key={file.key}
-                    href={`${GUIDE_DATA_FILES_BASE_URL}${file.path}`}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="guide-downloads-row"
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 8,
-                      background: 'var(--bf-white)',
-                      border: '1px solid var(--bf-purple)',
-                      borderRadius: 'var(--radius-control)',
-                      padding: '8px 12px',
-                      textDecoration: 'none',
-                      color: 'var(--bf-ink)',
-                    }}
-                  >
-                    <span className="guide-downloads-row-label" style={{ minWidth: 0 }}>
-                      <span style={{ font: '600 13px/1.3 var(--font-sans)', color: 'var(--bf-ink)' }}>
-                        {(GUIDE_DOWNLOAD_FILE_LABELS[file.key] &&
-                          (GUIDE_DOWNLOAD_FILE_LABELS[file.key][locale] || GUIDE_DOWNLOAD_FILE_LABELS[file.key].en)) ||
-                          file.key}
-                      </span>
-                      <br />
-                      <span
-                        className="guide-downloads-row-filename"
-                        style={{ font: '12px/1.4 monospace', color: 'var(--bf-ink-2)' }}
-                      >
-                        {file.filename}
-                      </span>
-                      <span
-                        className="guide-downloads-row-size"
-                        style={{ font: 'var(--text-caption)', color: 'var(--text-muted)' }}
-                      >
-                        {' '}· {formatKb(file.bytes)}
-                      </span>
+                <a
+                  href={`${GUIDE_DATA_FILES_BASE_URL}${GUIDE_DATA_ARCHIVE.path}`}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="guide-downloads-row"
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 8,
+                    background: 'var(--bf-white)',
+                    border: '1px solid var(--bf-purple)',
+                    borderRadius: 'var(--radius-control)',
+                    padding: '8px 12px',
+                    textDecoration: 'none',
+                    color: 'var(--bf-ink)',
+                  }}
+                >
+                  <span className="guide-downloads-row-label" style={{ minWidth: 0 }}>
+                    <span style={{ font: '600 13px/1.3 var(--font-sans)', color: 'var(--bf-ink)' }}>
+                      {downloadArchiveLabel}
+                    </span>
+                    <br />
+                    <span
+                      className="guide-downloads-row-filename"
+                      style={{ font: '12px/1.4 monospace', color: 'var(--bf-ink-2)' }}
+                    >
+                      {GUIDE_DATA_ARCHIVE.filename}
                     </span>
                     <span
-                      className="guide-downloads-row-cta"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        font: '600 13px/1 var(--font-sans)',
-                        color: 'var(--bf-purple)',
-                        flexShrink: 0,
-                      }}
+                      className="guide-downloads-row-size"
+                      style={{ font: 'var(--text-caption)', color: 'var(--text-muted)' }}
                     >
-                      <Icon name="download" size={14} />
-                      {downloadAction}
+                      {' '}· {formatKb(GUIDE_DATA_ARCHIVE.bytes)}
                     </span>
-                  </a>
-                ))}
+                  </span>
+                  <span
+                    className="guide-downloads-row-cta"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      font: '600 13px/1 var(--font-sans)',
+                      color: 'var(--bf-purple)',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon name="download" size={14} />
+                    {downloadAction}
+                  </span>
+                </a>
               </div>
             </div>
           </div>

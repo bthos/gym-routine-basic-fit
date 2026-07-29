@@ -64,23 +64,16 @@ export const GUIDE_GYM_ALT = {
 };
 
 /**
- * In-app "Download data files" card (llm-guide-file-downloads).
+ * In-app "download data archive" card (llm-guide-zip-download; superseded
+ * the per-file "download data files" card from llm-guide-file-downloads).
  * Served same-origin from the deployed PWA (GitHub Pages) so the HTML
  * `download` attribute reliably forces a save dialog instead of an inline
  * browser view — see spec AC2. Always the absolute production URL, mirroring
- * GYMS_CATALOG_URL's existing convention (the guide never points these at
+ * GYMS_CATALOG_URL's existing convention (the guide never points this at
  * localhost, even in local dev).
  */
 export const GUIDE_DATA_FILES_BASE_URL =
   'https://bthos.github.io/gym-routine-basic-fit/';
-
-/** Canonical AC3 order — must mirror DATA_FILES in scripts/copy-static-pages.js. */
-export const GUIDE_DATA_FILES = [
-  { key: 'schema', filename: 'rutina.schema.json', path: 'data/schema/rutina.schema.json', bytes: 10772 },
-  { key: 'equipment', filename: 'equipment.json', path: 'data/equipment.json', bytes: 111480 },
-  { key: 'gyms', filename: 'gyms.json', path: 'data/gyms.json', bytes: 4955 },
-  { key: 'example', filename: 'phase1-monday.json', path: 'data/examples/phase1-monday.json', bytes: 2428 },
-];
 
 export const GUIDE_DOWNLOADS_HEADING = {
   es: '¿LLM sin acceso web?',
@@ -89,16 +82,31 @@ export const GUIDE_DOWNLOADS_HEADING = {
 };
 
 export const GUIDE_DOWNLOADS_BODY = {
-  es: 'Descarga los cuatro archivos de datos y adjúntalos al chat manualmente.',
-  en: 'Download the four data files and attach them to the chat manually.',
-  be: 'Спампуйце чатыры файлы даных і далучыце іх да чата ўручную.',
+  es: 'Descarga el archivo de datos (ZIP) y adjúntalo al chat manualmente.',
+  en: 'Download the data archive (ZIP) and attach it to the chat manually.',
+  be: 'Спампуйце архіў даных (ZIP) і далучыце яго да чата ўручную.',
 };
 
 export const GUIDE_DOWNLOAD_ACTION = { es: 'Descargar', en: 'Download', be: 'Спампаваць' };
 
-export const GUIDE_DOWNLOAD_FILE_LABELS = {
-  schema: { es: 'Esquema', en: 'Schema', be: 'Схема' },
-  equipment: { es: 'Equipamiento', en: 'Equipment', be: 'Абсталяванне' },
-  gyms: { es: 'Gimnasios', en: 'Gyms', be: 'Залы' },
-  example: { es: 'Ejemplo', en: 'Example', be: 'Прыклад' },
+/**
+ * Single zip archive replacing the four per-file downloads
+ * (llm-guide-zip-download). `path` must mirror where
+ * scripts/copy-static-pages.js's buildDataArchive() writes the archive
+ * inside dist/ (dist/data/rutina-data-files.zip → 'data/rutina-data-files.zip'
+ * here, combined with GUIDE_DATA_FILES_BASE_URL above). `bytes` is
+ * hand-maintained (not build-computed) — same convention as the old
+ * per-file `bytes` fields; update it after running `npm run build && npm run postbuild`
+ * and reading the "Wrote dist/data/rutina-data-files.zip (N bytes)" log line.
+ */
+export const GUIDE_DATA_ARCHIVE = {
+  filename: 'rutina-data-files.zip',
+  path: 'data/rutina-data-files.zip',
+  bytes: 19291,
+};
+
+export const GUIDE_DOWNLOAD_ARCHIVE_LABEL = {
+  es: 'Todos los archivos (ZIP)',
+  en: 'All data files (ZIP)',
+  be: 'Усе файлы (ZIP)',
 };
