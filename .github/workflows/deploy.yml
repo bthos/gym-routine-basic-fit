@@ -29,6 +29,17 @@ jobs:
 
       - run: npm run build
 
+      - name: Purge jsDelivr cache for DATA SOURCES files
+        continue-on-error: true
+        run: |
+          for path in \
+            data/schema/rutina.schema.json \
+            data/equipment.json \
+            data/gyms.json \
+            data/examples/phase1-monday.json; do
+            curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/$path"
+          done
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
