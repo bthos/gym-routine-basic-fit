@@ -51,6 +51,11 @@ const PATHS = {
   target: <><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></>,
   timer: <><line x1="10" y1="2" x2="14" y2="2" /><line x1="12" y1="2" x2="12" y2="5" /><circle cx="12" cy="13" r="8" /><line x1="12" y1="9" x2="12" y2="13" /></>,
   trophy: <><path d="M8 21h8" /><path d="M12 17v4" /><path d="M7 4h10v5a5 5 0 0 1-10 0V4z" /><path d="M17 5h2a2 2 0 0 1-2 4h-1" /><path d="M7 5H5a2 2 0 0 0 2 4h1" /></>,
+
+  /* Onboarding (added 2026-07-31 for onboarding-screens feature) */
+  "message-square": <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+  "check-circle": <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 17.01" /></>,
+  "list-checks": <><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></>,
 };
 
 /** Thin-line stroke icon (Feather/Lucide subset). Inherits color via currentColor. */

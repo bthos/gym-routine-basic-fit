@@ -25,25 +25,6 @@ equipment files yourself.
 > attach to the chat, not just an inline browser view. Prefer to fetch them yourself?
 > The table above links directly to the raw files in the repository.
 
-## How it works
-
-```
-1. Fill in the REQUEST section at the top of the prompt (see the gym list callout below it for field 6)
-2. Copy the whole prompt and paste it into any LLM chat
-3. Copy the LLM's JSON reply
-4. Import into the Rutina app (paste or upload .json)
-      ✓ pass  → done
-      ✗ fail  → copy validation errors back to the LLM, ask it to fix and re-output
-                the full JSON, go back to step 4
-```
-
-The fix loop in step 4 is the reliability mechanism. The validator's error messages are
-written so you can paste them straight back into the chat.
-
-For local validation without the app: `npm run validate-rutina -- path/to/rutina.json`
-
----
-
 ## Step 1 — Copy the prompt
 
 Use the **Copy** button above this guide. The prompt starts with **REQUEST** — fill in
@@ -51,7 +32,7 @@ every numbered line (plain text, no JSON) before sending.
 
 > **Field 6 — target gym**
 > Look up your gym’s name and numeric **id** in the **[gym list →](https://bthos.github.io/gym-routine-basic-fit/gyms.html)**
-> (opens in a new tab). You can also find the same list in the Rutina app’s **Catalog** tab.
+> (opens in a new tab). You can also find the same list in the Rutina app’s **Catálogo** tab.
 
 | # | Field | Example | Required |
 |---|-------|---------|----------|
@@ -62,7 +43,7 @@ every numbered line (plain text, no JSON) before sending.
 | 5 | Injuries / movements to avoid | "Evitar press militar por hombro derecho" | no — write "none" if none |
 | 6 | Target gym | "Avda. Andalucía, Centro Comercial Alameda (id 3)" | yes |
 | 7 | Language for the output text | "Español" | yes |
-| 8 | Prior progress export | pasted Markdown from Rutina **History → Export** | no — omit if starting a first phase |
+| 8 | Prior progress export | pasted Markdown from Rutina **Historial → Exportar** | no — omit if starting a first phase |
 
 Putting "output only JSON, nothing else" at both the top (`ROLE`) and the bottom
 (`OUTPUT`) is deliberate — it's the single highest-leverage instruction for getting
@@ -130,13 +111,13 @@ npm run validate-rutina -- path/to/your-rutina.json
 - **Equipment id not found.** The LLM must pick ids from `equipment.json` where the `gyms`
   array includes your gym id — not invented ids. Paste the validator error back and ask
   it to re-read the equipment catalog.
-- **Not sure your gym's id?** Open the [gym list](https://bthos.github.io/gym-routine-basic-fit/gyms.html) or the **Catalog** tab in the Rutina app.
+- **Not sure your gym's id?** Open the [gym list](https://bthos.github.io/gym-routine-basic-fit/gyms.html) or the **Catálogo** tab in the Rutina app.
 
 ---
 
 ## Using your progress export (field 8)
 
-After running a phase, **History → Exportar progreso** in the Rutina app produces a
+After running a phase, **Historial → Exportar progreso** in the Rutina app produces a
 Markdown text you can paste as-is into field 8. It looks like:
 
 ```
@@ -162,9 +143,9 @@ too hard, and which sessions were abandoned — and adjusts the next phase accor
 
 ## Updating your program
 
-Once a program is loaded, you can replace or remove it from the **Program** tab:
+Once a program is loaded, you can replace or remove it from the **Programa** tab:
 
-1. Open the **Program** tab and scroll to the bottom of the overview.
+1. Open the **Programa** tab and scroll to the bottom of the overview.
 2. Tap **Reemplazar programa** (Replace program) to go to the import screen and paste a new rutina.json.
 3. Or tap **Eliminar programa** (Remove program) to clear the active program and return to first-run state.
 

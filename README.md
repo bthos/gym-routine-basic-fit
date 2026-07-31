@@ -169,6 +169,8 @@ On Chromium-based browsers (Chrome, Edge, Samsung Internet), the app also shows 
 
 ## Using the PWA
 
+**First launch:** if there's no active rutina yet, a short onboarding carousel introduces what Rutina does and the LLM generate-then-import workflow before handing off to Import. It's skippable from any step, and a small on-demand control keeps it reachable afterward if you want to revisit it. Subsequent opens skip straight past it.
+
 1. **Import a rutina** — paste a `rutina.json` or upload a file. Use `data/examples/phase1-monday.json` to try the flow immediately. Generate your own with the LLM workflow below.
 2. **Home** — shows today's day (resolved by matching the day label against the current weekday in Spanish, with a fallback to the first unstarted day).
 3. **Program** — full routine view across all days.

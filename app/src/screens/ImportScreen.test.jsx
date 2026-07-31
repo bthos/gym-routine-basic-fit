@@ -18,6 +18,11 @@ vi.mock('../lib/guideLocale.js', async (importOriginal) => {
   };
 });
 
+vi.mock('../lib/onboardingStorage.js', () => ({
+  hasSeenOnboarding: vi.fn().mockReturnValue(true),
+  markOnboardingSeen: vi.fn(),
+}));
+
 describe('ImportScreen — LLM guide link (AC1, AC2)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -46,5 +51,39 @@ describe('ImportScreen — LLM guide link (AC1, AC2)', () => {
     await user.click(screen.getByRole('button', { name: /close/i }));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});
+
+// onboarding-screens (AC7): pending Cmok implementation — see tech-plan.md.
+// Failures here are expected until Cmok adds the revisit link to
+// ImportScreen.jsx.
+describe('ImportScreen — onboarding revisit link (AC7)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('does not show the onboarding overlay on mount', () => {
+    render(<ImportScreen />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('opens the onboarding overlay when the revisit link is clicked', async () => {
+    const user = userEvent.setup();
+    render(<ImportScreen />);
+
+    await user.click(screen.getByRole('link', { name: /c[oó]mo funciona la app/i }));
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('dismissing the revisited onboarding overlay (Saltar) leaves ImportScreen interactive underneath (AC6)', async () => {
+    const user = userEvent.setup();
+    render(<ImportScreen />);
+
+    await user.click(screen.getByRole('link', { name: /c[oó]mo funciona la app/i }));
+    await user.click(screen.getByRole('button', { name: /saltar/i }));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/rutina\.json/i)).toBeInTheDocument();
   });
 });

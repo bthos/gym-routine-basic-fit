@@ -9,7 +9,9 @@ import { ActiveSessionScreen } from './screens/ActiveSessionScreen.jsx';
 import { HistoryScreen } from './screens/HistoryScreen.jsx';
 import { ExportScreen } from './screens/ExportScreen.jsx';
 import { CatalogScreen } from './screens/CatalogScreen.jsx';
+import { OnboardingOverlay } from './components/OnboardingOverlay.jsx';
 import { getActiveRutina } from './lib/db.js';
+import { hasSeenOnboarding } from './lib/onboardingStorage.js';
 
 /**
  * Inner shell that has access to location (must be inside HashRouter).
@@ -20,6 +22,9 @@ function Shell() {
   const location = useLocation();
   const [rutina, setRutina] = useState(undefined); // undefined = loading, null = not imported yet
   const [loadError, setLoadError] = useState(false);
+  // Read synchronously at mount (tech-plan.md) — independent of the async
+  // getActiveRutina() load below, so onboarding's gate doesn't wait on IDB.
+  const [onboardingSeen, setOnboardingSeen] = useState(() => hasSeenOnboarding());
 
   const loadRutina = () => {
     getActiveRutina()
@@ -33,40 +38,48 @@ function Shell() {
 
   if (rutina === undefined) return null; // still loading — avoids flash
 
+  // Existing users with a saved rutina never see onboarding, even though
+  // their onboardingSeen flag is necessarily unset (tech-plan.md Decision 2
+  // — deliberate, not a bug).
+  const showOnboarding = !onboardingSeen && rutina === null;
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
-      <InstallBanner />
-      <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
-        <Routes>
-          <Route
-            path="/import"
-            element={<ImportScreen onImported={() => { loadRutina(); }} />}
-          />
-          <Route
-            path="/"
-            element={
-              rutina
-                ? <HomeScreen rutina={rutina} loadError={loadError} onGoImport={() => { window.location.hash = '/import'; }} />
-                : <Navigate to="/import" replace />
-            }
-          />
-          <Route
-            path="/program"
-            element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
-          />
-          <Route
-            path="/program/:dayIndex"
-            element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
-          />
-          <Route path="/session" element={<ActiveSessionScreen />} />
-          <Route path="/history" element={<HistoryScreen />} />
-          <Route path="/export" element={<ExportScreen />} />
-          <Route path="/catalog" element={<CatalogScreen />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      {!hideNav && <BottomTabBar />}
-    </div>
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
+        <InstallBanner />
+        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+          <Routes>
+            <Route
+              path="/import"
+              element={<ImportScreen onImported={() => { loadRutina(); }} />}
+            />
+            <Route
+              path="/"
+              element={
+                rutina
+                  ? <HomeScreen rutina={rutina} loadError={loadError} onGoImport={() => { window.location.hash = '/import'; }} />
+                  : <Navigate to="/import" replace />
+              }
+            />
+            <Route
+              path="/program"
+              element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
+            />
+            <Route
+              path="/program/:dayIndex"
+              element={rutina ? <ProgramScreen rutina={rutina} onGoImport={() => { window.location.hash = '/import'; }} onRutinaCleared={() => { loadRutina(); }} /> : <Navigate to="/import" replace />}
+            />
+            <Route path="/session" element={<ActiveSessionScreen />} />
+            <Route path="/history" element={<HistoryScreen />} />
+            <Route path="/export" element={<ExportScreen />} />
+            <Route path="/catalog" element={<CatalogScreen />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        {!hideNav && <BottomTabBar />}
+      </div>
+      {showOnboarding && <OnboardingOverlay onClose={() => setOnboardingSeen(true)} />}
+    </>
   );
 }
 

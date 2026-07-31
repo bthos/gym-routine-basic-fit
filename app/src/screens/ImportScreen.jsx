@@ -3,6 +3,7 @@ import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
 import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
 import { GuideOverlay } from '../components/GuideOverlay.jsx';
+import { OnboardingOverlay } from '../components/OnboardingOverlay.jsx';
 import { detectGuideLocale, GUIDE_LINK_TEXT } from '../lib/guideLocale.js';
 import { validateImportedRutina } from '../lib/validateImport.js';
 import { saveActiveRutina, getActiveRutina, getActiveSession, listSessions } from '../lib/db.js';
@@ -18,9 +19,14 @@ export function ImportScreen({ onImported }) {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  // Onboarding on-demand revisit (spec AC7) — mirrors showGuide exactly:
+  // same OnboardingOverlay component, reopened here without touching the
+  // persisted seen-flag (that's the overlay's own internal concern).
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [pendingRutina, setPendingRutina] = useState(null); // parsed+valid, awaiting discard-warning confirmation
   const fileInputRef = useRef(null);
   const guideLinkRef = useRef(null);
+  const onboardingLinkRef = useRef(null);
   const locale = detectGuideLocale(navigator.language);
 
   function handleFilePick(e) {
@@ -156,6 +162,22 @@ export function ImportScreen({ onImported }) {
         </div>
 
         <p style={{ textAlign: 'center', font: 'var(--text-body-sm)', color: 'var(--text-muted)', marginTop: 'var(--space-6)' }}>
+          ¿Primera vez aquí?
+          <br />
+          <a
+            ref={onboardingLinkRef}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowOnboarding(true);
+            }}
+            style={{ color: 'var(--text-link)', fontWeight: 600 }}
+          >
+            Cómo funciona la app →
+          </a>
+        </p>
+
+        <p style={{ textAlign: 'center', font: 'var(--text-body-sm)', color: 'var(--text-muted)', marginTop: 'var(--space-6)' }}>
           ¿No tienes un rutina.json?
           <br />
           <a
@@ -178,6 +200,15 @@ export function ImportScreen({ onImported }) {
           onClose={() => {
             setShowGuide(false);
             guideLinkRef.current?.focus();
+          }}
+        />
+      )}
+
+      {showOnboarding && (
+        <OnboardingOverlay
+          onClose={() => {
+            setShowOnboarding(false);
+            onboardingLinkRef.current?.focus();
           }}
         />
       )}

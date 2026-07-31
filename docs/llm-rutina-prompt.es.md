@@ -26,25 +26,6 @@ los archivos de equipamiento.
 > ¿Prefieres obtenerlos tú mismo? La tabla de arriba enlaza directamente a los archivos
 > en bruto del repositorio.
 
-## Cómo funciona
-
-```
-1. Rellena la sección REQUEST al inicio del prompt (el recuadro del listado de gimnasios está debajo)
-2. Copia todo el prompt y pégalo en cualquier chat LLM
-3. Copia la respuesta JSON del LLM
-4. Importa en la app Rutina (pegar o subir .json)
-      ✓ pasa  → listo
-      ✗ falla → copia los errores de validación de vuelta al LLM, pídele que corrija
-                y vuelva a generar el JSON completo, vuelve al paso 4
-```
-
-El bucle de corrección del paso 4 es el mecanismo de fiabilidad. Los mensajes de error
-están escritos para pegarlos directamente en el chat.
-
-Validación local sin la app: `npm run validate-rutina -- ruta/a/rutina.json`
-
----
-
 ## Paso 1 — Copia el prompt
 
 Usa el botón **Copiar** encima de esta guía. El prompt empieza por **REQUEST** — rellena
@@ -131,6 +112,33 @@ npm run validate-rutina -- ruta/a/tu-rutina.json
 - **ID de equipamiento no encontrado.** El LLM debe elegir ids de `equipment.json` cuyo
   array `gyms` incluya tu id de gimnasio. Pega el error del validador y pídele que relea el catálogo.
 - **¿No sabes el id de tu gimnasio?** Abre la [lista de gimnasios](https://bthos.github.io/gym-routine-basic-fit/gyms.html) o la pestaña **Catálogo** en la app Rutina.
+
+---
+
+## Usa tu exportación de progreso (campo 8)
+
+Tras completar una fase, **Historial → Exportar progreso** en la app Rutina genera un
+texto Markdown que puedes pegar tal cual en el campo 8. Tiene este aspecto:
+
+```
+Prensa de Pecho (g3-s10)
+  · 32kg / difícil
+  · 32kg / normal
+  · 35kg / fácil
+
+Jalón al Pecho (g3-s30)
+  · 45kg / normal
+  · 48kg / fácil
+
+Sesiones sin completar:
+  · Lunes — 2026-07-01 (abandonada)
+```
+
+El LLM usa esto como evidencia de qué pesos fueron manejables, qué resultó demasiado
+fácil o demasiado difícil, y qué sesiones se abandonaron — y ajusta la siguiente fase
+en consecuencia.
+
+**Referencia completa del formato:** [`docs/export-format.md`](export-format.md)
 
 ---
 
