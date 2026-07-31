@@ -1,11 +1,75 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import commonjs from '@rollup/plugin-commonjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Dev-only CJS->ESM interop for scripts/lib (see build.commonjsOptions below
+// for why this is needed at all). We deliberately do NOT use the real
+// @rollup/plugin-commonjs here: its current (v28+) algorithm calls the
+// Rollup-only PluginContext#load() for every require() it transforms
+// (analyzeRequiredModule, used to classify cyclic/interop cases), which
+// crashes with "Cannot read properties of undefined (reading '_container')"
+// under Vite's dev server — that plugin container doesn't implement the
+// full-Rollup module graph #load() relies on. It works fine for `vite build`
+// because that goes through Vite's own internally-bundled Rollup pipeline
+// (build.commonjsOptions), which is untouched by this. This shim instead
+// does a narrow, literal require()/module.exports rewrite, matching only
+// the shape scripts/lib files actually use, and fails loudly (throws)
+// rather than silently emitting broken output if a file's shape changes.
+function scriptsLibCjsInterop() {
+  const requireRe = /^const\s+(\w+)\s*=\s*require\(\s*(['"])([^'"]+)\2\s*\)\s*;\s*$/gm;
+  const exportsRe = /module\.exports\s*=\s*\{\s*([\s\S]*?)\s*\}\s*;?/;
+
+  return {
+    name: 'scripts-lib-cjs-interop',
+    apply: 'serve',
+    enforce: 'pre',
+    transform(code, id) {
+      if (!/[\\/]scripts[\\/]lib[\\/].*\.js$/.test(id)) return null;
+      if (!code.includes('require(') && !code.includes('module.exports')) return null;
+
+      let transformed = code.replace(
+        requireRe,
+        (_match, name, quote, specifier) => `import ${name} from ${quote}${specifier}${quote};`
+      );
+
+      const exportsMatch = exportsRe.exec(transformed);
+      if (!exportsMatch) {
+        throw new Error(
+          `[scripts-lib-cjs-interop] ${id}: expected a "module.exports = { a, b, c };" ` +
+            `shorthand block to convert to ESM exports for dev serving.`
+        );
+      }
+      const names = exportsMatch[1]
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (names.some((n) => !/^\w+$/.test(n))) {
+        throw new Error(
+          `[scripts-lib-cjs-interop] ${id}: module.exports contains a non-shorthand entry; ` +
+            `this dev-only interop only supports "module.exports = { a, b, c };".`
+        );
+      }
+      transformed = transformed.replace(exportsRe, `export { ${names.join(', ')} };`);
+
+      // Comment-stripped only for this check — doc comments in this codebase
+      // routinely mention `require('x')` in prose (see this file's own
+      // header), which isn't a real leftover call.
+      const withoutComments = transformed.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+      if (/\brequire\(/.test(withoutComments)) {
+        throw new Error(
+          `[scripts-lib-cjs-interop] ${id}: a require() call remains after conversion ` +
+            `(only "const NAME = require('spec');" at the top level is supported for dev serving).`
+        );
+      }
+
+      return { code: transformed, map: null };
+    },
+  };
+}
 
 // NOTE (Bagnik build note #1, non-negotiable): Vite's dev server refuses to
 // serve files outside its configured root (app/) unless explicitly allowed.
@@ -42,20 +106,9 @@ export default defineConfig({
     // Rollup's commonjs plugin by default (that only happens for the
     // production build), so `npm run dev` would otherwise throw
     // "require is not defined" the moment ImportScreen imports
-    // validateImport.js. This plugin's transform hook runs in both dev
-    // and build because Vite plugins share Rollup's plugin interface.
-    // apply: 'serve' — this CJS plugin runs ONLY during `vite dev` (the dev
-    // server), NOT during `vite build`. In production, Rollup's built-in CJS
-    // transform (configured via build.commonjsOptions above) handles
-    // scripts/lib on its own. Running both in production causes a proxy
-    // conflict where ajv's `?commonjs-proxy` virtual module is generated
-    // twice with inconsistent exports. During dev, Vite's built-in doesn't
-    // transform first-party CJS outside app/ (scripts/lib), so we need this
-    // explicit plugin pass.
-    Object.assign(commonjs({
-      include: [/scripts[\\/]lib/],
-      transformMixedEsModules: true,
-    }), { apply: 'serve' }),
+    // validateImport.js. See scriptsLibCjsInterop's own comment above for
+    // why this dev-only shim exists instead of the real @rollup/plugin-commonjs.
+    scriptsLibCjsInterop(),
     react(),
     VitePWA({
       registerType: 'autoUpdate',

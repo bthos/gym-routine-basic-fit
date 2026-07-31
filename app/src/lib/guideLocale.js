@@ -59,7 +59,7 @@ export const GUIDE_GYM_LINK = {
 
 export const GUIDE_GYM_ALT = {
   es: 'También en la pestaña Catálogo de la app.',
-  en: 'Also in the app’s Catalog tab.',
+  en: 'Also in the app’s Catálogo tab.',
   be: 'Таксама на ўкладцы Catálogo ў прыкладзе.',
 };
 

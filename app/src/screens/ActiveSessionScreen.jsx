@@ -81,12 +81,20 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
     };
   }, [isExpanded, isDone, ex.equipmentId, ex.weightUsed, ex.difficulty]);
 
-  // a11y checklist: current exercise's weight input receives focus automatically.
+  // Focus follows the exercise becoming current (skips tab/tap-hunting) — but
+  // NOT on first mount, where isExpanded can already be true because the
+  // screen auto-expands the first pending exercise on load. Auto-focusing
+  // then would pop the keyboard open before the user has looked at the
+  // screen. hasMountedRef defers focus to the first *transition* into
+  // isExpanded, which only happens after a manual toggle or completing the
+  // previous exercise.
+  const hasMountedRef = useRef(false);
   useEffect(() => {
-    if (isExpanded && weightInputRef.current) {
+    if (isExpanded && weightInputRef.current && hasMountedRef.current) {
       weightInputRef.current.focus();
       weightInputRef.current.select();
     }
+    hasMountedRef.current = true;
   }, [isExpanded]);
 
   const isCurrent = isExpanded || (isNextPending && !isDone);
