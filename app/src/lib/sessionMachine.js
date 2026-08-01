@@ -8,6 +8,12 @@
  * createSession() directly (it returns a full new session object) and
  * persisting it; the reducer only handles transitions on an existing session:
  * COMPLETE_EXERCISE, UNDO_EXERCISE, FINISH, ABANDON, RESUME.
+ *
+ * Exercise identity inside a session is the **index** in that day's exercise
+ * list (parallel to rutina.days[dayIndex].exercises). Matching by equipmentId
+ * alone is wrong when a day repeats a machine or when the active rutina grew
+ * after the session was created — both caused "Marcar completado" to no-op
+ * or crash on the second+ card.
  */
 
 function generateId() {
@@ -49,6 +55,28 @@ export function createSession(dayLabel, dayIndex, exercises, now) {
   };
 }
 
+function patchExerciseAt(session, exerciseIndex, patch, identity) {
+  if (exerciseIndex < 0) return session;
+  const exercises = session.exercises.slice();
+  while (exercises.length <= exerciseIndex) {
+    exercises.push({
+      equipmentId: null,
+      name: null,
+      weightUsed: null,
+      difficulty: null,
+      completedAt: null,
+    });
+  }
+  const prev = exercises[exerciseIndex] || {};
+  exercises[exerciseIndex] = {
+    ...prev,
+    equipmentId: identity?.equipmentId ?? prev.equipmentId,
+    name: identity?.name ?? prev.name,
+    ...patch,
+  };
+  return { ...session, exercises };
+}
+
 export function sessionReducer(session, action) {
   switch (action.type) {
     case 'RESUME':
@@ -56,22 +84,23 @@ export function sessionReducer(session, action) {
       return action.session;
 
     case 'COMPLETE_EXERCISE':
-      return {
-        ...session,
-        exercises: session.exercises.map((ex) =>
-          ex.equipmentId === action.equipmentId
-            ? { ...ex, weightUsed: action.weightUsed, difficulty: action.difficulty, completedAt: action.now }
-            : ex
-        ),
-      };
+      return patchExerciseAt(
+        session,
+        action.exerciseIndex,
+        {
+          weightUsed: action.weightUsed,
+          difficulty: action.difficulty,
+          completedAt: action.now,
+        },
+        { equipmentId: action.equipmentId, name: action.name }
+      );
 
     case 'UNDO_EXERCISE':
-      return {
-        ...session,
-        exercises: session.exercises.map((ex) =>
-          ex.equipmentId === action.equipmentId ? { ...ex, weightUsed: null, difficulty: null, completedAt: null } : ex
-        ),
-      };
+      return patchExerciseAt(session, action.exerciseIndex, {
+        weightUsed: null,
+        difficulty: null,
+        completedAt: null,
+      });
 
     case 'FINISH':
       // Allowed with exercises still pending — "user ends early" (spec.md).

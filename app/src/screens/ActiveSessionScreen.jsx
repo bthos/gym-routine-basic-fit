@@ -10,12 +10,19 @@ import { getActiveRutina, getActiveSession, saveSession, getLastWeight } from '.
 import { DIFFICULTY_LEVELS, difficultyLabel } from '../lib/difficulty.js';
 import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/equipment.js';
 
-/** Joins this day's prescription (rutina) with the session's tracking record, by equipmentId. */
+/**
+ * Joins this day's prescription (rutina) with the session's tracking record
+ * by **index** (createSession writes a parallel array). Matching by
+ * equipmentId alone breaks when a day repeats a machine or the rutina grew
+ * after the session started — the card still renders, but COMPLETE could not
+ * find a track and crashed on `completedEx.name`.
+ */
 function mergeExercises(rutinaExercises, sessionExercises) {
-  return rutinaExercises.map((rx) => {
-    const tracking = sessionExercises.find((se) => se.equipmentId === rx.equipmentId) || {};
+  return rutinaExercises.map((rx, index) => {
+    const tracking = sessionExercises[index] || {};
     return {
       ...rx,
+      exerciseIndex: index,
       weightUsed: tracking.weightUsed ?? null,
       difficulty: tracking.difficulty ?? null,
       completedAt: tracking.completedAt ?? null,
@@ -147,6 +154,7 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
   const isDone = Boolean(ex.completedAt);
   const [weight, setWeight] = useState(ex.weightUsed ?? '');
   const [difficulty, setDifficulty] = useState(ex.difficulty ?? null);
+  const weightInputId = `weight-${ex.exerciseIndex}-${ex.equipmentId ?? 'x'}`;
 
   // Prefill: an already-done exercise being reopened shows ITS OWN logged
   // values (correction); a not-yet-done exercise becoming current prefills
@@ -231,13 +239,13 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
 
           <div>
             <label
-              htmlFor={`weight-${ex.equipmentId}`}
+              htmlFor={weightInputId}
               style={{ display: 'block', font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}
             >
               Peso usado (kg)
             </label>
             <input
-              id={`weight-${ex.equipmentId}`}
+              id={weightInputId}
               type="number"
               inputMode="decimal"
               value={weight}
@@ -261,11 +269,23 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
             <DifficultyPicker value={difficulty} onChange={setDifficulty} />
           </div>
 
-          <Button variant="primary" disabled={!difficulty} onClick={() => onComplete(ex.equipmentId, weight === '' ? null : Number(weight), difficulty)}>
+          <Button
+            variant="primary"
+            disabled={!difficulty}
+            onClick={() =>
+              onComplete({
+                exerciseIndex: ex.exerciseIndex,
+                equipmentId: ex.equipmentId,
+                name: ex.name,
+                weightUsed: weight === '' ? null : Number(weight),
+                difficulty,
+              })
+            }
+          >
             <Icon name="check" size={16} /> Marcar completado
           </Button>
           {isDone && (
-            <Button variant="ghost" onClick={() => onUndo(ex.equipmentId)}>
+            <Button variant="ghost" onClick={() => onUndo(ex.exerciseIndex)}>
               Deshacer
             </Button>
           )}
@@ -279,7 +299,7 @@ export function ActiveSessionScreen() {
   const navigate = useNavigate();
   const [rutina, setRutina] = useState(undefined);
   const [session, setSession] = useState(undefined); // undefined = loading, null = none found
-  const [expandedId, setExpandedId] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState(null);
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [announcement, setAnnouncement] = useState('');
 
@@ -293,7 +313,7 @@ export function ActiveSessionScreen() {
         const day = activeRutina.rutina.days[activeSession.dayIndex] || { exercises: [] };
         const merged = mergeExercises(day.exercises, activeSession.exercises);
         const firstPending = merged.find((e) => !e.completedAt);
-        setExpandedId(firstPending ? firstPending.equipmentId : null);
+        setExpandedIndex(firstPending ? firstPending.exerciseIndex : null);
       }
     });
     return () => {
@@ -305,7 +325,7 @@ export function ActiveSessionScreen() {
   const merged = useMemo(() => (day && session ? mergeExercises(day.exercises, session.exercises) : []), [day, session]);
   const doneCount = merged.filter((e) => e.completedAt).length;
   const total = merged.length;
-  const firstPendingId = merged.find((e) => !e.completedAt)?.equipmentId ?? null;
+  const firstPendingIndex = merged.find((e) => !e.completedAt)?.exerciseIndex ?? null;
 
   // Defensive guard: /session is only reachable via Start/Resume (ux-design.md
   // States Matrix) — if there's genuinely no active session, don't render a
@@ -323,23 +343,32 @@ export function ActiveSessionScreen() {
     saveSession(next);
   }
 
-  function handleComplete(equipmentId, weightUsed, difficulty) {
+  function handleComplete({ exerciseIndex, equipmentId, name, weightUsed, difficulty }) {
     const now = new Date().toISOString();
-    const next = sessionReducer(session, { type: 'COMPLETE_EXERCISE', equipmentId, weightUsed, difficulty, now });
+    const next = sessionReducer(session, {
+      type: 'COMPLETE_EXERCISE',
+      exerciseIndex,
+      equipmentId,
+      name,
+      weightUsed,
+      difficulty,
+      now,
+    });
     persist(next);
 
-    const completedEx = next.exercises.find((e) => e.equipmentId === equipmentId);
-    setAnnouncement(`${completedEx.name} completado${weightUsed != null ? `, ${weightUsed} kilos` : ''}, ${difficultyLabel(difficulty).toLowerCase()}`);
+    const completedEx = next.exercises[exerciseIndex];
+    const label = completedEx?.name || name || 'Ejercicio';
+    setAnnouncement(`${label} completado${weightUsed != null ? `, ${weightUsed} kilos` : ''}, ${difficultyLabel(difficulty).toLowerCase()}`);
 
     const nextMerged = mergeExercises(day.exercises, next.exercises);
     const nextPending = nextMerged.find((e) => !e.completedAt);
-    setExpandedId(nextPending ? nextPending.equipmentId : null);
+    setExpandedIndex(nextPending ? nextPending.exerciseIndex : null);
   }
 
-  function handleUndo(equipmentId) {
-    const next = sessionReducer(session, { type: 'UNDO_EXERCISE', equipmentId });
+  function handleUndo(exerciseIndex) {
+    const next = sessionReducer(session, { type: 'UNDO_EXERCISE', exerciseIndex });
     persist(next);
-    setExpandedId(equipmentId);
+    setExpandedIndex(exerciseIndex);
   }
 
   function handleFinish() {
@@ -383,11 +412,11 @@ export function ActiveSessionScreen() {
       <div style={{ padding: 'var(--space-4) var(--page-gutter)', display: 'grid', gap: 10 }}>
         {merged.map((ex) => (
           <ExerciseLogCard
-            key={ex.equipmentId}
+            key={`${ex.exerciseIndex}-${ex.equipmentId ?? 'x'}`}
             ex={ex}
-            isExpanded={expandedId === ex.equipmentId}
-            isNextPending={firstPendingId === ex.equipmentId}
-            onToggle={() => setExpandedId(expandedId === ex.equipmentId ? null : ex.equipmentId)}
+            isExpanded={expandedIndex === ex.exerciseIndex}
+            isNextPending={firstPendingIndex === ex.exerciseIndex}
+            onToggle={() => setExpandedIndex(expandedIndex === ex.exerciseIndex ? null : ex.exerciseIndex)}
             onComplete={handleComplete}
             onUndo={handleUndo}
           />
