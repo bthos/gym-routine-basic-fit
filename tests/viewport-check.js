@@ -22,7 +22,7 @@ const puppeteer = require('puppeteer');
 const REPO_ROOT = path.resolve(__dirname, '..');
 const BASE_URL = process.argv[2] || 'http://localhost:4173';
 const WIDTHS = [360, 390, 412, 768];
-const ROUTES = ['/import', '/', '/program', '/catalog', '/history', '/session', '/export'];
+const ROUTES = ['/import', '/', '/program', '/catalog', '/history', '/progress', '/session', '/export'];
 const HEIGHT = 800;
 
 const EXAMPLE_RUTINA = JSON.parse(

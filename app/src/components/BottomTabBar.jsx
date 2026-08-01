@@ -9,6 +9,7 @@ import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
  * active tab from useLocation() (via NavLink) rather than being a
  * fully-controlled component, per tech-plan.md.
  *
+ * Tabs: Home / Programa / Catálogo / Historial / Progreso (5 total).
  * data-testid="bottom-tab-bar" / "tab-item" are load-bearing: tests/
  * viewport-check.js asserts all tab-item elements share one offsetTop
  * (never wraps to multiple rows) at 360/390/412/768px.
@@ -18,6 +19,7 @@ const TABS = [
   { id: 'program', label: 'Programa', icon: 'dumbbell', path: '/program', end: false },
   { id: 'catalog', label: 'Catálogo', icon: 'search', path: '/catalog', end: false },
   { id: 'history', label: 'Historial', icon: 'bar-chart-2', path: '/history', end: false },
+  { id: 'progress', label: 'Progreso', icon: 'trending-up', path: '/progress', end: false },
 ];
 
 const linkStyle = ({ isActive }) => ({

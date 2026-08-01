@@ -7,6 +7,7 @@ import { HomeScreen } from './screens/HomeScreen.jsx';
 import { ProgramScreen } from './screens/ProgramScreen.jsx';
 import { ActiveSessionScreen } from './screens/ActiveSessionScreen.jsx';
 import { HistoryScreen } from './screens/HistoryScreen.jsx';
+import { ProgressScreen } from './screens/ProgressScreen.jsx';
 import { ExportScreen } from './screens/ExportScreen.jsx';
 import { CatalogScreen } from './screens/CatalogScreen.jsx';
 import { OnboardingOverlay } from './components/OnboardingOverlay.jsx';
@@ -87,6 +88,10 @@ function Shell() {
             />
             <Route path="/session" element={<ActiveSessionScreen />} />
             <Route path="/history" element={<HistoryScreen />} />
+            <Route
+              path="/progress"
+              element={rutina ? <ProgressScreen rutina={rutina} /> : <Navigate to="/import" replace />}
+            />
             <Route path="/export" element={<ExportScreen />} />
             <Route path="/catalog" element={<CatalogScreen />} />
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -11,7 +11,9 @@
 
 /**
  * @param {Array} sessions - full session history (any status)
- * @param {{limit?: number}} options
+ * @param {{limit?: number}} options - pass `limit: Infinity` to return the
+ *   full newest-first series (History default stays 3; Progress uses
+ *   buildWeightSeries from progress.js for its ascending uncapped chart).
  * @returns {Array<{equipmentId: string, name: string, entries: Array<{date, weightUsed, difficulty}>}>}
  *   newest-first, each capped at `limit` entries (default 3)
  */
