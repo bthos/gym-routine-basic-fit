@@ -46,7 +46,8 @@ basicfit-rutina/
 │       ├── main.jsx                # ReactDOM root + SW registration
 │       ├── App.jsx                 # HashRouter + route shell
 │       ├── components/
-│       │   ├── BottomTabBar.jsx    # Persistent bottom navigation (Home/Program/Catalog/History)
+│       │   ├── BottomTabBar.jsx    # Persistent bottom navigation (Home/Program/Catalog/History/Progress)
+│       │   ├── ProgressCharts.jsx  # Hand-rolled SVG weight/volume/frequency charts
 │       │   ├── ConfirmSheet.jsx    # Reusable confirmation sheet
 │       │   └── InstallBanner.jsx   # "Add to Home Screen" banner (beforeinstallprompt)
 │       ├── hooks/
@@ -57,11 +58,13 @@ basicfit-rutina/
 │       │   ├── ProgramScreen.jsx   # Full routine view (all days)
 │       │   ├── ActiveSessionScreen.jsx  # Live workout logging
 │       │   ├── HistoryScreen.jsx   # Past sessions + per-exercise trend
+│       │   ├── ProgressScreen.jsx  # Weight/volume/frequency progress charts
 │       │   ├── ExportScreen.jsx    # JSON + Markdown export
 │       │   └── CatalogScreen.jsx   # Equipment catalog (27 items, EN/ES/BE)
 │       ├── lib/
 │       │   ├── db.js               # IndexedDB wrapper (idb): activeRutina, sessions, lastWeights
 │       │   ├── sessionMachine.js   # Pure session-state reducer
+│       │   ├── progress.js         # Session aggregators for Progress charts (no new store)
 │       │   ├── exportFormat.js     # sessions[] → { json, markdown }
 │       │   ├── today.js            # Heuristic: which day is "today" in the rutina
 │       │   ├── validateImport.js   # Browser wrapper around scripts/lib/rutina-validator.js
@@ -176,13 +179,9 @@ On Chromium-based browsers (Chrome, Edge, Samsung Internet), the app also shows 
 3. **Program** — full routine view across all days.
 4. **Active session** — tap a day on Home to start. Log weight + difficulty per exercise. Finish or abandon at any time.
 5. **History** — past sessions with per-exercise last-3-sessions weight trend.
-6. **Export** — download a JSON archive or copy Markdown to clipboard. Optional Web Share on mobile. See [`docs/export-format.md`](docs/export-format.md) for the exact format.
-7. **Catalog** — all 27 equipment items with images and instructions (EN/ES/BE).
-
-> **Planned:** a fifth bottom tab, **Progress**, is in design (not yet built) —
-> per-exercise weight/reps trends, session volume per workout, and a 12-week
-> training-frequency heatmap, all derived from the existing session history
-> (no new data storage). It will slot in after History once implemented.
+6. **Progress** — fifth bottom tab after History: per-exercise weight chart (full history), per-session volume bars (current program's sets×reps × logged weight), and a trailing 12-week training-frequency heatmap — all derived from existing session history (no new store). Volume for older sessions can shift if you later edit the active program's sets/reps.
+7. **Export** — download a JSON archive or copy Markdown to clipboard. Optional Web Share on mobile. See [`docs/export-format.md`](docs/export-format.md) for the exact format.
+8. **Catalog** — all 27 equipment items with images and instructions (EN/ES/BE).
 
 All data is stored locally in IndexedDB — no account, no server.
 
