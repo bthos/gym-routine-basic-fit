@@ -27,7 +27,7 @@ function Shell() {
   const [onboardingSeen, setOnboardingSeen] = useState(() => hasSeenOnboarding());
 
   const loadRutina = () => {
-    getActiveRutina()
+    return getActiveRutina()
       .then((r) => setRutina(r ? r.rutina : null))
       .catch(() => { setLoadError(true); setRutina(null); });
   };
@@ -66,7 +66,7 @@ function Shell() {
               element={
                 justImported
                   ? <Navigate to="/" replace />
-                  : <ImportScreen onImported={() => { loadRutina(); setJustImported(true); }} />
+                  : <ImportScreen onImported={() => { loadRutina().then(() => setJustImported(true)); }} />
               }
             />
             <Route
