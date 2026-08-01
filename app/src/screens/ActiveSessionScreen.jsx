@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
 import { DetailItem } from '../../../design-system/components/primitives/DetailItem.jsx';
 import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
+import { EquipmentReferenceSheet } from '../components/EquipmentReferenceSheet.jsx';
 import { sessionReducer } from '../lib/sessionMachine.js';
 import { getActiveRutina, getActiveSession, saveSession, getLastWeight } from '../lib/db.js';
 import { DIFFICULTY_LEVELS, difficultyLabel } from '../lib/difficulty.js';
+import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/equipment.js';
 
 /** Joins this day's prescription (rutina) with the session's tracking record, by equipmentId. */
 function mergeExercises(rutinaExercises, sessionExercises) {
@@ -52,6 +54,88 @@ function DifficultyPicker({ value, onChange }) {
         );
       })}
     </div>
+  );
+}
+
+/**
+ * Compact equipment reference row rendered inside the expanded exercise card.
+ * Three display states: unresolved → plain text id; resolved+sparse → name text;
+ * resolved+rich → button that opens EquipmentReferenceSheet overlay.
+ */
+function EquipmentRow({ ex }) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const triggerRef = useRef(null);
+
+  const eq = getEquipmentById(ex.equipmentId);
+
+  if (!eq) {
+    return (
+      <div style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', padding: '4px 0' }}>
+        {ex.equipmentId}
+      </div>
+    );
+  }
+
+  const imageUrl = mainImageUrl(eq);
+  const displayName = `${eq.series ? `Matrix ${eq.series} ` : ''}${eq.modelCode} — ${equipmentDisplayName(eq)}`;
+  const steps = ex.technique || [];
+  const videoHref = ex.videoQuery
+    ? `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.videoQuery)}`
+    : undefined;
+  const hasMore = !!(imageUrl || steps.length > 0 || videoHref);
+
+  if (!hasMore) {
+    return (
+      <div style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', padding: '4px 0' }}>
+        {displayName}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-haspopup="dialog"
+        onClick={() => setSheetOpen(true)}
+        style={{
+          all: 'unset',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '6px 0',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt=""
+            style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 'var(--radius-control)', flexShrink: 0 }}
+          />
+        )}
+        <span style={{ flex: 1, minWidth: 0, font: 'var(--text-body-sm)', color: 'var(--bf-ink)' }}>
+          {displayName}
+        </span>
+        <Icon name="chevron-right" size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+      </button>
+
+      {sheetOpen && (
+        <EquipmentReferenceSheet
+          name={displayName}
+          imageUrl={imageUrl}
+          steps={steps}
+          videoHref={videoHref}
+          onClose={() => {
+            setSheetOpen(false);
+            triggerRef.current?.focus();
+          }}
+        />
+      )}
+    </>
   );
 }
 
@@ -138,6 +222,8 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
             <DetailItem label="Descanso" value={`${ex.restSeconds} seg`} />
             {ex.intensity && <DetailItem label="Intensidad" value={ex.intensity} />}
           </div>
+
+          <EquipmentRow ex={ex} />
 
           <div>
             <label
