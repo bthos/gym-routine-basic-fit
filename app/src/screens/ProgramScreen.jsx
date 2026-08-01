@@ -310,7 +310,11 @@ function ProgramDayDetail({ rutina, dayIndex }) {
                 equipment={equipment ? `${equipment.series ? `Matrix ${equipment.series} ` : ''}${equipment.modelCode} — ${equipmentDisplayName(equipment)}` : exercise.equipmentId}
                 imageUrl={equipment ? mainImageUrl(equipment) : undefined}
                 steps={exercise.technique || []}
-                videoHref={exercise.videoQuery ? `https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.videoQuery)}` : undefined}
+                videoHref={
+                  exercise.videoQuery
+                    ? `https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.videoQuery)}`
+                    : (equipment?.videos?.es || equipment?.videos?.en || [])[0]?.url
+                }
               />
             );
           })}

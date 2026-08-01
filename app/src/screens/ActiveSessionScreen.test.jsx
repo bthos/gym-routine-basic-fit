@@ -157,15 +157,20 @@ describe('ActiveSessionScreen — equipment reference (AC1–AC5)', () => {
     ).toBe(true);
   });
 
-  it('sparse resolved equipment shows name only, not a button (AC1-sparse)', async () => {
+  it('falls back to catalog equipment video when rutina omits videoQuery', async () => {
     const user = userEvent.setup();
     renderSession();
     await screen.findByRole('button', { name: new RegExp(RICH_EQ.modelCode) });
 
+    // g3-s45: no images, no technique/videoQuery in fixture — but catalog has videos.
     await user.click(screen.getByRole('button', { name: /sparse machine/i }));
+    const trigger = await screen.findByRole('button', { name: new RegExp(SPARSE_EQ.modelCode) });
+    await user.click(trigger);
 
-    expect(await screen.findByText(SPARSE_NAME)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: new RegExp(SPARSE_EQ.modelCode) })).not.toBeInTheDocument();
+    const dialog = await screen.findByRole('dialog');
+    const link = within(dialog).getByRole('link', { name: /ver tutorial en youtube/i });
+    const expected = (SPARSE_EQ.videos?.es || SPARSE_EQ.videos?.en || [])[0]?.url;
+    expect(link).toHaveAttribute('href', expected);
   });
 
   it('collapsed card does not show equipment row (AC5)', async () => {

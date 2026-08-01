@@ -79,9 +79,13 @@ function EquipmentRow({ ex }) {
   const imageUrl = mainImageUrl(eq);
   const displayName = `${eq.series ? `Matrix ${eq.series} ` : ''}${eq.modelCode} — ${equipmentDisplayName(eq)}`;
   const steps = ex.technique || [];
+  // Prefer rutina videoQuery (exercise-specific) when present; otherwise fall
+  // back to the catalog machine video — same source CatalogScreen uses, so
+  // every resolved apparatus gets a tutorial even when the rutina omitted videoQuery.
+  const catalogVideo = (eq.videos?.es || eq.videos?.en || [])[0]?.url;
   const videoHref = ex.videoQuery
     ? `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.videoQuery)}`
-    : undefined;
+    : catalogVideo;
   const hasMore = !!(imageUrl || steps.length > 0 || videoHref);
 
   if (!hasMore) {
