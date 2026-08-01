@@ -54,7 +54,7 @@ const PATHS = {
 
   /* Onboarding (added 2026-07-31 for onboarding-screens feature) */
   "message-square": <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
-  "check-circle": <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 17.01" /></>,
+  "check-circle": <><circle cx="12" cy="12" r="10" /><polyline points="8 12 11 15 16 9" /></>,
   "list-checks": <><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></>,
 };
 

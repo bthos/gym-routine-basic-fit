@@ -133,7 +133,7 @@ export function OnboardingOverlay({ onClose }) {
         }}
       >
         <div style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
-          <div style={{ color: 'var(--bf-purple)', marginBottom: 'var(--space-4)' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', color: 'var(--bf-purple)', marginBottom: 'var(--space-4)' }}>
             <Icon name={current.icon} size={40} strokeWidth={1.6} />
           </div>
 

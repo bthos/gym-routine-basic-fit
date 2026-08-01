@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
@@ -59,7 +59,6 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
   const isDone = Boolean(ex.completedAt);
   const [weight, setWeight] = useState(ex.weightUsed ?? '');
   const [difficulty, setDifficulty] = useState(ex.difficulty ?? null);
-  const weightInputRef = useRef(null);
 
   // Prefill: an already-done exercise being reopened shows ITS OWN logged
   // values (correction); a not-yet-done exercise becoming current prefills
@@ -80,22 +79,6 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
       cancelled = true;
     };
   }, [isExpanded, isDone, ex.equipmentId, ex.weightUsed, ex.difficulty]);
-
-  // Focus follows the exercise becoming current (skips tab/tap-hunting) — but
-  // NOT on first mount, where isExpanded can already be true because the
-  // screen auto-expands the first pending exercise on load. Auto-focusing
-  // then would pop the keyboard open before the user has looked at the
-  // screen. hasMountedRef defers focus to the first *transition* into
-  // isExpanded, which only happens after a manual toggle or completing the
-  // previous exercise.
-  const hasMountedRef = useRef(false);
-  useEffect(() => {
-    if (isExpanded && weightInputRef.current && hasMountedRef.current) {
-      weightInputRef.current.focus();
-      weightInputRef.current.select();
-    }
-    hasMountedRef.current = true;
-  }, [isExpanded]);
 
   const isCurrent = isExpanded || (isNextPending && !isDone);
 
@@ -164,7 +147,6 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
               Peso usado (kg)
             </label>
             <input
-              ref={weightInputRef}
               id={`weight-${ex.equipmentId}`}
               type="number"
               inputMode="decimal"

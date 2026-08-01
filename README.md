@@ -179,6 +179,11 @@ On Chromium-based browsers (Chrome, Edge, Samsung Internet), the app also shows 
 6. **Export** — download a JSON archive or copy Markdown to clipboard. Optional Web Share on mobile. See [`docs/export-format.md`](docs/export-format.md) for the exact format.
 7. **Catalog** — all 27 equipment items with images and instructions (EN/ES/BE).
 
+> **Planned:** a fifth bottom tab, **Progress**, is in design (not yet built) —
+> per-exercise weight/reps trends, session volume per workout, and a 12-week
+> training-frequency heatmap, all derived from the existing session history
+> (no new data storage). It will slot in after History once implemented.
+
 All data is stored locally in IndexedDB — no account, no server.
 
 ## Authoring a Rutina with an LLM
