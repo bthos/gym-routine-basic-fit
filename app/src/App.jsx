@@ -34,6 +34,18 @@ function Shell() {
 
   useEffect(() => { loadRutina(); }, []);
 
+  // One-shot redirect flag: ImportScreen has no navigation of its own (it
+  // just calls onImported() to refresh `rutina`), so without this a
+  // successful import silently saves and leaves the user staring at the
+  // same import form. Set on commit, cleared once we've actually left
+  // /import — so a later intentional revisit (onGoImport, to replace the
+  // active rutina) still lands on the real ImportScreen instead of bouncing
+  // straight back to "/".
+  const [justImported, setJustImported] = useState(false);
+  useEffect(() => {
+    if (justImported && location.pathname !== '/import') setJustImported(false);
+  }, [location.pathname, justImported]);
+
   const hideNav = location.pathname === '/import';
 
   if (rutina === undefined) return null; // still loading — avoids flash
@@ -51,7 +63,11 @@ function Shell() {
           <Routes>
             <Route
               path="/import"
-              element={<ImportScreen onImported={() => { loadRutina(); }} />}
+              element={
+                justImported
+                  ? <Navigate to="/" replace />
+                  : <ImportScreen onImported={() => { loadRutina(); setJustImported(true); }} />
+              }
             />
             <Route
               path="/"
