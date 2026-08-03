@@ -25,6 +25,11 @@ img {
   max-width: 100%;
 }
 
+/* Expanded display headings can exceed narrow cover widths; allow soft wrap. */
+h1, h2 {
+  overflow-wrap: anywhere;
+}
+
 /* Screen-reader-only content (aria-live announcements, etc.) — visually
    hidden but still reachable by assistive tech, standard "sr-only" pattern. */
 .sr-only {

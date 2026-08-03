@@ -32,14 +32,14 @@ export function CatalogScreen() {
   const [category, setCategory] = useState('all');
 
   const items = EQUIPMENT.filter((e) => category === 'all' || e.category === category);
-  const wrap = { maxWidth: 900, margin: '0 auto', padding: '0 var(--page-gutter)' };
+  const wrap = { maxWidth: 900, margin: '0 auto', padding: '0 var(--page-pad-x)' };
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
       <PageHeader title="Catálogo de equipamiento" subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit" />
 
       <div style={{ ...wrap, marginTop: 'var(--space-6)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 96px), 1fr))', gap: 10 }}>
           <StatCard value={String(EQUIPMENT_METADATA.totalEquipment ?? EQUIPMENT.length)} label="máquinas" />
           <StatCard value={String(GYMS.length)} label="gimnasios" />
           <StatCard value={String(LANGUAGES.length)} label="idiomas" />
@@ -115,7 +115,7 @@ export function CatalogScreen() {
           marginTop: 'var(--space-5)',
           paddingBottom: 'var(--space-10)',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
           gap: 14,
           alignItems: 'start',
         }}

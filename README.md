@@ -92,7 +92,7 @@ basicfit-rutina/
 │   ├── validate-data.js            # Schema validation for equipment.json
 │   └── validate-rutina.js          # CLI validator for rutina.json files
 ├── tests/
-│   └── viewport-check.js           # Puppeteer: no horizontal scroll + tab-bar row-wrap at 360/390/412/768px
+│   └── viewport-check.js           # Puppeteer: no horizontal scroll + tab-bar row-wrap at 280/360/390/412/768px
 ├── docs/
 │   ├── export-format.md            # Export Markdown + JSON format reference (LLM paste contract)
 │   ├── llm-rutina-prompt.md            # Redirect — backward compat
@@ -116,7 +116,7 @@ basicfit-rutina/
 | `npm run preview` | Serve the production build locally |
 | `npm test` | Run Vitest test suites (lib modules + component tests) |
 | `npm run test:watch` | Vitest in watch mode |
-| `npm run test:viewport` | Puppeteer viewport regression: 360/390/412/768px × 5 routes (requires `npm run preview` running) |
+| `npm run test:viewport` | Puppeteer viewport regression: 280/360/390/412/768px × routes (requires `npm run preview` running) |
 | `npm run validate-data` | Validate `data/equipment.json` against its schema |
 | `npm run validate-rutina -- <path>` | Validate a `rutina.json` file against its schema + cross-check `equipmentId` values |
 | `npm run serve` | Serve the repo root on port 3000 (for static HTML pages) |

@@ -76,12 +76,12 @@ export function ExportScreen() {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 100 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-gutter) var(--space-5)' }}>
+      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-pad-x) var(--space-5)' }}>
         <h1 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: 0 }}>Exportar progreso</h1>
         <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '6px 0 0' }}>Copia o descarga tu historial para pegarlo en tu próxima conversación con un LLM.</p>
       </div>
 
-      <div style={{ padding: 'var(--space-5) var(--page-gutter)', display: 'grid', gap: 'var(--space-5)' }}>
+      <div style={{ padding: 'var(--space-5) var(--page-pad-x)', display: 'grid', gap: 'var(--space-5)' }}>
         <div>
           <label htmlFor="export-range" style={{ display: 'block', font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
             Rango

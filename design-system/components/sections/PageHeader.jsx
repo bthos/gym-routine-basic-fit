@@ -17,7 +17,7 @@ export function PageHeader({ tone = "light", breadcrumb, title, subtitle, badge,
     <header style={{
       background: light ? "var(--bf-white)" : "var(--bf-ink)",
       color: light ? "var(--bf-ink)" : "var(--bf-white)",
-      padding: "var(--space-6) var(--page-gutter) var(--space-8)",
+      padding: "var(--space-6) var(--page-pad-x) var(--space-8)",
       borderBottom: light ? "1px solid var(--border-default)" : "none", ...style,
     }}>
       <div style={{ maxWidth: "var(--page-max-width)", margin: "0 auto" }}>
@@ -39,7 +39,7 @@ export function PageHeader({ tone = "light", breadcrumb, title, subtitle, badge,
         )}
         <h1 style={{
           font: "var(--text-h1)", color: "inherit", textTransform: "uppercase",
-          letterSpacing: "var(--tracking-heading)", margin: 0,
+          letterSpacing: "var(--tracking-heading)", margin: 0, overflowWrap: "anywhere",
         }}>{title}</h1>
         {subtitle && <p style={{ font: "var(--text-body-lg)", color: light ? "var(--text-body)" : "rgba(255,255,255,.8)", margin: "10px 0 0", maxWidth: 640 }}>{subtitle}</p>}
         {badge && <div style={{ marginTop: "var(--space-4)" }}><Badge>{badge}</Badge></div>}

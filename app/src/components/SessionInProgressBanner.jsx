@@ -44,7 +44,7 @@ export function SessionInProgressBanner({ status, session }) {
         gap: 10,
         width: '100%',
         minHeight: 44,
-        padding: 'var(--space-4) var(--page-gutter)',
+        padding: 'var(--space-4) var(--page-pad-x)',
         background: 'var(--bf-purple)',
         color: 'var(--bf-white)',
         cursor: 'pointer',

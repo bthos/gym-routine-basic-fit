@@ -101,7 +101,7 @@ export function OnboardingOverlay({ onClose }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: 'var(--space-4) var(--page-gutter)',
+          padding: 'var(--space-4) var(--page-pad-x)',
         }}
       >
         <DotIndicator total={TOTAL_STEPS} current={step} />
@@ -128,7 +128,7 @@ export function OnboardingOverlay({ onClose }) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 'var(--space-6) var(--page-gutter)',
+          padding: 'var(--space-6) var(--page-pad-x)',
           overflowY: 'auto',
         }}
       >
@@ -229,7 +229,7 @@ export function OnboardingOverlay({ onClose }) {
           flexShrink: 0,
           display: 'flex',
           justifyContent: 'space-between',
-          padding: 'var(--space-4) var(--page-gutter)',
+          padding: 'var(--space-4) var(--page-pad-x)',
         }}
       >
         {!isFirst && (

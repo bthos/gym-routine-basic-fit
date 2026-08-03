@@ -66,7 +66,7 @@ function Shell() {
       <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
         <InstallBanner />
         <SessionInProgressBanner status={activeSession.status} session={activeSession.session} />
-        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+        <main style={{ flex: 1, minWidth: 0, overflowY: 'auto', overflowX: 'hidden' }}>
           <Routes>
             <Route
               path="/import"

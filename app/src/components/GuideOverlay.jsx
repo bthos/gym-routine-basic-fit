@@ -156,7 +156,7 @@ export function GuideOverlay({ locale = 'es', onClose }) {
           flexShrink: 0,
           background: 'var(--bf-white)',
           borderBottom: '1px solid var(--bf-grey-2)',
-          padding: 'var(--space-4) var(--page-gutter)',
+          padding: 'var(--space-4) var(--page-pad-x)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -194,7 +194,7 @@ export function GuideOverlay({ locale = 'es', onClose }) {
         <div style={{
           flex: 1,
           overflowY: 'auto',
-          padding: 'var(--space-6) var(--page-gutter) var(--space-10)',
+          padding: 'var(--space-6) var(--page-pad-x) var(--space-10)',
         }}>
           <div style={{ maxWidth: 600, margin: '0 auto var(--space-6)' }}>
             <div style={{

@@ -12,7 +12,7 @@ import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
  * Tabs: Home / Programa / Catálogo / Historial / Progreso (5 total).
  * data-testid="bottom-tab-bar" / "tab-item" are load-bearing: tests/
  * viewport-check.js asserts all tab-item elements share one offsetTop
- * (never wraps to multiple rows) at 360/390/412/768px.
+ * (never wraps to multiple rows) at 280/360/390/412/768px.
  */
 const TABS = [
   { id: 'home', label: 'Inicio', icon: 'home', path: '/', end: true },
@@ -52,6 +52,8 @@ export function BottomTabBar() {
         zIndex: 200,
         background: 'var(--bf-ink)',
         display: 'flex',
+        paddingLeft: 'env(safe-area-inset-left, 0px)',
+        paddingRight: 'env(safe-area-inset-right, 0px)',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         borderTop: '1px solid rgba(255,255,255,.08)',
         boxShadow: '0 -2px 12px rgba(0,0,0,.18)',

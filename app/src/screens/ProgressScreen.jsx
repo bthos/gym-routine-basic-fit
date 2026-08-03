@@ -29,7 +29,7 @@ const PAGE_STYLE = {
 const HEADER_STYLE = {
   background: 'var(--bf-white)',
   borderBottom: '1px solid var(--border-default)',
-  padding: 'var(--space-6) var(--page-gutter) var(--space-5)',
+  padding: 'var(--space-6) var(--page-pad-x) var(--space-5)',
 };
 
 const SECTION_STYLE = {
@@ -79,7 +79,7 @@ export function ProgressScreen({ rutina }) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 'var(--page-gutter)',
+          padding: 'var(--page-gutter) var(--page-pad-x)',
           textAlign: 'center',
         }}
       >
@@ -112,7 +112,7 @@ export function ProgressScreen({ rutina }) {
         </h1>
       </div>
 
-      <div style={{ padding: 'var(--space-5) var(--page-gutter)', display: 'grid', gap: 10 }}>
+      <div style={{ padding: 'var(--space-5) var(--page-pad-x)', display: 'grid', gap: 10 }}>
         {/* AC2 — Weight/reps per exercise */}
         <section aria-labelledby="progress-weight-heading" style={SECTION_STYLE}>
           <h2

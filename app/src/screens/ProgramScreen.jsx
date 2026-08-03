@@ -13,7 +13,7 @@ import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/eq
 import { dayFocusLabels, muscleGroupLabels } from '../lib/muscleGroups.js';
 import { getActiveSession, listSessions, clearActiveRutina } from '../lib/db.js';
 
-const wrap = { maxWidth: 760, margin: '0 auto', padding: '0 var(--page-gutter)', display: 'grid', gap: 'var(--space-8)' };
+const wrap = { maxWidth: 760, margin: '0 auto', padding: '0 var(--page-pad-x)', display: 'grid', gap: 'var(--space-8)' };
 
 function SectionTitle({ children }) {
   return <h2 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: '0 0 4px' }}>{children}</h2>;
@@ -98,7 +98,7 @@ function ProgramOverview({ rutina, onGoImport, onRutinaCleared }) {
       <PageHeader title={program.name} subtitle={`${program.phaseName} · ${program.durationWeeks} semanas`} badge={`Fase ${program.phaseNumber}`} />
       <div style={{ ...wrap, paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-10)' }}>
         <SectionBanner tone="neutral" title="Objetivos de esta fase" subtitle={phaseInfo.objective}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginTop: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 10, marginTop: 16 }}>
             {phaseStats.map(([k, v]) => (
               <div key={k} style={{ background: 'var(--bf-white)', borderRadius: 8, padding: 12, boxShadow: 'var(--shadow-card)' }}>
                 <div style={{ font: '600 12px/1.3 var(--font-sans)', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--text-muted)' }}>{k}</div>
@@ -160,7 +160,7 @@ function ProgramOverview({ rutina, onGoImport, onRutinaCleared }) {
         {rules.length > 0 && (
           <section style={{ display: 'grid', gap: 'var(--space-4)' }}>
             <SectionTitle>Reglas generales</SectionTitle>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 10 }}>
               {rules.map((rule, i) => (
                 <RuleItem key={i} icon="info">
                   {rule}
@@ -173,7 +173,7 @@ function ProgramOverview({ rutina, onGoImport, onRutinaCleared }) {
         {notes.length > 0 && (
           <section style={{ display: 'grid', gap: 'var(--space-4)' }}>
             <SectionTitle>Notas</SectionTitle>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 10 }}>
               {notes.map((note, i) => (
                 <NoteItem key={i} title={note.title}>
                   {note.body}
@@ -268,7 +268,7 @@ function ProgramDayDetail({ rutina, dayIndex }) {
 
   if (!day) {
     return (
-      <div style={{ padding: 'var(--space-6) var(--page-gutter)' }}>
+      <div style={{ padding: 'var(--space-6) var(--page-pad-x)' }}>
         <p>Día no encontrado.</p>
         <Link to="/program" style={{ color: 'var(--text-link)' }}>
           Volver al programa
@@ -279,7 +279,7 @@ function ProgramDayDetail({ rutina, dayIndex }) {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-5) var(--page-gutter)' }}>
+      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-5) var(--page-pad-x)' }}>
         <button
           onClick={() => navigate('/program')}
           style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-muted)', font: 'var(--text-body-sm)', marginBottom: 10 }}

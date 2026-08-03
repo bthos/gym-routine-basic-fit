@@ -20,7 +20,7 @@ export function InstallBanner() {
       style={{
         background: 'var(--bf-purple-tint)',
         borderBottom: '1px solid var(--border-default)',
-        padding: '10px var(--page-gutter)',
+        padding: '10px var(--page-pad-x)',
         display: 'flex',
         alignItems: 'center',
         gap: 10,
@@ -28,7 +28,7 @@ export function InstallBanner() {
       }}
     >
       <Icon name="smartphone" size={20} style={{ color: 'var(--bf-purple)', flexShrink: 0 }} />
-      <p style={{ flex: 1, margin: 0, font: 'var(--text-body-sm)', color: 'var(--bf-ink-2)', minWidth: 200 }}>
+      <p style={{ flex: 1, margin: 0, font: 'var(--text-body-sm)', color: 'var(--bf-ink-2)', minWidth: 0 }}>
         Instala la app para usarla sin conexión desde tu pantalla de inicio.
       </p>
       <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>

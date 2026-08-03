@@ -16,7 +16,7 @@ export function SectionBanner({ tone = "brand", title, subtitle, items = [], chi
     }}>
       {title && <h2 style={{
         font: "var(--text-h2)", color: "inherit", textTransform: "uppercase",
-        letterSpacing: "var(--tracking-heading)", margin: 0,
+        letterSpacing: "var(--tracking-heading)", margin: 0, overflowWrap: "anywhere",
       }}>{title}</h2>}
       {subtitle && <p style={{ font: "var(--text-body-md)", margin: "8px 0 0", opacity: tone === "neutral" ? 1 : 0.92, color: tone === "neutral" ? "var(--text-body)" : "inherit" }}>{subtitle}</p>}
       {items.length > 0 && (

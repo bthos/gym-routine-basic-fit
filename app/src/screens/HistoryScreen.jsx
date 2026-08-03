@@ -65,7 +65,7 @@ export function HistoryScreen() {
 
   if (pastSessions.length === 0) {
     return (
-      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-gutter)', textAlign: 'center' }}>
+      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-gutter) var(--page-pad-x)', textAlign: 'center' }}>
         <div style={{ color: 'var(--text-muted)', marginBottom: 12 }}>
           <Icon name="bar-chart-2" size={36} />
         </div>
@@ -129,7 +129,7 @@ export function HistoryScreen() {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: selectionMode ? 160 : 100 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-gutter) var(--space-5)' }}>
+      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-pad-x) var(--space-5)' }}>
         {selectionMode ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
             <button
@@ -164,7 +164,7 @@ export function HistoryScreen() {
         )}
       </div>
 
-      <div style={{ padding: 'var(--space-5) var(--page-gutter)', display: 'grid', gap: 10 }}>
+      <div style={{ padding: 'var(--space-5) var(--page-pad-x)', display: 'grid', gap: 10 }}>
         {pastSessions.map((s) => {
           const done = s.exercises.filter((e) => e.completedAt).length;
           const total = s.exercises.length;
@@ -276,7 +276,7 @@ export function HistoryScreen() {
             bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
             background: 'var(--bf-white)',
             borderTop: '1px solid var(--border-default)',
-            padding: 'var(--space-4) var(--page-gutter)',
+            padding: 'var(--space-4) var(--page-pad-x)',
             zIndex: 150,
           }}
         >

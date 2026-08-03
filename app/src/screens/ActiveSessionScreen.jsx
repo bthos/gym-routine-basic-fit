@@ -229,7 +229,7 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
 
       {isExpanded && (
         <div style={{ marginTop: 'var(--space-4)', display: 'grid', gap: 'var(--space-4)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px,1fr))', gap: 8 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))', gap: 8 }}>
             <DetailItem label="Series × Reps" value={`${ex.sets} × ${ex.reps}`} />
             <DetailItem label="Descanso" value={`${ex.restSeconds} seg`} />
             {ex.intensity && <DetailItem label="Intensidad" value={ex.intensity} />}
@@ -417,7 +417,7 @@ export function ActiveSessionScreen({ onSessionEnded }) {
         {announcement}
       </div>
 
-      <div style={{ position: 'sticky', top: 0, zIndex: 100, background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-4) var(--page-gutter)' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 100, background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-4) var(--page-pad-x)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
           <button aria-label="Terminar sesión" onClick={() => setShowEndDialog(true)} style={{ all: 'unset', cursor: 'pointer', color: 'var(--bf-ink)', padding: 8 }}>
             <Icon name="x" size={20} />
@@ -435,7 +435,7 @@ export function ActiveSessionScreen({ onSessionEnded }) {
         </div>
       </div>
 
-      <div style={{ padding: 'var(--space-4) var(--page-gutter)', display: 'grid', gap: 10 }}>
+      <div style={{ padding: 'var(--space-4) var(--page-pad-x)', display: 'grid', gap: 10 }}>
         {merged.map((ex) => (
           <ExerciseLogCard
             key={`${ex.exerciseIndex}-${ex.equipmentId ?? 'x'}`}

@@ -8,7 +8,7 @@
  *   1. Page-level horizontal scroll (an unwrapped wide element, e.g. a table
  *      not inside overflow-x:auto).
  *   2. The bottom tab bar wrapping to multiple rows instead of staying a
- *      single row of 4 fixed items.
+ *      single row of 5 fixed items.
  *
  * Starts `npm run preview` automatically when nothing is listening on the
  * target port. Run: node tests/viewport-check.js [baseUrl]
@@ -21,7 +21,7 @@ const puppeteer = require('puppeteer');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const BASE_URL = process.argv[2] || 'http://localhost:4173';
-const WIDTHS = [360, 390, 412, 768];
+const WIDTHS = [280, 360, 390, 412, 768];
 const ROUTES = ['/import', '/', '/program', '/catalog', '/history', '/progress', '/session', '/export'];
 const HEIGHT = 800;
 
@@ -142,8 +142,13 @@ function seedPlanForRoute(route) {
   if (route === '/session') {
     return { rutina: EXAMPLE_RUTINA, sessions: [ACTIVE_SESSION] };
   }
-  if (route === '/export') {
+  if (route === '/export' || route === '/history' || route === '/progress') {
     return { rutina: EXAMPLE_RUTINA, sessions: [COMPLETED_SESSION] };
+  }
+  // Home / Program need an imported rutina; otherwise the shell redirects to /import
+  // and we never paint the screen under test.
+  if (route === '/' || route === '/program') {
+    return { rutina: EXAMPLE_RUTINA, sessions: [] };
   }
   return null;
 }
@@ -158,12 +163,19 @@ async function checkRoute(browser, width, route) {
 
     const seed = seedPlanForRoute(route);
     if (seed) {
-      await page.goto(`${BASE_URL}/#/import`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      await page.goto(`${BASE_URL}/#/import`, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await seedIndexedDB(page, seed);
+      // Full document navigation (new search param) remounts Shell so the
+      // one-shot getActiveRutina() reads the seeded IndexedDB. Avoid reload(),
+      // which intermittently hangs under the PWA service worker.
+      await page.goto(`${BASE_URL}/?vp=${width}-${encodeURIComponent(route)}#${route}`, {
+        waitUntil: 'domcontentloaded',
+        timeout: 30000,
+      });
+    } else {
+      await page.goto(`${BASE_URL}/#${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     }
-
-    await page.goto(`${BASE_URL}/#${route}`, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 500));
 
     const overflow = await page.evaluate(() => ({
       scrollWidth: document.documentElement.scrollWidth,
