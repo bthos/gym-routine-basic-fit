@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { PageHeader } from '../../../design-system/components/sections/PageHeader.jsx';
+import { ScreenHeader } from '../components/ScreenHeader.jsx';
 import { SectionBanner } from '../../../design-system/components/composite/SectionBanner.jsx';
 import { ExerciseCard } from '../../../design-system/components/composite/ExerciseCard.jsx';
 import { SummaryTable } from '../../../design-system/components/composite/SummaryTable.jsx';
@@ -13,7 +13,7 @@ import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/eq
 import { dayFocusLabels, muscleGroupLabels } from '../lib/muscleGroups.js';
 import { getActiveSession, listSessions, clearActiveRutina } from '../lib/db.js';
 
-const wrap = { maxWidth: 760, margin: '0 auto', padding: '0 var(--page-pad-x)', display: 'grid', gap: 'var(--space-8)' };
+const wrap = { maxWidth: 760, margin: '0 auto', paddingInline: 'var(--page-pad-x)', display: 'grid', gap: 'var(--space-8)' };
 
 function SectionTitle({ children }) {
   return <h2 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: '0 0 4px' }}>{children}</h2>;
@@ -95,7 +95,11 @@ function ProgramOverview({ rutina, onGoImport, onRutinaCleared }) {
   return (
     <>
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <PageHeader title={program.name} subtitle={`${program.phaseName} · ${program.durationWeeks} semanas`} badge={`Fase ${program.phaseNumber}`} />
+      <ScreenHeader
+        title={program.name}
+        subtitle={`${program.phaseName} · ${program.durationWeeks} semanas`}
+        badge={`Fase ${program.phaseNumber}`}
+      />
       <div style={{ ...wrap, paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-10)' }}>
         <SectionBanner tone="neutral" title="Objetivos de esta fase" subtitle={phaseInfo.objective}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 10, marginTop: 16 }}>
@@ -268,7 +272,7 @@ function ProgramDayDetail({ rutina, dayIndex }) {
 
   if (!day) {
     return (
-      <div style={{ padding: 'var(--space-6) var(--page-pad-x)' }}>
+      <div style={{ paddingBlock: 'var(--space-6)', paddingInline: 'var(--page-pad-x)' }}>
         <p>Día no encontrado.</p>
         <Link to="/program" style={{ color: 'var(--text-link)' }}>
           Volver al programa
@@ -279,16 +283,29 @@ function ProgramDayDetail({ rutina, dayIndex }) {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-5) var(--page-pad-x)' }}>
-        <button
-          onClick={() => navigate('/program')}
-          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-muted)', font: 'var(--text-body-sm)', marginBottom: 10 }}
-        >
-          <Icon name="chevron-left" size={16} /> Programa
-        </button>
-        <h1 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: 0 }}>{day.label}</h1>
-        {day.intro && <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '4px 0 0' }}>{day.intro}</p>}
-      </div>
+      <ScreenHeader
+        title={day.label}
+        subtitle={day.intro || undefined}
+        leading={
+          <button
+            type="button"
+            onClick={() => navigate('/program')}
+            style={{
+              all: 'unset',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              color: 'var(--text-muted)',
+              font: 'var(--text-body-sm)',
+              marginBottom: 10,
+              minHeight: 44,
+            }}
+          >
+            <Icon name="chevron-left" size={16} /> Programa
+          </button>
+        }
+      />
 
       <div style={{ ...wrap, paddingTop: 'var(--space-6)' }}>
         <section style={{ display: 'grid', gap: 'var(--space-4)' }}>

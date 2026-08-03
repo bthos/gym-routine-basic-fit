@@ -96,7 +96,7 @@ export function ImportScreen({ onImported }) {
   }
 
   return (
-    <div style={{ background: 'var(--bf-white)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 'var(--space-10) var(--page-pad-x) 100px' }}>
+    <div style={{ background: 'var(--bf-white)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBlock: 'var(--space-10) 100px', paddingInline: 'var(--page-pad-x)' }}>
       <div style={{ font: '800 15px/1 var(--font-display)', color: 'var(--bf-orange)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 'var(--space-6)' }}>Basic-Fit</div>
       <div style={{ color: 'var(--bf-purple)', marginBottom: 12 }}>
         <Icon name="dumbbell" size={40} strokeWidth={1.6} />

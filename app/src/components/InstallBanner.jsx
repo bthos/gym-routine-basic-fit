@@ -20,7 +20,8 @@ export function InstallBanner() {
       style={{
         background: 'var(--bf-purple-tint)',
         borderBottom: '1px solid var(--border-default)',
-        padding: '10px var(--page-pad-x)',
+        paddingBlock: '10px',
+        paddingInline: 'var(--page-pad-x)',
         display: 'flex',
         alignItems: 'center',
         gap: 10,

@@ -17,7 +17,8 @@ export function PageHeader({ tone = "light", breadcrumb, title, subtitle, badge,
     <header style={{
       background: light ? "var(--bf-white)" : "var(--bf-ink)",
       color: light ? "var(--bf-ink)" : "var(--bf-white)",
-      padding: "var(--space-6) var(--page-pad-x) var(--space-8)",
+      paddingBlock: "var(--space-6) var(--space-8)",
+      paddingInline: "var(--page-pad-x)",
       borderBottom: light ? "1px solid var(--border-default)" : "none", ...style,
     }}>
       <div style={{ maxWidth: "var(--page-max-width)", margin: "0 auto" }}>

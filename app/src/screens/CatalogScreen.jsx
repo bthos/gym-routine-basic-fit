@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../../../design-system/components/sections/PageHeader.jsx';
+import { ScreenHeader } from '../components/ScreenHeader.jsx';
 import { FilterPill } from '../../../design-system/components/primitives/FilterPill.jsx';
 import { StatCard } from '../../../design-system/components/primitives/StatCard.jsx';
 import { EquipmentCard } from '../../../design-system/components/composite/EquipmentCard.jsx';
@@ -32,11 +32,14 @@ export function CatalogScreen() {
   const [category, setCategory] = useState('all');
 
   const items = EQUIPMENT.filter((e) => category === 'all' || e.category === category);
-  const wrap = { maxWidth: 900, margin: '0 auto', padding: '0 var(--page-pad-x)' };
+  const wrap = { maxWidth: 900, margin: '0 auto', paddingInline: 'var(--page-pad-x)' };
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <PageHeader title="Catálogo de equipamiento" subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit" />
+      <ScreenHeader
+        title="Catálogo de equipamiento"
+        subtitle="Máquinas Matrix Aura en tus gimnasios Basic-Fit"
+      />
 
       <div style={{ ...wrap, marginTop: 'var(--space-6)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 96px), 1fr))', gap: 10 }}>

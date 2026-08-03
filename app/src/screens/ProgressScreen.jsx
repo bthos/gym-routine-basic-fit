@@ -19,17 +19,15 @@ import {
   VolumeBarChart,
   FrequencyHeatmap,
 } from '../components/ProgressCharts.jsx';
+import { ScreenHeader } from '../components/ScreenHeader.jsx';
 
 const PAGE_STYLE = {
   background: 'var(--bf-grey-1)',
   minHeight: '100vh',
   paddingBottom: 100,
-};
-
-const HEADER_STYLE = {
-  background: 'var(--bf-white)',
-  borderBottom: '1px solid var(--border-default)',
-  padding: 'var(--space-6) var(--page-pad-x) var(--space-5)',
+  minWidth: 0,
+  maxWidth: '100%',
+  overflowX: 'hidden',
 };
 
 const SECTION_STYLE = {
@@ -38,6 +36,9 @@ const SECTION_STYLE = {
   borderRadius: 'var(--radius-md)',
   padding: 'var(--space-4)',
   marginBottom: 10,
+  minWidth: 0,
+  maxWidth: '100%',
+  boxSizing: 'border-box',
 };
 
 const PILL_BASE = {
@@ -79,7 +80,8 @@ export function ProgressScreen({ rutina }) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 'var(--page-gutter) var(--page-pad-x)',
+          paddingBlock: 'var(--page-gutter)',
+          paddingInline: 'var(--page-pad-x)',
           textAlign: 'center',
         }}
       >
@@ -106,13 +108,9 @@ export function ProgressScreen({ rutina }) {
 
   return (
     <div style={PAGE_STYLE}>
-      <div style={HEADER_STYLE}>
-        <h1 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: 0 }}>
-          Progreso
-        </h1>
-      </div>
+      <ScreenHeader title="Progreso" />
 
-      <div style={{ padding: 'var(--space-5) var(--page-pad-x)', display: 'grid', gap: 10 }}>
+      <div style={{ paddingBlock: 'var(--space-5)', paddingInline: 'var(--page-pad-x)', display: 'grid', gap: 10, minWidth: 0, maxWidth: '100%', boxSizing: 'border-box' }}>
         {/* AC2 — Weight/reps per exercise */}
         <section aria-labelledby="progress-weight-heading" style={SECTION_STYLE}>
           <h2

@@ -87,7 +87,9 @@ export function ConfirmSheet({
           background: 'var(--bf-white)',
           width: '100%',
           borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
-          padding: 'var(--space-6) var(--page-pad-x) calc(var(--space-6) + env(safe-area-inset-bottom, 0px))',
+          paddingTop: 'var(--space-6)',
+          paddingInline: 'var(--page-pad-x)',
+          paddingBottom: 'calc(var(--space-6) + env(safe-area-inset-bottom, 0px))',
         }}
       >
         <h3 id="confirm-sheet-title" style={{ font: 'var(--text-h3)', color: 'var(--bf-ink)', margin: '0 0 4px' }}>

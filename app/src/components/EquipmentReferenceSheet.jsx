@@ -45,7 +45,9 @@ export function EquipmentReferenceSheet({ name, imageUrl, steps, videoHref, onCl
           borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
           maxHeight: '80vh',
           overflowY: 'auto',
-          padding: 'var(--space-6) var(--page-pad-x) calc(var(--space-6) + env(safe-area-inset-bottom, 0px))',
+          paddingTop: 'var(--space-6)',
+          paddingInline: 'var(--page-pad-x)',
+          paddingBottom: 'calc(var(--space-6) + env(safe-area-inset-bottom, 0px))',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>

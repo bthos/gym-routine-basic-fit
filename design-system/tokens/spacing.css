@@ -12,11 +12,12 @@
   --space-16: 64px;
 
   --page-max-width: 1200px;
-  /* Fluid base gutter; use --page-pad-x for horizontal padding (safe-area aware). */
+  /* Fluid base gutter; horizontal page padding uses --page-pad-left/right.
+     Prefer paddingInline: var(--page-pad-x) — NEVER put --page-pad-x in a
+     3-value padding shorthand (it expands to 2 tokens and steals top/bottom). */
   --page-gutter: clamp(12px, 4vw, 24px);
   --page-pad-left: max(var(--page-gutter), env(safe-area-inset-left, 0px));
   --page-pad-right: max(var(--page-gutter), env(safe-area-inset-right, 0px));
-  /* Multi-value: padding: Y var(--page-pad-x) */
   --page-pad-x: var(--page-pad-left) var(--page-pad-right);
   --touch-target: 44px;
 }

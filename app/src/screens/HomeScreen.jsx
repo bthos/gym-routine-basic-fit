@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
 import { Badge } from '../../../design-system/components/primitives/Badge.jsx';
+import { ScreenHeader } from '../components/ScreenHeader.jsx';
 import { resolveTodayDay } from '../lib/today.js';
 import { createSession } from '../lib/sessionMachine.js';
 import { getActiveSession, listSessions, saveSession } from '../lib/db.js';
@@ -41,7 +42,7 @@ export function HomeScreen({ rutina, loadError, onGoImport, activeSessionStatus,
 
   if (loadError) {
     return (
-      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-gutter) var(--page-pad-x)', textAlign: 'center' }}>
+      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingBlock: 'var(--page-gutter)', paddingInline: 'var(--page-pad-x)', textAlign: 'center' }}>
         <div style={{ color: 'var(--bf-danger)', marginBottom: 12 }}>
           <Icon name="alert-triangle" size={36} />
         </div>
@@ -77,15 +78,12 @@ export function HomeScreen({ rutina, loadError, onGoImport, activeSessionStatus,
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: 90 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-pad-x) var(--space-5)' }}>
-        <div style={{ font: '800 13px/1 var(--font-display)', color: 'var(--bf-orange)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 10 }}>Basic-Fit</div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <h1 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: 0, minWidth: 0, flex: '1 1 12rem' }}>{rutina.program.name}</h1>
-          <Badge tone="brand">Fase {rutina.program.phaseNumber}</Badge>
-        </div>
-      </div>
+      <ScreenHeader
+        title={rutina.program.name}
+        trailing={<Badge tone="brand">Fase {rutina.program.phaseNumber}</Badge>}
+      />
 
-      <div style={{ padding: 'var(--space-6) var(--page-pad-x)', display: 'grid', gap: 'var(--space-5)' }}>
+      <div style={{ paddingBlock: 'var(--space-6)', paddingInline: 'var(--page-pad-x)', display: 'grid', gap: 'var(--space-5)' }}>
         {activeSessionStatus === 'loading' && (
           <div
             aria-busy="true"

@@ -100,7 +100,6 @@ const VC_BAR_W = 28;
 const VC_GAP = 6;
 const VC_H = 100;
 const VC_PAD = 8;
-const VC_MIN_W = 280;
 
 /**
  * Horizontal-scroll bar chart of per-session volume.
@@ -111,17 +110,19 @@ export function VolumeBarChart({ bars = [] }) {
   if (bars.length === 0) return null;
 
   const maxVol = Math.max(...bars.map((b) => b.volume), 1);
-  const svgW = Math.max(VC_MIN_W, bars.length * (VC_BAR_W + VC_GAP) + 2 * VC_PAD);
+  // Width follows bar count only — a fixed min (was 280) overflowed cover-display
+  // viewports when the scroll parent expanded to fit the SVG.
+  const svgW = Math.max(1, bars.length * (VC_BAR_W + VC_GAP) + 2 * VC_PAD);
   const innerH = VC_H - 2 * VC_PAD;
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div style={{ overflowX: 'auto', maxWidth: '100%', minWidth: 0 }}>
       <svg
         aria-hidden="true"
         viewBox={`0 0 ${svgW} ${VC_H}`}
         width={svgW}
         height={VC_H}
-        style={{ display: 'block' }}
+        style={{ display: 'block', maxWidth: 'none' }}
       >
         {bars.map((bar, i) => {
           const bh = Math.max(4, (bar.volume / maxVol) * innerH);
@@ -163,14 +164,15 @@ export function FrequencyHeatmap({ cells = [], stats = {} }) {
   const rows = 7;
 
   return (
-    <div>
+    <div style={{ minWidth: 0, maxWidth: '100%' }}>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${cols}, ${HC_CELL}px)`,
-          gridTemplateRows: `repeat(${rows}, ${HC_CELL}px)`,
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${rows}, auto)`,
           gap: HC_GAP,
-          width: 'fit-content',
+          width: '100%',
+          maxWidth: cols * HC_CELL + (cols - 1) * HC_GAP,
         }}
       >
         {cells.map((cell, i) => (
@@ -179,8 +181,8 @@ export function FrequencyHeatmap({ cells = [], stats = {} }) {
             aria-label={cell.ariaLabel}
             role="img"
             style={{
-              width: HC_CELL,
-              height: HC_CELL,
+              aspectRatio: '1',
+              width: '100%',
               background: cell.filled ? PURPLE : MUTED,
               borderRadius: 2,
             }}
@@ -192,6 +194,7 @@ export function FrequencyHeatmap({ cells = [], stats = {} }) {
           font: 'var(--text-body-sm, 12px/1.4 sans-serif)',
           color: 'var(--text-muted, #666)',
           margin: '8px 0 0',
+          overflowWrap: 'anywhere',
         }}
       >
         Últimos 7 días: {stats.last7} · Últimos 30 días: {stats.last30} · Racha actual: {stats.streak}

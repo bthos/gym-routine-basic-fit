@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
 import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
+import { ScreenHeader } from '../components/ScreenHeader.jsx';
 import { listSessions, deleteSessions } from '../lib/db.js';
 import { buildExerciseTrends } from '../lib/trends.js';
 import { difficultyLabel } from '../lib/difficulty.js';
@@ -65,7 +66,7 @@ export function HistoryScreen() {
 
   if (pastSessions.length === 0) {
     return (
-      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-gutter) var(--page-pad-x)', textAlign: 'center' }}>
+      <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingBlock: 'var(--page-gutter)', paddingInline: 'var(--page-pad-x)', textAlign: 'center' }}>
         <div style={{ color: 'var(--text-muted)', marginBottom: 12 }}>
           <Icon name="bar-chart-2" size={36} />
         </div>
@@ -129,42 +130,42 @@ export function HistoryScreen() {
 
   return (
     <div style={{ background: 'var(--bf-grey-1)', minHeight: '100vh', paddingBottom: selectionMode ? 160 : 100 }}>
-      <div style={{ background: 'var(--bf-white)', borderBottom: '1px solid var(--border-default)', padding: 'var(--space-6) var(--page-pad-x) var(--space-5)' }}>
-        {selectionMode ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-            <button
-              type="button"
-              onClick={exitSelectionMode}
-              style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)' }}
-            >
-              Cancelar
-            </button>
-            <span aria-live="polite" style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)' }}>
-              {selectionCount} {pluralize(selectionCount, 'seleccionada', 'seleccionadas')}
-            </span>
-            <button
-              type="button"
-              onClick={toggleSelectAll}
-              style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)' }}
-            >
-              {allSelected ? 'Quitar selección' : 'Seleccionar todo'}
-            </button>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-            <h1 style={{ font: 'var(--text-h2)', textTransform: 'uppercase', color: 'var(--bf-ink)', margin: 0 }}>Historial</h1>
+      <ScreenHeader
+        title={selectionMode ? undefined : 'Historial'}
+        trailing={
+          selectionMode ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, width: '100%' }}>
+              <button
+                type="button"
+                onClick={exitSelectionMode}
+                style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)' }}
+              >
+                Cancelar
+              </button>
+              <span aria-live="polite" style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)' }}>
+                {selectionCount} {pluralize(selectionCount, 'seleccionada', 'seleccionadas')}
+              </span>
+              <button
+                type="button"
+                onClick={toggleSelectAll}
+                style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)' }}
+              >
+                {allSelected ? 'Quitar selección' : 'Seleccionar todo'}
+              </button>
+            </div>
+          ) : (
             <button
               type="button"
               onClick={() => setSelectionMode(true)}
-              style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)' }}
+              style={{ all: 'unset', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', font: '700 14px/1 var(--font-sans)', color: 'var(--bf-purple)', flexShrink: 0 }}
             >
               Seleccionar
             </button>
-          </div>
-        )}
-      </div>
+          )
+        }
+      />
 
-      <div style={{ padding: 'var(--space-5) var(--page-pad-x)', display: 'grid', gap: 10 }}>
+      <div style={{ paddingBlock: 'var(--space-5)', paddingInline: 'var(--page-pad-x)', display: 'grid', gap: 10 }}>
         {pastSessions.map((s) => {
           const done = s.exercises.filter((e) => e.completedAt).length;
           const total = s.exercises.length;
@@ -276,7 +277,8 @@ export function HistoryScreen() {
             bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
             background: 'var(--bf-white)',
             borderTop: '1px solid var(--border-default)',
-            padding: 'var(--space-4) var(--page-pad-x)',
+            paddingBlock: 'var(--space-4)',
+            paddingInline: 'var(--page-pad-x)',
             zIndex: 150,
           }}
         >
