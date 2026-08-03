@@ -1,16 +1,85 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from '../../../design-system/components/primitives/Button.jsx';
+import { Icon } from '../../../design-system/components/primitives/Icon.jsx';
 
 /**
  * Shared bottom-sheet confirm dialog — same visual pattern as the mockup's
  * ActiveSessionScreen "end session" dialog, factored out so it can also
  * back the Import screen's re-import discard warning (spec.md Render AC)
  * without duplicating the fixed-overlay/sheet markup twice.
+ *
+ * `destructiveAction` (session-discard-and-history-delete, DD-001) renders
+ * an isolated ghost/`--bf-danger` escape hatch BETWEEN the secondary button
+ * and Cancelar, fenced by hairlines — absent, the render is unchanged
+ * (AC28 back-compat for ConfirmSheet.test.jsx and the Import re-import
+ * warning).
+ *
+ * Focus containment (AC26-AC28) is implemented ONCE here so every call site
+ * inherits it with no per-caller change: on mount, focus moves into the
+ * sheet and the previously focused element is remembered; Tab/Shift+Tab
+ * wrap within the sheet's own focusable set; Escape triggers `onCancel`
+ * UNLESS `busy` (a destructive transaction must never be orphaned
+ * mid-write); on unmount, focus returns to the element that opened it.
  */
-export function ConfirmSheet({ title, description, primaryLabel, onPrimary, secondaryLabel, onSecondary, cancelLabel = 'Cancelar', onCancel, danger = false }) {
+export function ConfirmSheet({
+  title,
+  description,
+  primaryLabel,
+  onPrimary,
+  secondaryLabel,
+  onSecondary,
+  cancelLabel = 'Cancelar',
+  onCancel,
+  danger = false,
+  destructiveAction,
+  busy = false,
+  error,
+}) {
+  const sheetRef = useRef(null);
+  const previouslyFocusedRef = useRef(null);
+  const busyRef = useRef(busy);
+  busyRef.current = busy;
+
+  useEffect(() => {
+    previouslyFocusedRef.current = document.activeElement;
+    const focusables = sheetRef.current ? Array.from(sheetRef.current.querySelectorAll('button:not(:disabled)')) : [];
+    if (focusables[0]) focusables[0].focus();
+    return () => {
+      const toRestore = previouslyFocusedRef.current;
+      if (toRestore && typeof toRestore.focus === 'function') toRestore.focus();
+    };
+  }, []);
+
+  function focusableButtons() {
+    return sheetRef.current ? Array.from(sheetRef.current.querySelectorAll('button:not(:disabled)')) : [];
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Escape') {
+      if (!busyRef.current) onCancel && onCancel();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    const focusables = focusableButtons();
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(45,45,45,.5)', zIndex: 300, display: 'flex', alignItems: 'flex-end' }}>
+    <div
+      onKeyDown={handleKeyDown}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(45,45,45,.5)', zIndex: 300, display: 'flex', alignItems: 'flex-end' }}
+    >
       <div
+        ref={sheetRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="confirm-sheet-title"
@@ -25,10 +94,16 @@ export function ConfirmSheet({ title, description, primaryLabel, onPrimary, seco
           {title}
         </h3>
         {description && <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 var(--space-5)' }}>{description}</p>}
+        {error && (
+          <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bf-danger-tint)', border: '1px solid var(--bf-danger)', borderRadius: 'var(--radius-md)', padding: '10px 14px', font: 'var(--text-body-sm)', color: 'var(--bf-danger)', marginBottom: 'var(--space-5)' }}>
+            <Icon name="alert-triangle" size={16} style={{ flexShrink: 0 }} /> {error}
+          </div>
+        )}
         <div style={{ display: 'grid', gap: 10 }}>
           {onPrimary && (
             <Button
               variant="primary"
+              disabled={busy}
               style={{ width: '100%', ...(danger ? { background: 'var(--bf-danger)', borderColor: 'var(--bf-danger)' } : {}) }}
               onClick={onPrimary}
             >
@@ -36,12 +111,26 @@ export function ConfirmSheet({ title, description, primaryLabel, onPrimary, seco
             </Button>
           )}
           {onSecondary && (
-            <Button variant="outline" style={{ width: '100%' }} onClick={onSecondary}>
+            <Button variant="outline" disabled={busy} style={{ width: '100%' }} onClick={onSecondary}>
               {secondaryLabel}
             </Button>
           )}
+          {destructiveAction && (
+            <>
+              <div style={{ height: 1, background: 'var(--bf-grey-2)', margin: '2px 0' }} />
+              <Button
+                variant="ghost"
+                disabled={busy}
+                style={{ width: '100%', color: 'var(--bf-danger)', minHeight: 44 }}
+                onClick={destructiveAction.onClick}
+              >
+                {destructiveAction.label}
+              </Button>
+              <div style={{ height: 1, background: 'var(--bf-grey-2)', margin: '2px 0' }} />
+            </>
+          )}
           {onCancel && (
-            <Button variant="ghost" style={{ width: '100%' }} onClick={onCancel}>
+            <Button variant="ghost" disabled={busy} style={{ width: '100%' }} onClick={onCancel}>
               {cancelLabel}
             </Button>
           )}

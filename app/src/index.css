@@ -45,3 +45,20 @@ img {
 :root {
   --tab-bar-height: 58px;
 }
+
+/* SessionInProgressBanner's pulsing dot (spec.md AC14) — static under
+   prefers-reduced-motion (ux-design.md Accessibility Checklist § Motion). */
+@keyframes bf-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.bf-pulse-dot {
+  animation: bf-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-pulse-dot {
+    animation: none;
+  }
+}

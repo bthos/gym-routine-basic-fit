@@ -184,3 +184,172 @@ describe('ActiveSessionScreen — equipment reference (AC1–AC5)', () => {
     expect(screen.queryByText(SPARSE_NAME)).not.toBeInTheDocument();
   });
 });
+
+/**
+ * session-discard-and-history-delete — spec.md § A (AC1–AC5).
+ *
+ * A third way to end a workout that records NOTHING. The end-session sheet
+ * keeps its two recording outcomes untouched (AC24) and gains an isolated
+ * "Descartar sin guardar" escape hatch (DD-001) which opens a second, danger
+ * sheet (AC3). Discard is a hard delete via deleteSessions() — deliberately
+ * NOT a sessionMachine transition, because it produces no session object
+ * (tech-plan.md Decision 2).
+ */
+function renderSessionWith(props = {}) {
+  return render(
+    <MemoryRouter initialEntries={['/session']}>
+      <Routes>
+        <Route path="/session" element={<ActiveSessionScreen onSessionEnded={vi.fn()} {...props} />} />
+        <Route path="/" element={<div>Home</div>} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+async function openEndSheet(user) {
+  await user.click(await screen.findByRole('button', { name: /terminar sesión/i }));
+}
+
+describe('ActiveSessionScreen — discard (AC1–AC5)', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    db.getActiveRutina.mockResolvedValue({ rutina: RUTINA, importedAt: '2026-08-01' });
+    db.getActiveSession.mockResolvedValue(makeSession());
+    db.getLastWeight.mockResolvedValue(null);
+    db.saveSession.mockResolvedValue(undefined);
+    db.deleteSessions.mockResolvedValue(undefined);
+  });
+
+  it('offers discard with zero exercises completed (AC2)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+
+    // The "started by mistake" case — the whole point of the feature.
+    expect(screen.getByRole('button', { name: /descartar sin guardar/i })).toBeInTheDocument();
+  });
+
+  it('offers discard with some exercises completed (AC2)', async () => {
+    const partial = makeSession();
+    partial.exercises[0] = {
+      ...partial.exercises[0],
+      weightUsed: 40,
+      difficulty: 'normal',
+      completedAt: '2026-08-01T10:15:00.000Z',
+    };
+    db.getActiveSession.mockResolvedValue(partial);
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+
+    expect(screen.getByRole('button', { name: /descartar sin guardar/i })).toBeInTheDocument();
+  });
+
+  it('is distinct from the two recording outcomes (AC4)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+
+    const discard = screen.getByRole('button', { name: /descartar sin guardar/i });
+    const finish = screen.getByRole('button', { name: /finalizar sesión/i });
+    const abandon = screen.getByRole('button', { name: /sesión terminada sin completar/i });
+
+    // A user must not be able to confuse "no se guarda" with "sesión sin
+    // terminar" — the abandoned outcome DOES record.
+    expect(discard.getAttribute('style')).toContain('bf-danger');
+    expect(finish.getAttribute('style') ?? '').not.toContain('bf-danger');
+    expect(abandon.getAttribute('style') ?? '').not.toContain('bf-danger');
+    expect(discard.textContent).not.toMatch(/sin completar/i);
+  });
+
+  it('confirms through a danger sheet stating it is not saved and cannot be undone (AC3)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+
+    const dialog = await screen.findByRole('alertdialog');
+    expect(within(dialog).getByText(/¿descartar el entrenamiento\?/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/no se guardará nada/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/no se puede deshacer/i)).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: /sí, descartar/i }).getAttribute('style')
+    ).toContain('bf-danger');
+  });
+
+  it('cancelling the confirm leaves the session active and unchanged (AC3)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+
+    const dialog = await screen.findByRole('alertdialog');
+    await user.click(within(dialog).getByRole('button', { name: /volver/i }));
+
+    expect(db.deleteSessions).not.toHaveBeenCalled();
+    // Returns to the end sheet, so a mis-tap costs one tap, not the decision.
+    expect(await screen.findByRole('button', { name: /finalizar sesión/i })).toBeInTheDocument();
+  });
+
+  it('deletes the session record on confirm (AC1)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+    const dialog = await screen.findByRole('alertdialog');
+    await user.click(within(dialog).getByRole('button', { name: /sí, descartar/i }));
+
+    await waitFor(() => expect(db.deleteSessions).toHaveBeenCalledWith(['sess-1']));
+    // Never persisted with a status — no 'discarded' flag exists (DD-003).
+    expect(db.saveSession).not.toHaveBeenCalled();
+  });
+
+  it('navigates to Inicio after discarding (AC5)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+    const dialog = await screen.findByRole('alertdialog');
+    await user.click(within(dialog).getByRole('button', { name: /sí, descartar/i }));
+
+    expect(await screen.findByText('Home')).toBeInTheDocument();
+  });
+
+  it('refreshes the shell active-session state after discarding (AC15)', async () => {
+    const onSessionEnded = vi.fn();
+    const user = userEvent.setup();
+    renderSessionWith({ onSessionEnded });
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+    const dialog = await screen.findByRole('alertdialog');
+    await user.click(within(dialog).getByRole('button', { name: /sí, descartar/i }));
+
+    // Inicio and the banner must clear without a manual reload.
+    await waitFor(() => expect(onSessionEnded).toHaveBeenCalled());
+  });
+
+  it('keeps the sheet open and does not navigate when the delete fails', async () => {
+    db.deleteSessions.mockRejectedValue(new Error('IDB unavailable'));
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /descartar sin guardar/i }));
+    const dialog = await screen.findByRole('alertdialog');
+    await user.click(within(dialog).getByRole('button', { name: /sí, descartar/i }));
+
+    // The user must never land on Inicio believing the workout was discarded.
+    expect(await within(dialog).findByText(/no se pudo descartar/i)).toBeInTheDocument();
+    expect(screen.queryByText('Home')).not.toBeInTheDocument();
+  });
+
+  it('still records FINISH and ABANDON as it does today (AC24)', async () => {
+    const user = userEvent.setup();
+    renderSessionWith();
+    await openEndSheet(user);
+    await user.click(screen.getByRole('button', { name: /finalizar sesión/i }));
+
+    await waitFor(() => expect(db.saveSession).toHaveBeenCalled());
+    expect(db.saveSession.mock.calls.at(-1)[0]).toMatchObject({ status: 'completed' });
+    expect(db.deleteSessions).not.toHaveBeenCalled();
+  });
+});

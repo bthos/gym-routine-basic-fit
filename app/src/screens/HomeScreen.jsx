@@ -8,10 +8,20 @@ import { createSession } from '../lib/sessionMachine.js';
 import { getActiveSession, listSessions, saveSession } from '../lib/db.js';
 import { formatRelativeDays } from '../lib/relativeTime.js';
 
-/** States: success | error (storage corruption fallback) — ux-design.md. "empty" is the Import screen itself. */
-export function HomeScreen({ rutina, loadError, onGoImport }) {
+/**
+ * Active-session ownership moved up to the shell (spec.md AC10-AC13,
+ * tech-plan.md Decision 3): `activeSessionStatus`/`activeSession` come from
+ * `useActiveSession()` in `App.jsx`, not from a local read here. This is
+ * what makes AC10 structural — this screen literally cannot paint a start
+ * CTA before the shell knows the answer, because `'loading'` renders a
+ * skeleton with no CTA text at all.
+ *
+ * States: loading (skeleton, no CTA) | active | idle | error+retry
+ * (ux-design.md), plus the pre-existing full-screen `loadError` (corrupt
+ * rutina, AC24 regression baseline).
+ */
+export function HomeScreen({ rutina, loadError, onGoImport, activeSessionStatus, activeSession, onRetryActiveSession }) {
   const navigate = useNavigate();
-  const [activeSession, setActiveSession] = useState(null);
   const [lastSession, setLastSession] = useState(null);
   const [pastSessions, setPastSessions] = useState([]);
   const [starting, setStarting] = useState(false);
@@ -19,9 +29,8 @@ export function HomeScreen({ rutina, loadError, onGoImport }) {
   useEffect(() => {
     if (loadError) return;
     let cancelled = false;
-    Promise.all([getActiveSession(), listSessions()]).then(([session, sessions]) => {
+    listSessions().then((sessions) => {
       if (cancelled) return;
-      setActiveSession(session);
       setLastSession(sessions.find((s) => s.status !== 'active') || null);
       setPastSessions(sessions.map((s) => ({ dayIndex: s.dayIndex, status: s.status })));
     });
@@ -49,10 +58,13 @@ export function HomeScreen({ rutina, loadError, onGoImport }) {
 
   const today = resolveTodayDay(rutina.days, new Date(), pastSessions);
   const exerciseCount = today.day.exercises.length;
-  const hasActiveSession = Boolean(activeSession);
 
   async function handleStart() {
-    if (hasActiveSession) {
+    // AC11 — data-integrity backstop: the render-level guard (AC10) alone is
+    // racy, so re-check for an active session immediately before creating
+    // one, rather than trusting the props snapshot at tap time.
+    const existing = await getActiveSession();
+    if (existing) {
       navigate('/session');
       return;
     }
@@ -74,19 +86,62 @@ export function HomeScreen({ rutina, loadError, onGoImport }) {
       </div>
 
       <div style={{ padding: 'var(--space-6) var(--page-gutter)', display: 'grid', gap: 'var(--space-5)' }}>
-        <div style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', boxShadow: 'var(--shadow-card)' }}>
-          <div style={{ font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>
-            {today.mode === 'today' ? 'Hoy' : 'Próximo'}
+        {activeSessionStatus === 'loading' && (
+          <div
+            aria-busy="true"
+            style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', boxShadow: 'var(--shadow-card)', display: 'grid', gap: 10 }}
+          >
+            <div style={{ width: '35%', height: 12, borderRadius: 4, background: 'var(--bf-grey-2)' }} />
+            <div style={{ width: '70%', height: 20, borderRadius: 4, background: 'var(--bf-grey-2)' }} />
+            <div style={{ width: '50%', height: 14, borderRadius: 4, background: 'var(--bf-grey-2)' }} />
+            <div style={{ width: '100%', height: 48, borderRadius: 'var(--radius-btn)', background: 'var(--bf-grey-2)', marginTop: 8 }} />
           </div>
-          <h2 style={{ font: 'var(--text-h3)', color: 'var(--bf-ink)', margin: '0 0 4px' }}>{today.day.label}</h2>
-          <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 var(--space-5)' }}>
-            {today.day.intro ? `${today.day.intro} · ` : ''}
-            {exerciseCount} ejercicio{exerciseCount === 1 ? '' : 's'}
-          </p>
-          <Button variant="primary" size="lg" style={{ width: '100%' }} disabled={starting} onClick={handleStart}>
-            <Icon name="play" size={18} /> {hasActiveSession ? 'Reanudar entrenamiento' : 'Empezar entrenamiento'}
-          </Button>
-        </div>
+        )}
+
+        {activeSessionStatus === 'error' && (
+          <div style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', boxShadow: 'var(--shadow-card)', textAlign: 'center' }}>
+            <div style={{ color: 'var(--bf-danger)', marginBottom: 8 }}>
+              <Icon name="alert-triangle" size={20} />
+            </div>
+            <p style={{ font: 'var(--text-body-sm)', color: 'var(--bf-ink-2)', margin: '0 0 var(--space-5)' }}>
+              No se pudo comprobar si tienes un entrenamiento en curso.
+            </p>
+            <Button variant="outline" style={{ width: '100%' }} onClick={onRetryActiveSession}>
+              Reintentar
+            </Button>
+          </div>
+        )}
+
+        {activeSessionStatus === 'ready' && activeSession && (
+          <div style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', boxShadow: 'var(--shadow-card)' }}>
+            <div style={{ font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--bf-purple)', marginBottom: 4 }}>
+              En curso
+            </div>
+            <h2 style={{ font: 'var(--text-h3)', color: 'var(--bf-ink)', margin: '0 0 4px' }}>{activeSession.dayLabel}</h2>
+            <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 var(--space-5)' }}>
+              {activeSession.exercises.filter((e) => e.completedAt).length} / {activeSession.exercises.length} completados
+            </p>
+            <Button variant="primary" size="lg" style={{ width: '100%' }} onClick={() => navigate('/session')}>
+              <Icon name="play" size={18} /> Reanudar entrenamiento
+            </Button>
+          </div>
+        )}
+
+        {activeSessionStatus === 'ready' && !activeSession && (
+          <div style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', boxShadow: 'var(--shadow-card)' }}>
+            <div style={{ font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>
+              {today.mode === 'today' ? 'Hoy' : 'Próximo'}
+            </div>
+            <h2 style={{ font: 'var(--text-h3)', color: 'var(--bf-ink)', margin: '0 0 4px' }}>{today.day.label}</h2>
+            <p style={{ font: 'var(--text-body-sm)', color: 'var(--text-muted)', margin: '0 0 var(--space-5)' }}>
+              {today.day.intro ? `${today.day.intro} · ` : ''}
+              {exerciseCount} ejercicio{exerciseCount === 1 ? '' : 's'}
+            </p>
+            <Button variant="primary" size="lg" style={{ width: '100%' }} disabled={starting} onClick={handleStart}>
+              <Icon name="play" size={18} /> Empezar entrenamiento
+            </Button>
+          </div>
+        )}
 
         {lastSession && (
           <div style={{ background: 'var(--bf-white)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>

@@ -6,7 +6,7 @@ import { DetailItem } from '../../../design-system/components/primitives/DetailI
 import { ConfirmSheet } from '../components/ConfirmSheet.jsx';
 import { EquipmentReferenceSheet } from '../components/EquipmentReferenceSheet.jsx';
 import { sessionReducer } from '../lib/sessionMachine.js';
-import { getActiveRutina, getActiveSession, saveSession, getLastWeight } from '../lib/db.js';
+import { getActiveRutina, getActiveSession, saveSession, getLastWeight, deleteSessions } from '../lib/db.js';
 import { DIFFICULTY_LEVELS, difficultyLabel } from '../lib/difficulty.js';
 import { getEquipmentById, mainImageUrl, equipmentDisplayName } from '../data/equipment.js';
 
@@ -295,12 +295,15 @@ function ExerciseLogCard({ ex, isExpanded, isNextPending, onToggle, onComplete, 
   );
 }
 
-export function ActiveSessionScreen() {
+export function ActiveSessionScreen({ onSessionEnded }) {
   const navigate = useNavigate();
   const [rutina, setRutina] = useState(undefined);
   const [session, setSession] = useState(undefined); // undefined = loading, null = none found
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [showEndDialog, setShowEndDialog] = useState(false);
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
+  const [discardBusy, setDiscardBusy] = useState(false);
+  const [discardError, setDiscardError] = useState(null);
   const [announcement, setAnnouncement] = useState('');
 
   useEffect(() => {
@@ -375,6 +378,7 @@ export function ActiveSessionScreen() {
     const next = sessionReducer(session, { type: 'FINISH', now: new Date().toISOString() });
     persist(next);
     setShowEndDialog(false);
+    onSessionEnded && onSessionEnded();
     navigate('/');
   }
 
@@ -382,7 +386,29 @@ export function ActiveSessionScreen() {
     const next = sessionReducer(session, { type: 'ABANDON', now: new Date().toISOString() });
     persist(next);
     setShowEndDialog(false);
+    onSessionEnded && onSessionEnded();
     navigate('/');
+  }
+
+  /**
+   * Discard is a hard DELETE, never a sessionMachine transition (tech-plan.md
+   * Decision 2 — the reducer returns a session object; discard produces
+   * none). On failure the sheet stays open and we do NOT navigate — the
+   * user must never land on Inicio believing an untouched session was
+   * discarded (mockups.md Screen B″).
+   */
+  async function handleDiscard() {
+    setDiscardBusy(true);
+    setDiscardError(null);
+    try {
+      await deleteSessions([session.id]);
+      setShowDiscardConfirm(false);
+      onSessionEnded && onSessionEnded();
+      navigate('/');
+    } catch {
+      setDiscardBusy(false);
+      setDiscardError('No se pudo descartar la sesión.');
+    }
   }
 
   return (
@@ -433,6 +459,31 @@ export function ActiveSessionScreen() {
           onSecondary={handleAbandon}
           cancelLabel="Cancelar"
           onCancel={() => setShowEndDialog(false)}
+          destructiveAction={{
+            label: 'Descartar sin guardar',
+            onClick: () => {
+              setShowEndDialog(false);
+              setDiscardError(null);
+              setShowDiscardConfirm(true);
+            },
+          }}
+        />
+      )}
+
+      {showDiscardConfirm && (
+        <ConfirmSheet
+          title="¿Descartar el entrenamiento?"
+          description="No se guardará nada: esta sesión no aparecerá en el historial ni en tu progreso, y los pesos anotados no se recordarán. No se puede deshacer."
+          primaryLabel={discardBusy ? 'Descartando…' : 'Sí, descartar'}
+          onPrimary={handleDiscard}
+          cancelLabel="Volver"
+          onCancel={() => {
+            setShowDiscardConfirm(false);
+            setShowEndDialog(true);
+          }}
+          danger
+          busy={discardBusy}
+          error={discardError}
         />
       )}
     </div>

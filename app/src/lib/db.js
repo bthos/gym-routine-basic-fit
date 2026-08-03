@@ -17,6 +17,15 @@ import { openDB } from 'idb';
  * under that test harness AND safe for the app's own actual call volume
  * (a handful of writes per workout session — the extra open/close cost is
  * immaterial).
+ *
+ * `lastWeights` single-writer assumption: today the ONLY writers of this
+ * store are `saveSession`'s mirror (below) and `deleteSessions`'s scoped
+ * rollback — both derive every record from the `sessions` store, never from
+ * an independent input. That is what makes the `deleteSessions` recompute
+ * well-defined: it can safely reconstruct "the most recent surviving logged
+ * value" by re-scanning sessions. If anything ever writes `lastWeights` from
+ * a source other than a session's own exercises, this assumption breaks and
+ * the recompute can silently diverge from reality.
  */
 
 const DB_NAME = 'basicfit-rutina';
@@ -107,6 +116,71 @@ export async function listSessions({ from, to } = {}) {
     if (from) sessions = sessions.filter((s) => s.startedAt >= from);
     if (to) sessions = sessions.filter((s) => s.startedAt <= to);
     return sessions.reverse();
+  });
+}
+
+/**
+ * Deletes one or many sessions and rolls back `lastWeights` for every
+ * equipment id they logged, in ONE `readwrite` transaction over
+ * ['sessions', 'lastWeights'] (spec.md AC1, AC6-AC9, AC17, AC18).
+ *
+ * A single batch entry point — never N per-id calls — because this module
+ * opens a fresh connection per exported call (see docblock above): N calls
+ * would mean N transactions and a partial-failure window where some
+ * sessions are gone and lastWeights is only half rolled back. That would
+ * also make the multi-delete confirm sheet's "se borrarán N sesiones" a lie.
+ *
+ * The rollback winner for each affected equipmentId is chosen by the SAME
+ * predicate saveSession uses to write lastWeights in the first place
+ * (`weightUsed != null && completedAt`, see saveSession above) — using a
+ * looser predicate here could invent a lastWeights value saveSession itself
+ * would never have written.
+ *
+ * @param {string[]} ids
+ */
+export async function deleteSessions(ids) {
+  if (!ids || ids.length === 0) return;
+  return withDb(async (db) => {
+    const tx = db.transaction(['sessions', 'lastWeights'], 'readwrite');
+    const sessionsStore = tx.objectStore('sessions');
+    const weightsStore = tx.objectStore('lastWeights');
+
+    const idSet = new Set(ids);
+    const allSessions = await sessionsStore.getAll();
+    const toDelete = allSessions.filter((s) => idSet.has(s.id));
+    const survivors = allSessions.filter((s) => !idSet.has(s.id));
+
+    // AC6 scope: every equipmentId that had a LOGGED exercise in a deleted
+    // session — an exercise that was never completed never seeded a
+    // lastWeights value, so it must not be touched (AC8).
+    const affected = new Set();
+    for (const s of toDelete) {
+      for (const ex of s.exercises || []) {
+        if (ex.completedAt != null) affected.add(ex.equipmentId);
+      }
+    }
+
+    for (const id of ids) {
+      await sessionsStore.delete(id);
+    }
+
+    for (const equipmentId of affected) {
+      let winner = null;
+      for (const s of survivors) {
+        for (const ex of s.exercises || []) {
+          if (ex.equipmentId !== equipmentId) continue;
+          if (ex.weightUsed == null || !ex.completedAt) continue; // mirrors saveSession's mirror condition exactly
+          if (!winner || ex.completedAt > winner.completedAt) winner = ex;
+        }
+      }
+      if (winner) {
+        await weightsStore.put({ equipmentId, weight: winner.weightUsed, loggedAt: winner.completedAt });
+      } else {
+        await weightsStore.delete(equipmentId); // AC7 — no survivor, remove the record entirely
+      }
+    }
+
+    await tx.done;
   });
 }
 

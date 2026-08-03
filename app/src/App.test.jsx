@@ -25,13 +25,20 @@ vi.mock('./screens/HomeScreen.jsx', () => ({
   HomeScreen: () => <div>Home stub</div>,
 }));
 
-import { getActiveRutina } from './lib/db.js';
+import { getActiveRutina, getActiveSession, listSessions } from './lib/db.js';
 import { hasSeenOnboarding } from './lib/onboardingStorage.js';
 
 describe('App / Shell — onboarding gating', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.location.hash = '';
+    // session-discard-and-history-delete: Shell now mounts useActiveSession()
+    // unconditionally (spec.md AC15), so every test here needs a resolved
+    // read regardless of route/onboarding state. restoreAllMocks() in
+    // afterEach wipes the factory's default mockResolvedValue, so it must be
+    // re-set per test rather than relying on the vi.mock() factory alone.
+    getActiveSession.mockResolvedValue(null);
+    listSessions.mockResolvedValue([]);
   });
 
   afterEach(() => {

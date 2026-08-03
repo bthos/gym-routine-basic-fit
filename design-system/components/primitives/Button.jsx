@@ -1,7 +1,7 @@
 import React from "react";
 
 /** Basic-Fit button: rectangular (4px), bold UPPERCASE label, purple action color. */
-export function Button({ variant = "primary", size = "md", disabled = false, href, onClick, children, style }) {
+export function Button({ variant = "primary", size = "md", disabled = false, href, onClick, children, style, ...rest }) {
   const pad = size === "lg" ? "16px 32px" : size === "sm" ? "9px 18px" : "13px 26px";
   const fontSize = size === "lg" ? 16 : size === "sm" ? 13 : 15;
   const base = {
@@ -36,7 +36,7 @@ export function Button({ variant = "primary", size = "md", disabled = false, hre
   };
   const Tag = href ? "a" : "button";
   return (
-    <Tag href={href} onClick={onClick} disabled={disabled && !href} style={s}
+    <Tag {...rest} href={href} onClick={onClick} disabled={disabled && !href} style={s}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       {children}
     </Tag>
