@@ -341,9 +341,16 @@ export function ActiveSessionScreen({ onSessionEnded }) {
     return null;
   }
 
+  // Every mutation (complete, undo, finish, abandon) must refresh the
+  // shell-level active-session state, not just the terminal ones — otherwise
+  // SessionInProgressBanner and Inicio keep showing the done/total count
+  // from whenever the shell last loaded, and other screens only pick up a
+  // freshly-completed exercise after a full page reload remounts the shell.
   function persist(next) {
     setSession(next);
-    saveSession(next);
+    saveSession(next).then(() => {
+      onSessionEnded && onSessionEnded();
+    });
   }
 
   function handleComplete({ exerciseIndex, equipmentId, name, weightUsed, difficulty }) {
@@ -378,7 +385,6 @@ export function ActiveSessionScreen({ onSessionEnded }) {
     const next = sessionReducer(session, { type: 'FINISH', now: new Date().toISOString() });
     persist(next);
     setShowEndDialog(false);
-    onSessionEnded && onSessionEnded();
     navigate('/');
   }
 
@@ -386,7 +392,6 @@ export function ActiveSessionScreen({ onSessionEnded }) {
     const next = sessionReducer(session, { type: 'ABANDON', now: new Date().toISOString() });
     persist(next);
     setShowEndDialog(false);
-    onSessionEnded && onSessionEnded();
     navigate('/');
   }
 
